@@ -28,7 +28,7 @@ void    print_key(t_env *head)
     }
 }
 
-char *print_value(t_env *env, char *key)
+char	*print_value(t_env *env, char *key)
 {
     while (env)
     {
@@ -38,10 +38,10 @@ char *print_value(t_env *env, char *key)
         }
         env = env->next;
     }
-    return NULL;
+    return (NULL);
 }
 
-void print_argu(char **args)
+void	print_argu(char **args)
 {
     int i = 0;
     while (args[i] != NULL)

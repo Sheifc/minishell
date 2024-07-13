@@ -46,6 +46,8 @@ void    add_argument(t_cmd *cmd, char *token_content)
     new_arg[cmd->n_args] = ft_strdup(token_content);
     new_arg[cmd->n_args + 1] = NULL;
     cmd->arg = new_arg;
+	free(new_arg[cmd->n_args]);
+	free(new_arg);
     cmd->n_args++;
 }
 
