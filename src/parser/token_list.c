@@ -20,7 +20,7 @@ void	add_back(t_token **lst, t_token *new)
 		last->next = new;
 }
 
-t_token	*list_empty(int type, char *content)
+t_token	*create_token_node(int type, char *content)
 {
 	t_token	*node;
 
@@ -33,18 +33,16 @@ t_token	*list_empty(int type, char *content)
 	return (node);
 }
 
-void	create_list(int type, t_token **tok, char *content)
+void	create_list(int type, t_token **token, char *content)
 {
 	t_token	*aux;
 
-	if (!*tok)
-	{
-		*tok = list_empty(type, content);
-	}
+	if (!*token)
+		*token = create_token_node(type, content);
 	else
 	{
-		aux = list_empty(type, content);
-		add_back(tok, aux);
+		aux = create_token_node(type, content);
+		add_back(token, aux);
 	}
 	free(content);
 }

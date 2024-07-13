@@ -21,11 +21,11 @@ FILES_PARSER    = init.c    	   \
                   lexer.c          \
                   tokenizator.c    \
                   setter.c         \
-                  create_lists.c   \
+                  token_list.c   	\
                   printer.c        \
                   quote_stuff.c    \
                   in_out.c         \
-                  expand_variables.c\
+                  expansion.c		\
 				  expand_utils.c	\
                   exp_utils.c      \
                   syntaxis.c       \
