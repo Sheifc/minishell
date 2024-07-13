@@ -42,8 +42,10 @@ char	*replace_dollar(char *line, t_shell *data)
     char *temp;
     int i = 0;
     int temp_len = 0;
+	t_env *env;
 
 	temp = ft_strdup("");
+	env = data->env;
     while (line[i])
 	{
 		if (line[i] == '$')
