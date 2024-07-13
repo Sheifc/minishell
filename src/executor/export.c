@@ -1,10 +1,10 @@
 #include "minishell.h"
 
-static void    handle_vars(t_shell *data)
+static void	handle_vars(t_shell *data)
 {
-    char    *key;
-	char    *value;
-	int	    i;
+	char	*key;
+	char	*value;
+	int		i;
 
 	i = 1;
 	while (i < data->cmd->n_args)
@@ -22,8 +22,8 @@ static void    handle_vars(t_shell *data)
 
 void	ft_export(t_shell *data)
 {
-	t_env   *export;
-	t_env   *temp;
+	t_env	*export;
+	t_env	*temp;
 
 	handle_vars(data);
 	if (data->cmd->n_args > 1)
@@ -34,7 +34,8 @@ void	ft_export(t_shell *data)
 		temp = export;
 		while (temp->key && temp->next)
 		{
-			if (ft_strncmp(temp->key, temp->next->key, ft_strlen(temp->key) + 1) > 0)
+			if (ft_strncmp(temp->key, temp->next->key, ft_strlen(temp->key)
+					+ 1) > 0)
 			{
 				ft_swap(&temp->key, &temp->next->key);
 				ft_swap(&temp->value, &temp->next->value);

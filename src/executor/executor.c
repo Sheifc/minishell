@@ -25,7 +25,7 @@ void	redirection(t_cmd *current, int tmpout, int last_cmd)
 }
 
 void	executer(t_shell *data, t_cmd *current, int i)
-{		
+{
 	if (!execute_builtin(data))
 	{
 		data->pid[i] = fork();
@@ -35,11 +35,11 @@ void	executer(t_shell *data, t_cmd *current, int i)
 			if (!data->path)
 			{
 				perror("Error: command not found");
-				exit(127);
+				exit(errno);
 			}
 			execve(data->path, current->arg, data->envp);
 			perror("Error: execve failed");
-			exit(127);
+			exit(errno);
 		}
 		else if (data->pid[i] < 0)
 			perror("Error: fork failed");
