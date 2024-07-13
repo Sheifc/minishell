@@ -1,13 +1,13 @@
 #include "minishell.h"
 
-int only_spaces(char *str_cmd)
+int only_spaces(char *prompt)
 {
     int i;
 
     i = 0;
-    while(str_cmd[i])
+    while(prompt[i])
     {
-        if(str_cmd[i] != ' ')
+        if(prompt[i] != ' ')
             return(0);
         i++;
     }

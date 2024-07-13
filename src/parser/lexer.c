@@ -1,25 +1,25 @@
 #include "minishell.h"
 
-void	lexer(char *str_cmd, t_token **tok)
+void	lexer(char *prompt, t_token **tok)
 {
 	int	i;
 
 	i = 0;
-	while (str_cmd[i])
+	while (prompt[i])
 	{
-		if (str_cmd[i] == '|')
-			set_token(PIPE, str_cmd, tok, &i);
-		else if (str_cmd[i] == '<')
-			set_token(IN, str_cmd, tok, &i);
-		else if (str_cmd[i] == '>')
-			set_token(OUT, str_cmd, tok, &i);
-		else if (str_cmd[i] == '\'')
-			set_token(QUOTE, str_cmd, tok, &i);
-		else if (str_cmd[i] == '"')
-			set_token(DQUOTE, str_cmd, tok, &i);
-		else if (str_cmd[i] != '|' && str_cmd[i] != '<' && str_cmd[i] != '>'
-			&& str_cmd[i] != '\'' && str_cmd[i] != '"' && str_cmd[i] != ' ')
-			set_token(WORD, str_cmd, tok, &i);
+		if (prompt[i] == '|')
+			set_token(PIPE, prompt, tok, &i);
+		else if (prompt[i] == '<')
+			set_token(IN, prompt, tok, &i);
+		else if (prompt[i] == '>')
+			set_token(OUT, prompt, tok, &i);
+		else if (prompt[i] == '\'')
+			set_token(QUOTE, prompt, tok, &i);
+		else if (prompt[i] == '"')
+			set_token(DQUOTE, prompt, tok, &i);
+		else if (prompt[i] != '|' && prompt[i] != '<' && prompt[i] != '>'
+			&& prompt[i] != '\'' && prompt[i] != '"' && prompt[i] != ' ')
+			set_token(WORD, prompt, tok, &i);
 		else
 			i++;
 	}

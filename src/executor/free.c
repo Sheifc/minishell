@@ -2,10 +2,10 @@
 
 void    free_all(t_shell *data)
 {
-    if (data->str_cmd)
+    if (data->prompt)
     {
-        free(data->str_cmd);
-        data->str_cmd = NULL;
+        free(data->prompt);
+        data->prompt = NULL;
     }
     if (data->env)
     {

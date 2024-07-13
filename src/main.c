@@ -1,11 +1,11 @@
 #include "minishell.h"
 
-void    handle_empty_or_whitespace_commands(char **str_cmd)
+void    handle_empty_or_whitespace_commands(char **prompt)
 {
-    if (!ft_strlen(*str_cmd) || only_spaces(*str_cmd) == 1)
+    if (!ft_strlen(*prompt) || only_spaces(*prompt) == 1)
     {
-        free(*str_cmd);
-        *str_cmd = readline(M "Mini" W "shell" G "--> " RST);
+        free(*prompt);
+        *prompt = readline(M "Mini" W "shell" G "--> " RST);
     }
 }
 
@@ -30,16 +30,16 @@ int main(int argc, char **argv, char **envp)
     init(&data, envp);
     while (1)
     {
-        data.str_cmd = readline(M "Mini" W "shell" G "--> " RST);
-        if (!data.str_cmd)
+        data.prompt = readline(M "Mini" W "shell" G "--> " RST);
+        if (!data.prompt)
             break ;
-        add_history(data.str_cmd);
-        handle_empty_or_whitespace_commands(&data.str_cmd);
-        lexer(data.str_cmd, &data.token);
+        add_history(data.prompt);
+        handle_empty_or_whitespace_commands(&data.prompt);
+        lexer(data.prompt, &data.token);
 		minishell(&data);
-        free(data.str_cmd);
+        free(data.prompt);
         data.cmd_count = 0;
-        data.str_cmd = NULL;
+        data.prompt = NULL;
     }
     free_all(&data);
     return ((void)argc, (void)argv, 0);

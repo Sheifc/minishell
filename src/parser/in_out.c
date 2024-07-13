@@ -1,8 +1,8 @@
 #include "minishell.h"
 
-void	heredoc_in(char *str_cmd, t_token **tok, int *i)
+void	heredoc_in(char *prompt, t_token **tok, int *i)
 {
-	if (str_cmd[*i + 1] == '<')
+	if (prompt[*i + 1] == '<')
 	{
 		create_list(HEREDOC, tok, ft_strdup("<<"));
 		*i += 2;
@@ -14,9 +14,9 @@ void	heredoc_in(char *str_cmd, t_token **tok, int *i)
 	}
 }
 
-void	append_out(char *str_cmd, t_token **tok, int *i)
+void	append_out(char *prompt, t_token **tok, int *i)
 {
-	if (str_cmd[*i + 1] == '>')
+	if (prompt[*i + 1] == '>')
 	{
 		create_list(APPEND, tok, ft_strdup(">>"));
 		*i += 2;

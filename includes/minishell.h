@@ -28,22 +28,22 @@ void	init_struct(t_shell *data, char **envp);
 
 //*--------------------LEXER-------------------------------
 // lexer.c
-void	lexer(char *str_cmd, t_token **tok);
+void	lexer(char *prompt, t_token **tok);
 // tokenizator.c
-void	set_token(int type, char *str_cmd, t_token **tok, int *i);
+void	set_token(int type, char *prompt, t_token **tok, int *i);
 // setter.c
-void	setter(int type, char *str_cmd, t_token **tok, int *i);
+void	setter(int type, char *prompt, t_token **tok, int *i);
 // create_lists.c
 void	create_list(int type, t_token **tok, char *content);
 // printer.c
 void	print_lists(t_token *tok);
 void	print_cmd_list(t_cmd *cmd);
 // quote_stuff.c
-int		quote_stuff(int *i, char *str_cmd);
-int		dquote_stuff(int *i, char *str_cmd);
+int		quote_stuff(int *i, char *prompt);
+int		dquote_stuff(int *i, char *prompt);
 // utils.c
-void	heredoc_in(char *str_cmd, t_token **tok, int *i);
-void	append_out(char *str_cmd, t_token **tok, int *i);
+void	heredoc_in(char *prompt, t_token **tok, int *i);
+void	append_out(char *prompt, t_token **tok, int *i);
 
 //*--------------------PARSER-------------------------------
 void	parser(t_token **tok, char **envp, t_env *env);
@@ -64,7 +64,7 @@ char	*expand_heredoc(char *line, t_env *env);
 // syntaxis.c
 int		syntaxis_is_ok(t_token **token);
 // parser_main.c
-int		only_spaces(char *str_cmd);
+int		only_spaces(char *prompt);
 void	clear_structs(t_token **token, t_cmd **cmd);
 void	init_struct(t_shell *data, char **envp);
 
