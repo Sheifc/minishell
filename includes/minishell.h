@@ -140,6 +140,7 @@ void	ft_swap(char **a, char **b);
 void	count_commands(t_shell *data);
 void	init_pid(t_shell *data);
 void	end_processess(int *pids, int len);
+void	wait_process(t_shell *data);
 
 // printing.c
 void	print_key(t_env *head);

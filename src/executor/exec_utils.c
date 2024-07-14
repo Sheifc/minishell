@@ -35,3 +35,14 @@ void	end_processess(int *pids, int len)
 		kill(pids[--len], SIGKILL);
 	free(pids);
 }
+
+void	wait_process(t_shell *data)
+{
+	while ((wait(&data->status)))
+	{
+		if (WIFEXITED(data->status))
+			data->status = WEXITSTATUS(data->status);
+		else if (WIFSIGNALED(data->status))
+			data->status = WTERMSIG(data->status);
+	}
+}
