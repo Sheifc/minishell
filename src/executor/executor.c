@@ -1,8 +1,19 @@
 #include "minishell.h"
 
+void	wait_process(t_shell *data)
+{
+	while ((wait(&data->status)))
+	{
+		if (WIFEXITED(data->status))
+			data->status = WEXITSTATUS(data->status);
+		else if (WIFSIGNALED(data->status))
+			data->status = WTERMSIG(data->status);
+	}
+}
+
 void	redirection(t_cmd *current, int tmpout, int last_cmd)
 {
-	int fdpipe[2];
+	int	fdpipe[2];
 
 	dup2(current->fdin, 0);
 	close(current->fdin);
@@ -43,26 +54,25 @@ void	executer(t_shell *data, t_cmd *current, int i)
 		}
 		else if (data->pid[i] < 0)
 			perror("Error: fork failed");
-		else
-		if (current != NULL)
+		else if (current != NULL)
 			close(current->fdout);
 	}
 }
 
-void restart_fds(int tmpin, int tmpout)
-{	
+void	restart_fds(int tmpin, int tmpout)
+{
 	dup2(tmpin, 0);
 	dup2(tmpout, 1);
 	close(tmpin);
 	close(tmpout);
 }
 
-void executor(t_shell *data)
+void	executor(t_shell *data)
 {
-	int tmpin;
-	int tmpout;
-	int i;
-	t_cmd *current;
+	int		tmpin;
+	int		tmpout;
+	int		i;
+	t_cmd	*current;
 
 	i = -1;
 	count_commands(data);
@@ -80,8 +90,63 @@ void executor(t_shell *data)
 		executer(data, current, i);
 		current = current->next;
 	}
-	waitpid(data->pid[data->cmd_count-1], &data->status, 0);
+	waitpid(data->pid[data->cmd_count - 1], &data->status, 0);
 	data->status = WEXITSTATUS(data->status);
+	//wait_process(data);
 	end_processess(data->pid, data->cmd_count - 1);
 	restart_fds(tmpin, tmpout);
 }
+
+// void	executor(t_shell *data)
+// {
+// 	t_cmd	*current;
+// 	int		i;
+// 	int		fdpipe[2];
+
+// 	i = -1;
+// 	count_commands(data);
+// 	current = data->cmd;
+// 	if (!current)
+// 		return ;
+// 	if (current->fdin == -1)
+// 		current->fdin = dup(0);
+// 	if (current->fdout == -1)
+// 		current->fdout = dup(1);
+// 	if (data->cmd_count == 1)
+// 	{
+// 		if(!execute_builtin(data))
+// 		{
+			
+// 			data->pid = fork();
+// 			if (data->pid == 0)
+// 			{
+// 				get_path(data, current);
+// 				if (!data->path)
+// 				{
+// 					perror("Error: command not found");
+// 					exit(errno);
+// 				}
+// 				execve(data->path, current->arg, data->envp);
+// 				perror("Error: execve failed");
+// 				exit(errno);
+// 			}
+// 		}
+// 	}
+// 	if (pipe(fdpipe) == -1)
+// 		perror("Error: pipe failed");
+// 	else if
+// 	{
+// 		while (++i < data->cmd_count)
+// 		{
+// 			if (!execute_builtin(data))
+// 			{
+// 				if ((data->pid = fork()) == -1);
+// 					perror("Error: fork failed");
+// 				else if (data->pid == 0)
+// 				{
+					
+// 				}
+// 		}
+// 	}
+
+// }
