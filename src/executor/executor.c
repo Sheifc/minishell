@@ -13,37 +13,33 @@ void	wait_process(t_shell *data)
 
 void	redirection(t_cmd *current, int tmpout, int last_cmd)
 {
-	int	fdpipe[2];
-	dprintf(2, "entra en redirection\n");
+	int fdpipe[2];
+
 	dup2(current->fdin, 0);
-	dprintf(2, "fdin before pipe en redirection: %d\n", current->fdin);
 	close(current->fdin);
 	if (last_cmd)
 	{
+		dprintf(2, "entra en last_cmd\n");
 		if (current->fdout == -1)
 			current->fdout = dup(tmpout);
-		dprintf(2, "fdout last command: %d\n", current->fdout);
 	}
 	else
 	{
+		dprintf(2, "entra en else\n");
 		pipe(fdpipe);
-		dprintf(2, "fdin after pipe: %d\n", current->fdin);
-		current->next->fdin = dup(fdpipe[0]);
-		dprintf(2, "fdin next command after pipe: %d\n", current->next->fdin);
-		close(fdpipe[0]);
+		current->next->fdin = fdpipe[0];
 		if (current->fdout == -1){
-			current->fdout = dup(fdpipe[1]);
-			dprintf(2, "fdout after pipe: %d\n", current->fdout);
-			}
-		else
+			current->fdout = fdpipe[1];
+			dprintf(2, "escrito en pipe\n");}
+		else{
 			close(fdpipe[1]);
+			dprintf(2, "cierro fdpipe[1]\n");}
 	}
 	dup2(current->fdout, 1);
 	close(current->fdout);
-	dprintf(2, "fdout after redirection: %d\n", current->fdout);
 }
 
-void	executer(t_shell *data, t_cmd *current) //, int i
+void	executer(t_shell *data, t_cmd *current)
 {
 	if (!execute_builtin(data))
 	{
@@ -62,28 +58,26 @@ void	executer(t_shell *data, t_cmd *current) //, int i
 		}
 		else if (data->pid < 0)
 			perror("Error: fork failed");
-		else if (current != NULL){
+		else
+		if (current != NULL)
 			close(current->fdout);
-			dprintf(2, "fdout if current != NULL en executer: %d\n", current->fdout);}
 	}
 }
 
-void	restart_fds(int tmpin, int tmpout)
-{
+void restart_fds(int tmpin, int tmpout)
+{	
 	dup2(tmpin, 0);
 	dup2(tmpout, 1);
-	dprintf(2, "tmpin: %d\n", tmpin);
-	dprintf(2, "tmpout: %d\n", tmpout);
 	close(tmpin);
 	close(tmpout);
 }
 
-void	executor(t_shell *data)
+void executor(t_shell *data)
 {
-	int		tmpin;
-	int		tmpout;
-	int		i;
-	t_cmd	*current;
+	int tmpin;
+	int tmpout;
+	int i;
+	t_cmd *current;
 
 	i = -1;
 	count_commands(data);
@@ -92,24 +86,13 @@ void	executor(t_shell *data)
 		return ;
 	tmpin = dup(0);
 	tmpout = dup(1);
-	dprintf(2, "tmpin: %d\n", tmpin);
-	dprintf(2, "tmpout: %d\n", tmpout);
 	if (current->fdin == -1)
 		current->fdin = dup(tmpin);
-	dprintf(2, "fdin if cmd->fdin == -1: %d\n", current->fdin);
-	if (data->cmd_count == 1)
+	while (++i < data->cmd_count)
 	{
-		redirection(current, tmpout, 1);
+		redirection(current, tmpout, data->cmd_count - 1 == i);
 		executer(data, current);
-	}
-	else
-	{
-		while (++i < data->cmd_count)
-		{
-			redirection(current, tmpout, data->cmd_count - 1 == i);
-			executer(data, current);
-			current = current->next;
-		}
+		current = current->next;
 	}
 	wait_process(data);
 	restart_fds(tmpin, tmpout);

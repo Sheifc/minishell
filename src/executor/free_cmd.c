@@ -4,9 +4,9 @@ void	free_arg(char ***matrix)
 {
 	int	i;
 
-	if (!matrix)
-		return ;
 	i = 0;
+	if (!matrix || !*matrix || !*matrix[i])
+		return ;
 	while ((*matrix)[i])
 	{
 		free((*matrix)[i]);
