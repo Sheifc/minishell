@@ -1,5 +1,5 @@
 #include "minishell.h"
-
+```c
 void	redirection(t_cmd *current, int tmpout, int last_cmd)
 {
 	int fdpipe[2];

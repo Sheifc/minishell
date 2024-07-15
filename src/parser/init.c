@@ -10,7 +10,7 @@ void	init_struct(t_shell *data, char **envp)
     data->envp = envp;
     data->path = NULL;
     data->status = 0;
-    data->pid = NULL;
+    data->pid = 0;
     data->cmd_count = 0;
 }
 

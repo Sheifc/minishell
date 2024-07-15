@@ -22,7 +22,7 @@ void	count_commands(t_shell *data)
 	}
 }
 
-void	init_pid(t_shell *data)
+/* void	init_pid(t_shell *data)
 {
 	data->pid = ft_calloc(sizeof(int), data->cmd_count);
 	if (!data->pid)
@@ -34,4 +34,4 @@ void	end_processess(int *pids, int len)
 	while (len)
 		kill(pids[--len], SIGKILL);
 	free(pids);
-}
+} */
