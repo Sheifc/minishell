@@ -4,7 +4,7 @@ LIBS            = -lft -lreadline
 NAME            = minishell
 
 CC              = gcc
-CFLAGS          = -Wall -Werror -Wextra -Iincludes -g #-fsanitize=address
+CFLAGS          = -Wall -Werror -Wextra -Iincludes -Ilibft/includes -g #-fsanitize=address
 #LDFLAGS         = -fsanitize=address
 RM              = rm -rf
 
@@ -30,6 +30,7 @@ FILES_PARSER    = init.c    	   \
                   exp_utils.c      \
                   syntaxis.c       \
 				  heredoc.c 	   \
+                  token.c token_utils.c \
 				  parser_utils.c
 
 FILES_EXEC      = exec_builtins.c  \
