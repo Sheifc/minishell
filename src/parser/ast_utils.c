@@ -1,0 +1,78 @@
+#include "ast.h"
+
+// Function to select the type of redirection
+NodeType	select_redirection(TokenType type)
+{
+	if (type == T_OUTPUT)
+		return (NODE_OUTPUT);
+	else if (type == T_OUTPUT_APPEND)
+		return (NODE_OUTPUT_APPEND);
+	else if (type == T_INPUT)
+		return (NODE_INPUT);
+	else if (type == T_HEREDOC)
+		return (NODE_HEREDOC);
+	else
+		return (NODE_UNKNOWN);
+}
+
+// Function to select the type of operator
+NodeType	select_operator(TokenType type)
+{
+	if (type == T_PIPE)
+		return (NODE_PIPE);
+	else if (type == T_AND)
+		return (NODE_AND);
+	else if (type == T_OR)
+		return (NODE_OR);
+	else if (type == T_SEMICOLON)
+		return (NODE_SEMICOLON);
+	else
+		return (NODE_UNKNOWN);
+}
+
+// Function to find the main operator considering precedence and parentheses
+int	find_operator(Token **tokens, int num_tokens)
+{
+	int	depth;
+	int	last_operator_index;
+	int	i;
+
+	depth = 0;
+	last_operator_index = -1;
+	i = -1;
+	while (++i < num_tokens)
+	{
+		if (tokens[i]->type == T_PAREN_OPEN)
+			depth++;
+		else if (tokens[i]->type == T_PAREN_CLOSE)
+			depth--;
+		else if (depth == 0)
+		{
+			if (tokens[i]->type == T_OR || tokens[i]->type == T_AND
+				|| tokens[i]->type == T_SEMICOLON || tokens[i]->type == T_PIPE)
+				last_operator_index = i;
+		}
+	}
+	if (last_operator_index != -1)
+		return (last_operator_index);
+	return (-1);
+}
+
+// Función para imprmir
+void	print_ast(ASTNode *root)
+{
+	int			i;
+	const char	*messages[] = {M_COMMAND, M_ARGUMENT, M_PIPE, M_AND, M_OR,
+		M_TEXT, M_INPUT, M_HEREDOC, M_OUTPUT, M_OUTPUT_APPEND, M_SEMICOLON,
+		M_UNKNOWN};
+
+	if (root == NULL)
+		return ;
+	i = -1;
+	while (++i < root->level)
+		printf("   ");
+	printf("(%d) %s[%d]: %s\n", root->level, messages[root->type], root->type,
+		root->value);
+	print_ast(root->left);
+	print_ast(root->right);
+}

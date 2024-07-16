@@ -93,4 +93,36 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all clean fclean re
+# --------------------------------------------------
+#             Test compilation process             |
+# --------------------------------------------------
+
+TOKEN_FILES		=	token.c token_utils.c test_token.c
+TOKEN_DIR		=	$(SRC_DIR)parser/
+TOKEN_OBJ_DIR	=	$(OBJ_DIR)parser/
+TOKEN_SRC		=	$(addprefix $(TOKEN_DIR),$(TOKEN_FILES))
+TOKEN_OBJ		=	$(TOKEN_SRC:$(TOKEN_DIR)%.c=$(TOKEN_OBJ_DIR)%.o)
+
+$(TOKEN_OBJ_DIR)%.o: $(TOKEN_DIR)%.c
+	@mkdir -p $(TOKEN_OBJ_DIR)
+	@$(CC) $(CFLAGS) -c $< -o $@
+
+test_token: $(TOKEN_OBJ)
+	@$(MAKE) -s all bonus printf gnl -C $(LIBFT_DIR)
+	$(CC) $(TOKEN_OBJ) -L $(LIBFT_DIR) $(LIBS) -o $@
+
+AST_FILES		= ast.c ast_utils.c ast_handles.c test_ast.c token.c token_utils.c
+AST_DIR		=	$(SRC_DIR)parser/
+AST_OBJ_DIR	=	$(OBJ_DIR)parser/
+AST_SRC		=	$(addprefix $(AST_DIR),$(AST_FILES))
+AST_OBJ		=	$(AST_SRC:$(AST_DIR)%.c=$(AST_OBJ_DIR)%.o)
+
+$(AST_OBJ_DIR)%.o: $(AST_DIR)%.c
+	@mkdir -p $(AST_OBJ_DIR)
+	@$(CC) $(CFLAGS) -c $< -o $@
+
+test_ast: $(AST_OBJ)
+	@$(MAKE) -s all bonus printf gnl -C $(LIBFT_DIR)
+	$(CC) $(AST_OBJ) -L $(LIBFT_DIR) $(LIBS) -o $@
+
+.PHONY: all clean fclean re test_ast test_token

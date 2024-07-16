@@ -43,148 +43,148 @@ int main() {
 	int total_error = 0;
 	const char *test1 = "ls -la";
 	const char *expected1[][2] = {
-		{"0", "ls"},
-		{"1", "-la"}
+		{ft_itoa(T_COMMAND), "ls"},
+		{ft_itoa(T_ARG), "-la"}
 	};
 
 	const char *test2 = "ls -la && (cd /home || echo \"Failed to change directory\") | grep 'file'";
 	const char *expected2[][2] = {
-		{"0", "ls"},
-		{"1", "-la"},
-		{"4", "&&"},
-		{"6", "("},
-		{"0", "cd"},
-		{"1", "/home"},
-		{"5", "||"},
-		{"0", "echo"},
-		{"8", "Failed to change directory"},
-		{"7", ")"},
-		{"3", "|"},
-		{"0", "grep"},
-		{"8", "file"}
+		{ft_itoa(T_COMMAND), "ls"},
+		{ft_itoa(T_ARG), "-la"},
+		{ft_itoa(T_AND), "&&"},
+		{ft_itoa(T_PAREN_OPEN), "("},
+		{ft_itoa(T_COMMAND), "cd"},
+		{ft_itoa(T_ARG), "/home"},
+		{ft_itoa(T_OR), "||"},
+		{ft_itoa(T_COMMAND), "echo"},
+		{ft_itoa(T_TEXT), "Failed to change directory"},
+		{ft_itoa(T_PAREN_CLOSE), ")"},
+		{ft_itoa(T_PIPE), "|"},
+		{ft_itoa(T_COMMAND), "grep"},
+		{ft_itoa(T_TEXT), "file"}
 	};
 
 	const char *test3 = "echo 'Hello, World!' | cat -n";
 	const char *expected3[][2] = {
-		{"0", "echo"},
-		{"8", "Hello, World!"},
-		{"3", "|"},
-		{"0", "cat"},
-		{"1", "-n"}
+		{ft_itoa(T_COMMAND), "echo"},
+		{ft_itoa(T_TEXT), "Hello, World!"},
+		{ft_itoa(T_PIPE), "|"},
+		{ft_itoa(T_COMMAND), "cat"},
+		{ft_itoa(T_ARG), "-n"}
 	};
 
 	const char *test4 = "mkdir new_folder && cd new_folder";
 	const char *expected4[][2] = {
-		{"0", "mkdir"},
-		{"1", "new_folder"},
-		{"4", "&&"},
-		{"0", "cd"},
-		{"1", "new_folder"}
+		{ft_itoa(T_COMMAND), "mkdir"},
+		{ft_itoa(T_ARG), "new_folder"},
+		{ft_itoa(T_AND), "&&"},
+		{ft_itoa(T_COMMAND), "cd"},
+		{ft_itoa(T_ARG), "new_folder"}
 	};
 
 	const char *test5 = "(echo 'start'; ls) && (cd /tmp || echo 'Failed')";
 	const char *expected5[][2] = {
-		{"6", "("},
-		{"0", "echo"},
-		{"8", "start"},
-		{"13", ";"},
-		{"0", "ls"},
-		{"7", ")"},
-		{"4", "&&"},
-		{"6", "("},
-		{"0", "cd"},
-		{"1", "/tmp"},
-		{"5", "||"},
-		{"0", "echo"},
-		{"8", "Failed"},
-		{"7", ")"}
+		{ft_itoa(T_PAREN_OPEN), "("},
+		{ft_itoa(T_COMMAND), "echo"},
+		{ft_itoa(T_TEXT), "start"},
+		{ft_itoa(T_SEMICOLON), ";"},
+		{ft_itoa(T_COMMAND), "ls"},
+		{ft_itoa(T_PAREN_CLOSE), ")"},
+		{ft_itoa(T_AND), "&&"},
+		{ft_itoa(T_PAREN_OPEN), "("},
+		{ft_itoa(T_COMMAND), "cd"},
+		{ft_itoa(T_ARG), "/tmp"},
+		{ft_itoa(T_OR), "||"},
+		{ft_itoa(T_COMMAND), "echo"},
+		{ft_itoa(T_TEXT), "Failed"},
+		{ft_itoa(T_PAREN_CLOSE), ")"}
 	};
 
 	const char *test6 = "cat < input.txt";
 	const char *expected6[][2] = {
-		{"0", "cat"},
-		{"9", "<"},
-		{"1", "input.txt"}
+		{ft_itoa(T_COMMAND), "cat"},
+		{ft_itoa(T_INPUT), "<"},
+		{ft_itoa(T_ARG), "input.txt"}
 	};
 
 	const char *test7 = "cat << EOF";
 	const char *expected7[][2] = {
-		{"0", "cat"},
-		{"10", "<<"},
-		{"1", "EOF"}
+		{ft_itoa(T_COMMAND), "cat"},
+		{ft_itoa(T_HEREDOC), "<<"},
+		{ft_itoa(T_ARG), "EOF"}
 	};
 
 	const char *test8 = "echo Hello > output.txt";
 	const char *expected8[][2] = {
-		{"0", "echo"},
-		{"1", "Hello"},
-		{"11", ">"},
-		{"1", "output.txt"}
+		{ft_itoa(T_COMMAND), "echo"},
+		{ft_itoa(T_ARG), "Hello"},
+		{ft_itoa(T_OUTPUT), ">"},
+		{ft_itoa(T_ARG), "output.txt"}
 	};
 
 	const char *test9 = "echo Hello >> output.txt";
 	const char *expected9[][2] = {
-		{"0", "echo"},
-		{"1", "Hello"},
-		{"12", ">>"},
-		{"1", "output.txt"}
+		{ft_itoa(T_COMMAND), "echo"},
+		{ft_itoa(T_ARG), "Hello"},
+		{ft_itoa(T_OUTPUT_APPEND), ">>"},
+		{ft_itoa(T_ARG), "output.txt"}
 	};
 
 	const char *test10 = "ls; cd /tmp; echo 'done';";
 	const char *expected10[][2] = {
-		{"0", "ls"},
-		{"13", ";"},
-		{"0", "cd"},
-		{"1", "/tmp"},
-		{"13", ";"},
-		{"0", "echo"},
-		{"8", "done"},
-		{"13", ";"}
+		{ft_itoa(T_COMMAND), "ls"},
+		{ft_itoa(T_SEMICOLON), ";"},
+		{ft_itoa(T_COMMAND), "cd"},
+		{ft_itoa(T_ARG), "/tmp"},
+		{ft_itoa(T_SEMICOLON), ";"},
+		{ft_itoa(T_COMMAND), "echo"},
+		{ft_itoa(T_TEXT), "done"},
+		{ft_itoa(T_SEMICOLON), ";"}
 	};
 
 	const char *test11 = "ls -la; (echo 'Hello'; cat < input.txt) && echo 'done'";
 	const char *expected11[][2] = {
-		{"0", "ls"},
-		{"1", "-la"},
-		{"13", ";"},
-		{"6", "("},
-		{"0", "echo"},
-		{"8", "Hello"},
-		{"13", ";"},
-		{"0", "cat"},
-		{"9", "<"},
-		{"1", "input.txt"},
-		{"7", ")"},
-		{"4", "&&"},
-		{"0", "echo"},
-		{"8", "done"}
+		{ft_itoa(T_COMMAND), "ls"},
+		{ft_itoa(T_ARG), "-la"},
+		{ft_itoa(T_SEMICOLON), ";"},
+		{ft_itoa(T_PAREN_OPEN), "("},
+		{ft_itoa(T_COMMAND), "echo"},
+		{ft_itoa(T_TEXT), "Hello"},
+		{ft_itoa(T_SEMICOLON), ";"},
+		{ft_itoa(T_COMMAND), "cat"},
+		{ft_itoa(T_INPUT), "<"},
+		{ft_itoa(T_ARG), "input.txt"},
+		{ft_itoa(T_PAREN_CLOSE), ")"},
+		{ft_itoa(T_AND), "&&"},
+		{ft_itoa(T_COMMAND), "echo"},
+		{ft_itoa(T_TEXT), "done"}
 	};
 
 	const char *test12 = "(echo 'start' && ls) || (cd /tmp && echo 'Failed')";
 	const char *expected12[][2] = {
-		{"6", "("},
-		{"0", "echo"},
-		{"8", "start"},
-		{"4", "&&"},
-		{"0", "ls"},
-		{"7", ")"},
-		{"5", "||"},
-		{"6", "("},
-		{"0", "cd"},
-		{"1", "/tmp"},
-		{"4", "&&"},
-		{"0", "echo"},
-		{"8", "Failed"},
-		{"7", ")"}
+		{ft_itoa(T_PAREN_OPEN), "("},
+		{ft_itoa(T_COMMAND), "echo"},
+		{ft_itoa(T_TEXT), "start"},
+		{ft_itoa(T_AND), "&&"},
+		{ft_itoa(T_COMMAND), "ls"},
+		{ft_itoa(T_PAREN_CLOSE), ")"},
+		{ft_itoa(T_OR), "||"},
+		{ft_itoa(T_PAREN_OPEN), "("},
+		{ft_itoa(T_COMMAND), "cd"},
+		{ft_itoa(T_ARG), "/tmp"},
+		{ft_itoa(T_AND), "&&"},
+		{ft_itoa(T_COMMAND), "echo"},
+		{ft_itoa(T_TEXT), "Failed"},
+		{ft_itoa(T_PAREN_CLOSE), ")"}
 	};
 
 	const char *test13 = "cat << EOF > output.txt";
 	const char *expected13[][2] = {
-		{"0", "cat"},
-		{"10", "<<"},
-		{"1", "EOF"},
-		{"11", ">"},
-		{"1", "output.txt"}
+		{ft_itoa(T_COMMAND), "cat"},
+		{ft_itoa(T_HEREDOC), "<<"},
+		{ft_itoa(T_ARG), "EOF"},
+		{ft_itoa(T_OUTPUT), ">"},
+		{ft_itoa(T_ARG), "output.txt"}
 	};
 
 	const char *test14 = "    \t ";

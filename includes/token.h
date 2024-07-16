@@ -5,6 +5,7 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
+# include "libft.h"
 
 # define MAX_TOKENS 1000
 # define DELIMITERS " \r\n\t\v\f"
@@ -25,12 +26,11 @@
 // 	T_OUTPUT_APPEND		>>	
 // 	T_SEMICOLON			;
 // 	T_UNKNOWN
-// }				TokenType;
+
 typedef enum _TokenType
 {
 	T_COMMAND,
 	T_ARG,
-	T_OPERATOR,
 	T_PIPE,
 	T_AND,
 	T_OR,
