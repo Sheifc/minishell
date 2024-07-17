@@ -1,39 +1,16 @@
 #include "ast.h"
 
-// Function to find the corresponding closing parenthesis
-static int	find_matching_paren(Token **tokens, int start, int num_tokens)
-{
-	int	depth;
-	int	i;
-
-	depth = 1;
-	i = start + 1;
-	while (i < num_tokens)
-	{
-		if (tokens[i]->type == T_PAREN_OPEN)
-			depth++;
-		else if (tokens[i]->type == T_PAREN_CLOSE)
-		{
-			depth--;
-			if (depth == 0)
-				return (i);
-		}
-		i++;
-	}
-	return (-1);
-}
-
 // Function to create the corresponding redirect operator node
 ASTNode	*build_redirect_node(Token *token, int level)
 {
 	if (token->type == T_OUTPUT)
-		return (create_node(NODE_COMMAND, "output", level));
+		return (create_node(NODE_COMMAND, ">", level));
 	if (token->type == T_OUTPUT_APPEND)
-		return (create_node(NODE_COMMAND, "output_append", level));
+		return (create_node(NODE_COMMAND, ">>", level));
 	if (token->type == T_INPUT)
-		return (create_node(NODE_COMMAND, "input", level));
+		return (create_node(NODE_COMMAND, "<", level));
 	if (token->type == T_HEREDOC)
-		return (create_node(NODE_COMMAND, "heredoc", level));
+		return (create_node(NODE_COMMAND, "<<", level));
 	return (create_node(NODE_UNKNOWN, "-", level));
 }
 
@@ -44,33 +21,69 @@ ASTNode	*build_command_node(Token **tokens, int num_tokens, int level)
 	ASTNode	*root;
 	ASTNode	*current;
 
-	if (tokens[0]->type == T_ARG || tokens[0]->type == T_TEXT)
-		return (create_node(NODE_ARGUMENT, tokens[0]->value, level + 1));
-	root = create_node(NODE_COMMAND, tokens[0]->value, level);
-	current = root;
-	i = 1;
-	while (i < num_tokens)
+	root = NULL;
+	if (num_tokens > 0)
 	{
-		if (tokens[i]->type == T_ARG || tokens[i]->type == T_TEXT)
+		if (tokens[0]->type == T_ARG || tokens[0]->type == T_TEXT)
+			return (create_node(NODE_ARGUMENT, tokens[0]->value, level + 1));
+		root = create_node(NODE_COMMAND, tokens[0]->value, level);
+		current = root;
+		i = 1;
+		while (i < num_tokens)
 		{
-			current->right = create_node(NODE_ARGUMENT, tokens[i]->value, level
-					+ 1);
-			current = current->right;
+			if (tokens[i]->type == T_ARG || tokens[i]->type == T_TEXT)
+			{
+				current->right = create_node(NODE_ARGUMENT, tokens[i]->value,
+						level + 1);
+				current = current->right;
+			}
+			i++;
 		}
-		i++;
 	}
 	return (root);
+}
+
+// Function to handle redirects
+ASTNode	*handle_operators(Token **tokens, int num_tokens, int level, int *pos)
+{
+	TokenType	op_type;
+	ASTNode		*root;
+
+	*pos = find_operator(tokens, num_tokens);
+	if (*pos == ERROR)
+	{
+		printf(" ** Error parentesis: no se ha abierto un parentesis **\n");
+		return (NULL);
+	}
+	if (*pos != NOT_FOUND)
+	{
+		op_type = tokens[*pos]->type;
+		root = create_node(select_operator(op_type), tokens[*pos]->value,
+				level);
+		root->left = build_ast(tokens, *pos, level + 1);
+		root->right = build_ast(tokens + *pos + 1, num_tokens - *pos - 1, level
+				+ 1);
+		return (root);
+	}
+	return (NULL);
 }
 
 // Function to handle parentheses
 ASTNode	*handle_parentheses(Token **tokens, int num_tokens, int level)
 {
-	int	close_pos;
+	ASTNode	*root;
+	int		close_pos;
 
 	close_pos = find_matching_paren(tokens, 0, num_tokens);
-	if (close_pos == -1)
+	if (close_pos == NOT_FOUND)
+	{
+		printf(" ** Error parentesis: no se ha cerrado un parentesis **\n");
 		return (NULL);
-	return (build_ast(tokens + 1, close_pos - 1, level));
+	}
+	root = create_node(NODE_PARENTHESIS, "()", level);
+	root->right = NULL;
+	root->left = build_ast(tokens + 1, close_pos - 1, level + 1);
+	return (root);
 }
 
 // Function to handle redirects

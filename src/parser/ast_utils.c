@@ -1,5 +1,28 @@
 #include "ast.h"
 
+// Function to find the corresponding closing parenthesis
+int	find_matching_paren(Token **tokens, int start, int num_tokens)
+{
+	int	depth;
+	int	i;
+
+	depth = 1;
+	i = start + 1;
+	while (i < num_tokens)
+	{
+		if (tokens[i]->type == T_PAREN_OPEN)
+			depth++;
+		else if (tokens[i]->type == T_PAREN_CLOSE)
+		{
+			depth--;
+			if (depth == 0)
+				return (i);
+		}
+		i++;
+	}
+	return (NOT_FOUND);
+}
+
 // Function to select the type of redirection
 NodeType	select_redirection(TokenType type)
 {
@@ -38,7 +61,7 @@ int	find_operator(Token **tokens, int num_tokens)
 	int	i;
 
 	depth = 0;
-	last_operator_index = -1;
+	last_operator_index = NOT_FOUND;
 	i = -1;
 	while (++i < num_tokens)
 	{
@@ -53,18 +76,18 @@ int	find_operator(Token **tokens, int num_tokens)
 				last_operator_index = i;
 		}
 	}
-	if (last_operator_index != -1)
-		return (last_operator_index);
-	return (-1);
+	if (depth < 0)
+		return (ERROR);
+	return (last_operator_index);
 }
 
-// Función para imprmir
+// AST Print function
 void	print_ast(ASTNode *root)
 {
 	int			i;
 	const char	*messages[] = {M_COMMAND, M_ARGUMENT, M_PIPE, M_AND, M_OR,
-		M_TEXT, M_INPUT, M_HEREDOC, M_OUTPUT, M_OUTPUT_APPEND, M_SEMICOLON,
-		M_UNKNOWN};
+		M_PAREN, M_TEXT, M_INPUT, M_HEREDOC, M_OUTPUT, M_OUTPUT_APPEND,
+		M_SEMICOLON, M_UNKNOWN};
 
 	if (root == NULL)
 		return ;

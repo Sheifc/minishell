@@ -12,6 +12,7 @@
 # define M_PIPE "Pipe"
 # define M_AND "And"
 # define M_OR "Or"
+# define M_PAREN "Parentesis"
 # define M_TEXT "Text"
 # define M_INPUT "Redirect"
 # define M_HEREDOC "Redirect"
@@ -19,6 +20,10 @@
 # define M_OUTPUT_APPEND "Redirect"
 # define M_SEMICOLON "Semicolon"
 # define M_UNKNOWN "Unknown"
+
+# define OK 0
+# define NOT_FOUND -1
+# define ERROR -2
 
 // Command
 typedef struct _Command
@@ -35,6 +40,7 @@ typedef enum _NodeType
 	NODE_PIPE,
 	NODE_AND,
 	NODE_OR,
+	NODE_PARENTHESIS,
 	NODE_TEXT,
 	NODE_INPUT,
 	NODE_HEREDOC,
@@ -61,10 +67,13 @@ ASTNode				*build_ast(Token **tokens, int num_tokens, int level);
 // AST handles
 ASTNode				*build_redirect_node(Token *token, int level);
 ASTNode				*build_command_node(Token **tokens, int n_token, int level);
+ASTNode				*handle_operators(Token **tokens, int n_token, int level,
+						int *pos);
 ASTNode				*handle_parentheses(Token **tokens, int n_token, int level);
 ASTNode				*handle_redirection(Token **tokens, int n_token, int level);
 
 // AST utils
+int					find_matching_paren(Token **tokens, int start, int n_token);
 NodeType			select_redirection(TokenType type);
 NodeType			select_operator(TokenType type);
 int					find_operator(Token **tokens, int num_tokens);

@@ -17,7 +17,7 @@ int run_test(const char *input, const char *expected_tokens[][2], int expected_n
 			if (i < expected_num_tokens) {
 				printf("Expected Token %d: Type = %s, Value = %s\n", i, expected_tokens[i][0], expected_tokens[i][1]);
 			}
-			if (tokens[i]->type != atoi(expected_tokens[i][0]) || strcmp(tokens[i]->value, expected_tokens[i][1]) != 0) {
+			if ((int)tokens[i]->type != atoi(expected_tokens[i][0]) || strcmp(tokens[i]->value, expected_tokens[i][1]) != 0) {
 				error = true;
 				printf(" -> Test failed: Token %d does not match expected\n", i);
 			}

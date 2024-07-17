@@ -21,31 +21,26 @@ void	free_ast(ASTNode *root)
 		return ;
 	free_ast(root->left);
 	free_ast(root->right);
-	free(root->value);
+	if (root->value)
+		free(root->value);
 	free(root);
 }
 
 // Main function to build the AST
 ASTNode	*build_ast(Token **tokens, int num_tokens, int level)
 {
-	int			op_pos;
-	TokenType	op_type;
-	ASTNode		*root;
+	int		result;
+	ASTNode	*root;
 
+	result = NOT_FOUND;
 	if (num_tokens <= 0 || tokens == NULL)
 		return (NULL);
-	op_pos = find_operator(tokens, num_tokens);
-	if (op_pos != -1)
-	{
-		op_type = tokens[op_pos]->type;
-		root = create_node(select_operator(op_type), tokens[op_pos]->value,
-				level);
-		root->left = build_ast(tokens, op_pos, level + 1);
-		root->right = build_ast(tokens + op_pos + 1, num_tokens - op_pos - 1,
-				level + 1);
+	root = handle_operators(tokens, num_tokens, level, &result);
+	if (result == ERROR)
+		return (NULL);
+	if (root != NULL)
 		return (root);
-	}
-	if (tokens[0]->type == T_PAREN_OPEN)
+	if (tokens[0]->type == T_PAREN_OPEN || tokens[0]->type == T_PAREN_CLOSE)
 		return (handle_parentheses(tokens, num_tokens, level));
 	root = handle_redirection(tokens, num_tokens, level);
 	if (root != NULL)
