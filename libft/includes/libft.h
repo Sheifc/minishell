@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sheferna <sheferna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: svilla-d <svilla-d@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 12:05:09 by sheferna          #+#    #+#             */
-/*   Updated: 2024/04/09 11:24:21 by sheferna         ###   ########.fr       */
+/*   Updated: 2024/07/19 13:36:39 by svilla-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -248,6 +248,18 @@ void				*ft_calloc(size_t count, size_t size);
  * @returns The copied string.
 */
 char				*ft_strdup(const char *s);
+/**
+ * @brief Allocates sufficient memory for a copy of up to n characters of the
+ *        string s, does the copy, and returns a pointer to it. The pointer
+ *        may subsequently be used as an argument to the function free(3).
+ *        If insufficient memory is available, NULL is returned. The resulting
+ *        string is null-terminated, even if the length of s is greater than n.
+ * @param s The string to copy.
+ * @param n The maximum number of characters to be copied from s.
+ * @returns A pointer to the newly allocated string, or NULL if allocation fails
+ */
+char				*ft_strndup(const char *s, size_t n);
+
 
 // ---------------------- Additional functions libft -------------------------
 /**

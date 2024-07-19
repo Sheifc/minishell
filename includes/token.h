@@ -58,6 +58,7 @@ void			free_token2(Token *token);
 Token			**tokenize(const char *input, int *num_tokens);
 
 // token_utils
+void			free_tokens(Token **tokens, int num_tokens);
 void			skip_delimiters(char **start);
 void			add_token(char **start, Token **tokens, int *n_tokens, Token t);
 void			add_cmd_arg_token(char **start, Token **tokens, int *n_tokens);

@@ -1,5 +1,18 @@
 #include "token.h"
 
+void	free_tokens(Token **tokens, int num_tokens)
+{
+	int	i;
+
+	if (tokens)
+	{
+		i = -1;
+		while (++i < num_tokens)
+			free_token2(tokens[i]);
+	}
+	free(tokens);
+}
+
 void	skip_delimiters(char **start)
 {
 	while (**start && strchr(DELIMITERS, **start))

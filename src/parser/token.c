@@ -31,18 +31,20 @@ void	handle_quotes(char **start, Token **tokens, int *n_tokens,
 		end++;
 	if (*end == quote_char)
 	{
-		token_value = strndup(*start + 1, end - *start - 1);
+		token_value = ft_strndup(*start + 1, end - *start - 1);
 		tokens[*n_tokens] = create_token(T_TEXT, token_value, false);
 		(*n_tokens)++;
 		*start = end + 1;
 	}
 	else
 	{
-		token_value = strdup(*start + 1);
+		token_value = ft_strdup(*start + 1);
 		tokens[*n_tokens] = create_token(T_TEXT, token_value, false);
 		(*n_tokens)++;
 		*start = end;
 	}
+	if (token_value)
+		free(token_value);
 }
 
 void	handle_regular_tokens(char **start, Token **tokens, int *n_tokens)
@@ -80,7 +82,7 @@ Token	**tokenize(const char *input, int *n_tokens)
 
 	tokens = (Token **)malloc(MAX_TOKENS * sizeof(Token *));
 	*n_tokens = 0;
-	input_copy = strdup(input);
+	input_copy = ft_strdup(input);
 	start = input_copy;
 	while (*start)
 	{

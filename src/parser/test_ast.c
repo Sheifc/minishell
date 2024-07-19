@@ -1,53 +1,82 @@
-# include "syntax.h"
+#include "syntax.h"
+
 typedef struct _test_ast
 {
-	char inputs[100];
-	bool isValid;
-} t_test_ast;
+	char	inputs[100];
+	bool	is_valid;
+}			t_test_ast;
 
-int main() {
-	t_test_ast test_values[] = {
-		{"() ()", false},
-		{"() () ls -al", false},
-		{"(ls -la", false},
-		{"ls -la)", false},
-		{"(ls -la)", true},
-		{"ls -la | grep 'txt' && cat file.txt > output.txt", true},
-		{"ls -la | grep 'txt' && cat file.txt > output.txt || echo 'Failed'", true},
-		{"(ls -l -a -r | grep 'txt') && (cat file.txt > output.txt || (echo 'Failed' && mkdir new_dir))", true},
-		{"mkdir test && cd test || echo 'Could not create directory'", true},
-		{"echo 'Starting process'; (cd /tmp && touch temp_file) || echo 'Error in processing'", true}
-	};
+static void	print_result(bool expected, bool result)
+{
+	const char	*expected_str;
+	const char	*result_str;
 
-	for (int i = 0; i < 10; i++) {
-		printf("\n-------------- %d --------------\n", i);
-		char *input = test_values[i].inputs;
-		bool expected = test_values[i].isValid;
-		int num_tokens;
-		bool is_valid;
-		Token **tokens = tokenize(input, &num_tokens);
-
-		printf("input:\n%s\n\n", input);
-		print_tokens(tokens, num_tokens);
-		printf("\n");
-
-		ASTNode *ast = build_ast(tokens, num_tokens, 0);
-		printf("AST:\n");
-		print_ast(ast);
-		printf("\n");
-
-		is_valid = validate_ast(tokens, ast);
-		printf("\nAST Valid\n");
-		printf(" *Expected: %s ", expected ? "TRUE" : "FALSE");
-		printf(" *Result: %s ", is_valid ? "TRUE" : "FALSE");
-		printf(" *Test: %s\n", is_valid == expected? "Ok" : "Failed");
-
-		for (int i = 0; i < num_tokens; i++)
-			if (tokens[i])
-				free_token2(tokens[i]);
-		free(tokens);
-		free_ast(ast);
-		printf("\n");
+	if (expected)
+		expected_str = "TRUE";
+	else
+		expected_str = "FALSE";
+	if (result)
+		result_str = "TRUE";
+	else
+		result_str = "FALSE";
+	if (result == expected)
+	{
+		printf("\e[32m *Expected: %s ", expected_str);
+		printf(" *Result: %s ", result_str);
+		printf(" *Test: Ok\e[0m\n");
 	}
-	return 0;
+	else
+	{
+		printf("\e[31m *Expected: %s ", expected_str);
+		printf(" *Result: %s ", result_str);
+		printf(" *Test: Failed\e[0m\n");
+	}
+}
+
+void	process_test_case(const t_test_ast *test_value, int index)
+{
+	Token	**tokens;
+	ASTNode	*ast;
+	bool	is_valid;
+	int		num_tokens;
+
+	printf("\e[35m\n------------------- %d -------------------\n\e[0m", index);
+	tokens = tokenize(test_value->inputs, &num_tokens);
+	printf("input:\n%s\n\n", test_value->inputs);
+	print_tokens(tokens, num_tokens);
+	ast = build_ast(tokens, num_tokens, 0);
+	printf("AST:\n");
+	print_ast(ast);
+	is_valid = validate_ast(tokens, ast);
+	print_result(test_value->is_valid, is_valid);
+	free_tokens(tokens, num_tokens);
+	free_ast(ast);
+	printf("\n");
+}
+
+int	main(void)
+{
+	int					i;
+	const t_test_ast	test_values[] = {
+	{"cd .", true},
+	{"() ()", false},
+	{"() () ls -al", false},
+	{"(ls -la", false},
+	{"ls -la)", false},
+	{"(ls -la)", true},
+	{"export", true},
+	{"ls -la | grep 'txt' && cat file.txt > output.txt", true},
+	{"ls -la | grep 'txt' && cat file.txt > output.txt || echo 'Failed'", true},
+	{"(ls -l -a -r | grep 'txt') && (cat file.txt > output.txt || "
+		"(echo 'Failed'&& mkdir new_dir))", true},
+	{"mkdir test && cd test || echo 'Could not create directory'", true},
+	{"echo 'Starting process'; (cd /tmp && touch temp_file) || "
+		"echo 'Error in processing'", true}
+	};
+	const int			num_tests = sizeof(test_values) / sizeof(t_test_ast);
+
+	i = -1;
+	while (++i < num_tests)
+		process_test_case(&test_values[i], i);
+	return (0);
 }
