@@ -129,7 +129,10 @@ test_ast: $(AST_OBJ)
 directories:
 	mkdir -p $(AST_OBJ_DIR) $(TOKEN_OBJ_DIR)
 
-# norminette src/parser/token.c src/parser/token_utils.c src/parser/ast.c src/parser/ast_handles.c src/parser/ast_utils.c src/parser/syntax.c src/parser/syntax_utils.c
+# norminette src/parser/token.c src/parser/token_utils.c
+# norminette src/parser/ast.c src/parser/ast_handles.c src/parser/ast_utils.c
+# norminette src/parser/syntax.c src/parser/syntax_utils.c
+# norminette src/parser/test_token.c src/parser/test_ast.c
 # norminette includes/token.h includes/ast.h includes/syntax.h
 
 .PHONY: all clean fclean re test_token test_ast directories
