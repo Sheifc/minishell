@@ -83,12 +83,12 @@ int	main(void)
 	int					n;
 	const t_test_case	cases[] = {
 	{"ls -la", {{T_COMMAND, "ls", 1}, {T_ARG, "-la", 1}}, 2},
-	{"ls -la && (cd /home || echo \"Failed change directory\") | grep 'file'",
-	{{T_COMMAND, "ls", 1}, {T_ARG, "-la", 1}, {T_AND, "&&", 1},
-	{T_PAREN_OPEN, "(", 1}, {T_COMMAND, "cd", 1}, {T_ARG, "/home", 1},
-	{T_OR, "||", 1}, {T_COMMAND, "echo", 1},
-	{T_TEXT, "Failed change directory", 1}, {T_PAREN_CLOSE, ")", 1},
-	{T_PIPE, "|", 1}, {T_COMMAND, "grep", 1}, {T_TEXT, "file", 1}}, 13}
+	{"ls | (pwd && cd '/home|')", {{T_COMMAND, "ls", 1}, {T_PIPE, "|", 1},
+	{T_PAREN_OPEN, "(", 1}, {T_COMMAND, "pwd", 1}, {T_AND, "&&", 1},
+	{T_COMMAND, "cd", 1}, {T_TEXT, "/home|", 1}, {T_PAREN_CLOSE, ")", 1}}, 8},
+	{"ls -l -a | wc ", {{T_COMMAND, "ls", 1}, {T_ARG, "-l", 1},
+	{T_ARG, "-a", 1}, {T_PIPE, "|", 1}, {T_COMMAND, "wc", 1}}, 5},
+	{"ls file*.txt", {{T_COMMAND, "ls", 1}, {T_WILDCARD, "file*.txt", 1}}, 2}
 	};
 
 	errors = 0;
@@ -104,6 +104,49 @@ int	main(void)
 		printf("\e[31m\nSuccessful tests: (%d/%d)\n\e[0m", n - errors, n);
 	return (0);
 }
+
+// const char *input = "FRASE";
+// int num_tokens;
+// Token **tokens = tokenize(input, &num_tokens);
+
+// printf("input:\n%s\n\n", input);
+// print_tokens(tokens, num_tokens);
+// printf("\n");
+
+// {	"ls -la",
+// 	{
+// 		{T_COMMAND, "ls", 1},
+// 		{T_ARG, "-la", 1}
+// 	},
+// 	2
+// }
+
+// {"ls *[1-2].txt",
+// 	{
+// 		{T_COMMAND, "ls", 1},
+// 		{T_WILDCARD, "*[1-2].txt", 1}
+// 	},
+// 	2
+// }
+
+// {"ls -la && (cd /home || echo \"Failed change directory\") | grep 'file'",
+// 	{
+// 		{T_COMMAND, "ls", 1},
+// 		{T_ARG, "-la", 1},
+// 		{T_AND, "&&", 1},
+// 		{T_PAREN_OPEN, "(", 1},
+// 		{T_COMMAND, "cd", 1},
+// 		{T_ARG, "/home", 1},
+// 		{T_OR, "||", 1},
+// 		{T_COMMAND, "echo", 1},
+// 		{T_TEXT, "Failed change directory", 1},
+// 		{T_PAREN_CLOSE, ")", 1},
+// 		{T_PIPE, "|", 1},
+// 		{T_COMMAND, "grep", 1},
+// 		{T_TEXT, "file", 1}
+// 	},
+// 	13
+// }
 
 // 	const char			*test1 = "ls -la"
 // 	const t_test_token	expected1[] = {
@@ -250,6 +293,33 @@ int	main(void)
 // 		{T_OUTPUT, ">", 1},
 // 		{T_ARG, "output.txt", 1}
 // 	};
+
+// {"(ls -l -a -r | grep 'txt' && cat file.txt > output.txt || echo 'Failed')
+// && ls *[1-2].txt",
+// 	{
+// 		{T_PAREN_OPEN, "(", 1},
+// 		{T_COMMAND, "ls", 1},
+// 		{T_ARG, "-l", 1},
+// 		{T_ARG, "-a", 1},
+// 		{T_ARG, "-r", 1},
+// 		{T_PIPE, "|", 1},
+// 		{T_COMMAND, "grep", 1},
+// 		{T_TEXT, "txt", 1},
+// 		{T_AND, "&&", 1},
+// 		{T_COMMAND, "cat", 1},
+// 		{T_ARG, "file.txt", 1},
+// 		{T_OUTPUT, ">", 1},
+// 		{T_ARG, "output.txt", 1},
+// 		{T_OR, "||", 1},
+// 		{T_COMMAND, "echo", 1},
+// 		{T_TEXT, "Failed", 1},
+// 		{T_PAREN_CLOSE, ")", 1},
+// 		{T_AND, "&&", 1},
+// 		{T_COMMAND, "ls", 1},
+// 		{T_WILDCARD, "*[1-2].txt", 1}
+// 	},
+// 	20
+// }
 
 // 	const char *test14 = "    \t ";
 // 	const t_test_token expected14[] = {

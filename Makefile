@@ -99,7 +99,7 @@ re: fclean all
 #             Test compilation process             |
 # --------------------------------------------------
 
-TOKEN_FILES		=	token.c token_utils.c test_token.c
+TOKEN_FILES		=	token.c token_handles.c token_utils.c test_token.c
 TOKEN_DIR		=	$(SRC_DIR)parser/
 TOKEN_OBJ_DIR	=	$(OBJ_DIR)parser/
 TOKEN_SRC		=	$(addprefix $(TOKEN_DIR),$(TOKEN_FILES))
@@ -129,7 +129,7 @@ test_ast: $(AST_OBJ)
 directories:
 	mkdir -p $(AST_OBJ_DIR) $(TOKEN_OBJ_DIR)
 
-# norminette src/parser/token.c src/parser/token_utils.c
+# norminette src/parser/token.c src/parser/token_handles.c src/parser/token_utils.c
 # norminette src/parser/ast.c src/parser/ast_handles.c src/parser/ast_utils.c
 # norminette src/parser/syntax.c src/parser/syntax_utils.c
 # norminette src/parser/test_token.c src/parser/test_ast.c
