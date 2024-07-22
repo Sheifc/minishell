@@ -24,20 +24,21 @@ ASTNode	*build_command_node(Token **tokens, int num_tokens, int level)
 	root = NULL;
 	if (num_tokens > 0)
 	{
-		if (tokens[0]->type == T_ARG || tokens[0]->type == T_TEXT)
+		if (tokens[0]->type == T_ARG || tokens[0]->type == T_TEXT
+			|| tokens[0]->type == T_WILDCARD)
 			return (create_node(NODE_ARGUMENT, tokens[0]->value, level + 1));
 		root = create_node(NODE_COMMAND, tokens[0]->value, level);
 		current = root;
-		i = 1;
-		while (i < num_tokens)
+		i = 0;
+		while (++i < num_tokens)
 		{
-			if (tokens[i]->type == T_ARG || tokens[i]->type == T_TEXT)
+			if (tokens[i]->type == T_ARG || tokens[i]->type == T_TEXT
+				|| tokens[i]->type == T_WILDCARD)
 			{
 				current->right = create_node(NODE_ARGUMENT, tokens[i]->value,
 						level + 1);
 				current = current->right;
 			}
-			i++;
 		}
 	}
 	return (root);

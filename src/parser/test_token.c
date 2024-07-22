@@ -105,6 +105,14 @@ int	main(void)
 	return (0);
 }
 
+// {"ls file?.txt", {{T_COMMAND, "ls", 1}, {T_WILDCARD, "*file*.txt", 1}}, 2},
+// {"ls *file_[1-2].txt", {{T_COMMAND, "ls", 1}, {T_WILDCARD, "*file*.txt", 1}},
+//  2},
+// {"ls ?_file_[1-2].txt", {{T_COMMAND, "ls", 1},
+// {T_WILDCARD, "*file*.txt", 1}}, 2},
+// {"ls [a-b]_file_[1-2].txt", {{T_COMMAND, "ls", 1}, {T_WILDCARD, "*file*.txt",
+//  1}}, 2}
+
 // const char *input = "FRASE";
 // int num_tokens;
 // Token **tokens = tokenize(input, &num_tokens);

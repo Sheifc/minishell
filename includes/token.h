@@ -6,9 +6,11 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
+# include <dirent.h>
 
 # define MAX_TOKENS 1000
 # define DELIMITERS " \r\n\t\v\f"
+# define NOMATCH -1
 
 // TokenType:
 // 	T_COMMAND			commands
@@ -71,5 +73,17 @@ void			skip_delimiters(char **start);
 void			add_token(char **start, Token **tokens, int *n_tokens, Token t);
 void			add_cmd_arg_token(char **start, Token **tokens, int *n_tokens);
 void			print_tokens(Token **tokens, int n_tokens);
+
+// wildcard
+int				match(const char *pattern, const char *string);
+bool			is_wildcards(char **start);
+bool			search_wildcard_matches(const char *wildcard, Token **tokens,
+					int *n_tokens);
+
+// wildcard_utils
+int				handle_question(const char *pattern, const char *string);
+int				handle_star(const char *pattern, const char *string);
+int				handle_brackets(const char *pattern, const char *string);
+int				handle_exact_match(const char *pattern, const char *string);
 
 #endif

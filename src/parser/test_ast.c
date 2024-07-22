@@ -71,7 +71,8 @@ int	main(void)
 		"(echo 'Failed'&& mkdir new_dir))", true},
 	{"mkdir test && cd test || echo 'Could not create directory'", true},
 	{"echo 'Starting process'; (cd /tmp && touch temp_file) || "
-		"echo 'Error in processing'", true}
+		"echo 'Error in processing'", true},
+	{"ls file*.txt", true}
 	};
 	const int			num_tests = sizeof(test_values) / sizeof(t_test_ast);
 

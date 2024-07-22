@@ -99,7 +99,8 @@ re: fclean all
 #             Test compilation process             |
 # --------------------------------------------------
 
-TOKEN_FILES		=	token.c token_handles.c token_utils.c test_token.c
+TOKEN_FILES		=	token.c token_handles.c token_utils.c test_token.c \
+					wildcard.c wildcard_utils.c
 TOKEN_DIR		=	$(SRC_DIR)parser/
 TOKEN_OBJ_DIR	=	$(OBJ_DIR)parser/
 TOKEN_SRC		=	$(addprefix $(TOKEN_DIR),$(TOKEN_FILES))
@@ -112,8 +113,8 @@ test_token: $(TOKEN_OBJ)
 	@$(MAKE) -s all bonus printf gnl -C $(LIBFT_DIR)
 	$(CC) $(TOKEN_OBJ) -L $(LIBFT_DIR) $(LIBS) -o $@
 
-AST_FILES		= ast.c ast_utils.c ast_handles.c test_ast.c token.c \
-					token_utils.c syntax.c syntax_utils.c
+AST_FILES	= 	ast.c ast_utils.c ast_handles.c test_ast.c token.c token_handles.c \
+				token_utils.c syntax.c syntax_utils.c wildcard.c wildcard_utils.c
 AST_DIR		=	$(SRC_DIR)parser/
 AST_OBJ_DIR	=	$(OBJ_DIR)parser/
 AST_SRC		=	$(addprefix $(AST_DIR),$(AST_FILES))
@@ -130,6 +131,7 @@ directories:
 	mkdir -p $(AST_OBJ_DIR) $(TOKEN_OBJ_DIR)
 
 # norminette src/parser/token.c src/parser/token_handles.c src/parser/token_utils.c
+# norminette src/parser/wildcard.c src/parser/wildcard_utils.c
 # norminette src/parser/ast.c src/parser/ast_handles.c src/parser/ast_utils.c
 # norminette src/parser/syntax.c src/parser/syntax_utils.c
 # norminette src/parser/test_token.c src/parser/test_ast.c

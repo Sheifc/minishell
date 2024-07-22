@@ -1,35 +1,28 @@
 #include "token.h"
 
-static bool	is_wildcards(char **start)
-{
-	char	*end;
-
-	end = *start;
-	while (*end && !strchr(" \r\n\t\v\f\"'()|<>;&", *end))
-	{
-		if (*end == '*' || *end == '?' || *end == '[' || *end == ']')
-			return (true);
-		end++;
-	}
-	return (false);
-}
-
+// Function to create the wildcard token
 void	handle_wildcards(char **start, Token **tokens, int *n_tokens)
 {
 	char	*end;
 	char	temp;
+	bool	found;
 
 	end = *start;
 	while (*end && !strchr(" \r\n\t\v\f\"'()|<>;&", *end))
 		end++;
 	temp = *end;
 	*end = '\0';
-	tokens[*n_tokens] = create_token(T_WILDCARD, *start, false);
-	(*n_tokens)++;
+	found = search_wildcard_matches(*start, tokens, n_tokens);
+	if (found == false)
+	{
+		tokens[*n_tokens] = create_token(T_WILDCARD, *start, false);
+		(*n_tokens)++;
+	}
 	*end = temp;
 	*start = end;
 }
 
+// Function to create the text token
 void	handle_quotes(char **start, Token **tokens, int *n_tokens,
 		char quote_char)
 {
@@ -57,6 +50,7 @@ void	handle_quotes(char **start, Token **tokens, int *n_tokens,
 		free(token_value);
 }
 
+// Main function for token matching
 void	handle_regular_tokens(char **start, Token **tokens, int *n_tokens)
 {
 	if (strncmp(*start, "&&", 2) == 0)
