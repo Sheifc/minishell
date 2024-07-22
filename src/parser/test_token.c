@@ -50,9 +50,9 @@ bool	compare_tokens(Token **t, int num_tokens, const t_test_case *c)
 	return (error);
 }
 
-void	free_tokens_and_print_result(Token **tokens, int num_tokens, bool error)
+void	free_tokens_and_print_result(Token **tokens, int *n_tokens, bool error)
 {
-	free_tokens(tokens, num_tokens);
+	free_tokens(tokens, n_tokens);
 	if (!error)
 		printf("\e[32mTest case: ok\n\e[0m");
 	else
@@ -70,7 +70,7 @@ int	run_test_case(const t_test_case *c)
 	if (tokens == NULL)
 		return (1);
 	error = compare_tokens(tokens, num_tokens, c);
-	free_tokens_and_print_result(tokens, num_tokens, error);
+	free_tokens_and_print_result(tokens, &num_tokens, error);
 	if (error)
 		return (1);
 	return (0);
@@ -85,10 +85,10 @@ int	main(void)
 	{"ls -la", {{T_COMMAND, "ls", 1}, {T_ARG, "-la", 1}}, 2},
 	{"ls | (pwd && cd '/home|')", {{T_COMMAND, "ls", 1}, {T_PIPE, "|", 1},
 	{T_PAREN_OPEN, "(", 1}, {T_COMMAND, "pwd", 1}, {T_AND, "&&", 1},
-	{T_COMMAND, "cd", 1}, {T_TEXT, "/home|", 1}, {T_PAREN_CLOSE, ")", 1}}, 8},
-	{"ls -l -a | wc ", {{T_COMMAND, "ls", 1}, {T_ARG, "-l", 1},
-	{T_ARG, "-a", 1}, {T_PIPE, "|", 1}, {T_COMMAND, "wc", 1}}, 5},
-	{"ls file*.txt", {{T_COMMAND, "ls", 1}, {T_WILDCARD, "file*.txt", 1}}, 2}
+	{T_COMMAND, "cd", 1}, {T_QUOTE, "\'", 1}, {T_TEXT, "/home|", 1},
+	{T_QUOTE, "\'", 1}, {T_PAREN_CLOSE, ")", 1}}, 10},
+	{"ls -l -a file*.txt", {{T_COMMAND, "ls", 1}, {T_ARG, "-l", 1},
+	{T_ARG, "-a", 1}, {T_WILDCARD, "file*.txt", 1}}, 4}
 	};
 
 	errors = 0;

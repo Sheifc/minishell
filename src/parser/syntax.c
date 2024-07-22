@@ -6,8 +6,8 @@ bool	is_parenthesis_valid(ASTNode *node)
 		return (false);
 	if (node->left == NULL)
 	{
-		printf(" ** Error parentesis: (%d) %s[%d]: requiere agrupar algún "
-			"elemento\n", node->level, node->value, node->type);
+		printf("\e[31m ** Error parentesis: (%d)%s[%d]: requiere agrupar algún "
+			"elemento\e[0m\n", node->level, node->value, node->type);
 		return (false);
 	}
 	return (is_ast_valid(node->left));
@@ -29,8 +29,8 @@ bool	is_ast_valid(ASTNode *root)
 		return (is_parenthesis_valid(root));
 	else
 	{
-		printf(" ** Error nodo: (%d) %s[%d]:  tipo no soportado\n", root->level,
-			root->value, root->type);
+		printf("\e[31m ** Error nodo: (%d) %s[%d]:  tipo no soportado\e[0m\n",
+			root->level, root->value, root->type);
 		return (false);
 	}
 }

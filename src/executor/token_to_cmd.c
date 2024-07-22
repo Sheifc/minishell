@@ -52,7 +52,7 @@ void	add_argument(t_cmd *cmd, char *token_content)
 	cmd->n_args++;
 }
 
-int	handle_redirection(t_cmd *cmd, t_token **token) //, t_env *env
+int	handle_redirection1(t_cmd *cmd, t_token **token) //, t_env *env
 {
 	int	status;
 
@@ -82,7 +82,7 @@ int	fill_cmd_args(t_cmd *cmd, t_token **token) //, t_env *env
 		if ((*token)->type == IN || (*token)->type == OUT \
 			|| (*token)->type == APPEND || (*token)->type == HEREDOC)
 		{
-			status = handle_redirection(cmd, token); //, env
+			status = handle_redirection1(cmd, token); //, env
 			if (status != 0)
 				break ;
 		}

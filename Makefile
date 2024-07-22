@@ -30,8 +30,11 @@ FILES_PARSER    = init.c    	   \
                   exp_utils.c      \
                   syntaxis.c       \
 				  heredoc.c 	   \
-                  token.c token_utils.c \
-				  parser_utils.c
+				  parser_utils.c	\
+				  token.c token_handles.c token_utils.c	\
+				  ast.c ast_utils.c ast_handles.c		\
+				  syntax.c syntax_utils.c				\
+				  wildcard.c wildcard_utils.c
 
 FILES_EXEC      = exec_builtins.c  \
                   exec_utils.c     \

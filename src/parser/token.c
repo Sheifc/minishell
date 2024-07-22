@@ -18,6 +18,36 @@ void	free_token2(Token *token)
 		free(token->value);
 		free(token);
 	}
+	token = NULL;
+}
+
+int	verify_tokens(Token **tokens, int *n_tokens)
+{
+	int	balance_parentheses;
+	int	balance_quotes;
+	int	i;
+
+	i = -1;
+	balance_parentheses = 0;
+	while (tokens && ++i < *n_tokens)
+	{
+		if (tokens[i]->type == T_PAREN_OPEN)
+			balance_parentheses++;
+		else if (tokens[i]->type == T_PAREN_CLOSE)
+			balance_parentheses--;
+	}
+	if (balance_parentheses < 0)
+		printf("\e[31m ** Error parentesis: no se ha abierto **\e[0m\n");
+	else if (balance_parentheses > 0)
+		printf("\e[31m ** Error parentesis: no se ha cerrado **\e[0m\n");
+	i = -1;
+	balance_quotes = 0;
+	while (tokens && ++i < *n_tokens)
+		if (tokens[i]->type == T_QUOTE)
+			balance_quotes++;
+	if (balance_quotes % 2 != 0)
+		printf("\e[31m ** Error quotes: el numero de commillas **\e[0m\n");
+	return (balance_parentheses | balance_quotes);
 }
 
 Token	**tokenize(const char *input, int *n_tokens)

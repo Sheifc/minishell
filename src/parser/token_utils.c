@@ -1,16 +1,18 @@
 #include "token.h"
 
-void	free_tokens(Token **tokens, int num_tokens)
+void	free_tokens(Token **tokens, int *num_tokens)
 {
 	int	i;
 
 	if (tokens)
 	{
 		i = -1;
-		while (++i < num_tokens)
+		while (++i < *num_tokens)
 			free_token2(tokens[i]);
+		free(tokens);
 	}
-	free(tokens);
+	tokens = NULL;
+	*num_tokens = 0;
 }
 
 void	skip_delimiters(char **start)
@@ -56,7 +58,7 @@ void	print_tokens(Token **tokens, int n_tokens)
 	int	i;
 
 	i = -1;
-	while (++i < n_tokens)
+	while (tokens && ++i < n_tokens)
 		printf("Token %d: Type = %d, Value = %s\n", i, tokens[i]->type,
 			tokens[i]->value);
 }

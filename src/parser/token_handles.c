@@ -22,6 +22,18 @@ void	handle_wildcards(char **start, Token **tokens, int *n_tokens)
 	*start = end;
 }
 
+void	handle_unmatched_quotes(char **start, char *end, Token **tokens,
+		int *n_tokens)
+{
+	char	*token_value;
+
+	token_value = ft_strdup(*start + 1);
+	tokens[(*n_tokens)++] = create_token(T_TEXT, token_value, false);
+	if (token_value)
+		free(token_value);
+	*start = end;
+}
+
 // Function to create the text token
 void	handle_quotes(char **start, Token **tokens, int *n_tokens,
 		char quote_char)
@@ -29,25 +41,27 @@ void	handle_quotes(char **start, Token **tokens, int *n_tokens,
 	char	*end;
 	char	*token_value;
 
+	token_value = ft_strndup(*start, 1);
+	tokens[(*n_tokens)++] = create_token(T_QUOTE, token_value, false);
+	free(token_value);
 	end = *start + 1;
 	while (*end && *end != quote_char)
 		end++;
 	if (*end == quote_char)
 	{
-		token_value = ft_strndup(*start + 1, end - *start - 1);
-		tokens[*n_tokens] = create_token(T_TEXT, token_value, false);
-		(*n_tokens)++;
+		if (*(end - 1) != quote_char)
+		{
+			token_value = ft_strndup(*start + 1, end - *start - 1);
+			tokens[(*n_tokens)++] = create_token(T_TEXT, token_value, false);
+			free(token_value);
+		}
+		token_value = ft_strndup(end, 1);
+		tokens[(*n_tokens)++] = create_token(T_QUOTE, token_value, false);
+		free(token_value);
 		*start = end + 1;
 	}
 	else
-	{
-		token_value = ft_strdup(*start + 1);
-		tokens[*n_tokens] = create_token(T_TEXT, token_value, false);
-		(*n_tokens)++;
-		*start = end;
-	}
-	if (token_value)
-		free(token_value);
+		handle_unmatched_quotes(start, end, tokens, n_tokens);
 }
 
 // Main function for token matching

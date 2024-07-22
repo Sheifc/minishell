@@ -44,12 +44,13 @@ void	process_test_case(const t_test_ast *test_value, int index)
 	tokens = tokenize(test_value->inputs, &num_tokens);
 	printf("input:\n%s\n\n", test_value->inputs);
 	print_tokens(tokens, num_tokens);
+	verify_tokens(tokens, &num_tokens);
 	ast = build_ast(tokens, num_tokens, 0);
 	printf("AST:\n");
 	print_ast(ast);
 	is_valid = validate_ast(tokens, ast);
 	print_result(test_value->is_valid, is_valid);
-	free_tokens(tokens, num_tokens);
+	free_tokens(tokens, &num_tokens);
 	free_ast(ast);
 	printf("\n");
 }

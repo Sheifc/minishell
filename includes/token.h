@@ -36,6 +36,7 @@ typedef enum _TokenType
 	T_PIPE,
 	T_AND,
 	T_OR,
+	T_QUOTE,
 	T_PAREN_OPEN,
 	T_PAREN_CLOSE,
 	T_TEXT,
@@ -58,6 +59,7 @@ typedef struct _Token
 // token
 Token			*create_token(TokenType type, const char *value, bool exp_arg);
 void			free_token2(Token *token);
+int				verify_tokens(Token **tokens, int *n_tokens);
 Token			**tokenize(const char *input, int *num_tokens);
 
 // token_handles
@@ -68,7 +70,7 @@ void			handle_regular_tokens(char **start, Token **tokens,
 					int *n_tokens);
 
 // token_utils
-void			free_tokens(Token **tokens, int num_tokens);
+void			free_tokens(Token **tokens, int *num_tokens);
 void			skip_delimiters(char **start);
 void			add_token(char **start, Token **tokens, int *n_tokens, Token t);
 void			add_cmd_arg_token(char **start, Token **tokens, int *n_tokens);

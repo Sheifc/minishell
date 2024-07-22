@@ -35,9 +35,9 @@ ASTNode	*build_command_node(Token **tokens, int num_tokens, int level)
 			if (tokens[i]->type == T_ARG || tokens[i]->type == T_TEXT
 				|| tokens[i]->type == T_WILDCARD)
 			{
-				current->right = create_node(NODE_ARGUMENT, tokens[i]->value,
+				current->left = create_node(NODE_ARGUMENT, tokens[i]->value,
 						level + 1);
-				current = current->right;
+				current = current->left;
 			}
 		}
 	}
@@ -53,7 +53,7 @@ ASTNode	*handle_operators(Token **tokens, int num_tokens, int level, int *pos)
 	*pos = find_operator(tokens, num_tokens);
 	if (*pos == ERROR)
 	{
-		printf(" ** Error parentesis: no se ha abierto un parentesis **\n");
+		printf("\e[31m ** Error parentesis: no se ha abierto **\e[0m\n");
 		return (NULL);
 	}
 	if (*pos != NOT_FOUND)
@@ -78,7 +78,7 @@ ASTNode	*handle_parentheses(Token **tokens, int num_tokens, int level)
 	close_pos = find_matching_paren(tokens, 0, num_tokens);
 	if (close_pos == NOT_FOUND)
 	{
-		printf(" ** Error parentesis: no se ha cerrado un parentesis **\n");
+		printf("\e[31m ** Error parentesis: no se ha cerrado **\e[0m\n");
 		return (NULL);
 	}
 	root = create_node(NODE_PARENTHESIS, "()", level);
