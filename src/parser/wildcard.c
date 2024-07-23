@@ -46,7 +46,6 @@ bool	search_wildcard_matches(const char *wildcard, Token **tokens,
 		if (found_match(wildcard, entry->d_name) == 0)
 		{
 			found = true;
-			printf("Match found: %s\n", entry->d_name);
 			tokens[*n_tokens] = create_token(T_ARG, entry->d_name, true);
 			(*n_tokens)++;
 		}

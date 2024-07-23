@@ -1,0 +1,26 @@
+#include "command.h"
+
+int	main(void)
+{
+	const char	*input;
+	Token		**tokens;
+	ASTNode		*ast;
+	bool		is_valid;
+	int			num_tokens;
+
+	input = "(ls file* && ls arch*) && ls file[1].txt";
+	printf("\e[35m\n------------------- * -------------------\n\e[0m");
+	tokens = tokenize(input, &num_tokens);
+	printf("input:\n%s\n", input);
+	printf("\n**** Tokens: ****\n");
+	print_tokens(tokens, num_tokens);
+	verify_tokens(tokens, &num_tokens);
+	ast = build_ast(tokens, num_tokens, 0);
+	printf("\n**** AST: ****\n");
+	print_ast(ast);
+	is_valid = validate_ast(tokens, ast);
+	printf("\n**** Exe: ****\n");
+	if (is_valid)
+		traverse_ast(ast);
+	return (0);
+}

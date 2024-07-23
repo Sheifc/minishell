@@ -25,14 +25,6 @@
 # define NOT_FOUND -1
 # define ERROR -2
 
-// Command
-typedef struct _Command
-{
-	char			*name;
-	char			**args;
-	int				arg_count;
-}					Command;
-
 typedef enum _NodeType
 {
 	NODE_COMMAND,

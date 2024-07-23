@@ -94,6 +94,7 @@ fclean: clean
 	@$(RM) $(NAME)
 	@$(RM) test_token
 	@$(RM) test_ast
+	@$(RM) test_cmd
 	@$(MAKE) -C $(LIBFT_DIR) fclean
 
 re: fclean all
@@ -130,14 +131,30 @@ test_ast: $(AST_OBJ)
 	@$(MAKE) -s all bonus printf gnl -C $(LIBFT_DIR)
 	$(CC) $(AST_OBJ) -L $(LIBFT_DIR) $(LIBS) -o $@
 
+CMD_FILES	= 	command.c command_utils.c test_command.c \
+				ast.c ast_utils.c ast_handles.c token.c token_handles.c \
+				token_utils.c syntax.c syntax_utils.c wildcard.c wildcard_utils.c
+CMD_DIR		=	$(SRC_DIR)parser/
+CMD_OBJ_DIR	=	$(OBJ_DIR)parser/
+CMD_SRC		=	$(addprefix $(CMD_DIR),$(CMD_FILES))
+CMD_OBJ		=	$(CMD_SRC:$(CMD_DIR)%.c=$(CMD_OBJ_DIR)%.o)
+
+$(CMD_OBJ_DIR)%.o: $(CMD_DIR)%.c | directories
+	@$(CC) $(CFLAGS) -c $< -o $@
+
+test_cmd: $(CMD_OBJ)
+	@$(MAKE) -s all bonus printf gnl -C $(LIBFT_DIR)
+	$(CC) $(CMD_OBJ) -L $(LIBFT_DIR) $(LIBS) -o $@
+
 directories:
-	mkdir -p $(AST_OBJ_DIR) $(TOKEN_OBJ_DIR)
+	mkdir -p $(AST_OBJ_DIR) $(TOKEN_OBJ_DIR) $(CMD_OBJ_DIR)
 
 # norminette src/parser/token.c src/parser/token_handles.c src/parser/token_utils.c
 # norminette src/parser/wildcard.c src/parser/wildcard_utils.c
 # norminette src/parser/ast.c src/parser/ast_handles.c src/parser/ast_utils.c
 # norminette src/parser/syntax.c src/parser/syntax_utils.c
+# norminette src/parser/command.c src/parser/command_utils.c src/parser/test_command.c
 # norminette src/parser/test_token.c src/parser/test_ast.c
-# norminette includes/token.h includes/ast.h includes/syntax.h
+# norminette includes/token.h includes/ast.h includes/syntax.h includes/command.h
 
 .PHONY: all clean fclean re test_token test_ast directories
