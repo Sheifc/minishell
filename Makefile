@@ -131,7 +131,7 @@ test_ast: $(AST_OBJ)
 	@$(MAKE) -s all bonus printf gnl -C $(LIBFT_DIR)
 	$(CC) $(AST_OBJ) -L $(LIBFT_DIR) $(LIBS) -o $@
 
-CMD_FILES	= 	command.c command_utils.c test_command.c \
+CMD_FILES	= 	command.c command_utils.c command_handles.c command_exe.c test_command.c \
 				ast.c ast_utils.c ast_handles.c token.c token_handles.c \
 				token_utils.c syntax.c syntax_utils.c wildcard.c wildcard_utils.c
 CMD_DIR		=	$(SRC_DIR)parser/
@@ -153,7 +153,7 @@ directories:
 # norminette src/parser/wildcard.c src/parser/wildcard_utils.c
 # norminette src/parser/ast.c src/parser/ast_handles.c src/parser/ast_utils.c
 # norminette src/parser/syntax.c src/parser/syntax_utils.c
-# norminette src/parser/command.c src/parser/command_utils.c src/parser/test_command.c
+# norminette src/parser/command.c src/parser/command_utils.c src/parser/command_handles.c src/parser/command_exe.c src/parser/test_command.c
 # norminette src/parser/test_token.c src/parser/test_ast.c
 # norminette includes/token.h includes/ast.h includes/syntax.h includes/command.h
 

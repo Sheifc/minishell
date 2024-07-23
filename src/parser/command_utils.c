@@ -70,8 +70,6 @@ void	free_command(Command *cmd)
 			}
 			free(cmd->args);
 		}
-		close(cmd->input_fd);
-		close(cmd->output_fd);
 		free(cmd);
 	}
 }
@@ -86,42 +84,3 @@ void	print_command(Command *cmd)
 	while (++i < cmd->arg_count)
 		printf("   Arg[%d]: %s\n", i, cmd->args[i]);
 }
-
-// Ejecuta los comandos conectados por tuberías
-// int	execute_pipe(ASTNode *node)
-// {
-// 	int		pipefd[2];
-// 	Command	*left_cmd;
-// 	Command	*right_cmd;
-// 	pid_t	pid1;
-// 	pid_t	pid2;
-// 	int		status;
-
-// 	if (pipe(pipefd) == -1)
-// 	{
-// 		perror("pipe");
-// 		return (-1);
-// 	}
-// 	left_cmd = create_command_from_ast(node->left);
-// 	right_cmd = create_command_from_ast(node->right);
-// 	left_cmd->output_fd = pipefd[WRITE];
-// 	right_cmd->input_fd = pipefd[READ];
-// 	pid1 = execute_command(left_cmd);
-// 	if (pid1 == -1)
-// 	{
-// 		close(pipefd[READ]);
-// 		close(pipefd[WRITE]);
-// 		return (-1);
-// 	}
-// 	close(pipefd[WRITE]);
-// 	pid2 = execute_command(right_cmd);
-// 	if (pid2 == -1)
-// 	{
-// 		close(pipefd[READ]);
-// 		return (-1);
-// 	}
-// 	close(pipefd[READ]);
-// 	waitpid(pid1, &status, 0);
-// 	waitpid(pid2, &status, 0);
-// 	return (WEXITSTATUS(status));
-// }
