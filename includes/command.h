@@ -40,6 +40,7 @@ int			handle_and(ASTNode *node, int input_fd, int output_fd,
 int			handle_or(ASTNode *node, int input_fd, int output_fd,
 				int left_result);
 int			handle_parenthesis(ASTNode *node, int left_result);
+int			handle_redirections(ASTNode *node, int *input_fd, int *output_fd);
 
 // Command exe
 int			execute_command(Command *cmd, int input_fd, int output_fd);
