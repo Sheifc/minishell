@@ -89,12 +89,17 @@ void	token_to_cmd(t_shell *data);
 //*--------------------BUILTINS----------------------------
 
 // exec_builtins.c
-int		execute_builtin(t_shell *data);
+void	execute_echo(t_shell *data, t_cmd *cmd);
+int		execute_builtin(t_shell *data, t_cmd *cmd);
+int		execute_builtin_forked(t_shell *data, t_cmd *cmd);
+int		execute_some_builtin(t_shell *data, t_cmd *cmd);
+void	run_single_cmd(t_shell *data, t_cmd *cmd);
+void	get_status(t_shell *data);
 // cd.c
 t_env	*env_lst_search(t_env *env, const char *key);
-void	ft_cd(t_shell *data);
+void	ft_cd(t_shell *data, t_cmd *cmd);
 // echo.c
-void	ft_echo(t_cmd *args);
+void	ft_echo(t_cmd *cmd);
 // env.c
 void	ft_env(t_env *env);
 // export.c
@@ -129,9 +134,16 @@ int		save_outfile(t_cmd *cmd, t_token **tok);
 int		ft_innout(t_cmd *cmd, t_token **tok); //, t_env *env
 
 //*--------------------EXECUTOR----------------------------
-// path.c
 void	get_path(t_shell *data, t_cmd *cmd);
-// executor.c
+void	set_tmp_fds(t_shell *data);
+void	set_fdin(t_shell *data, t_cmd *cmd);
+void	set_fdout(t_shell *data, t_cmd *cmd);
+void	restart_fds(t_shell *data);
+void	run_single_cmd(t_shell *data, t_cmd *cmd);
+void	exec_multiple_cmds(t_shell *data, t_cmd *cmd);
+void	exec_one_cmd(t_shell *data, t_cmd *cmd);
+void	wait_process(t_shell *data);
+void	wait_processess(t_shell *data);
 void	executor(t_shell *data);
 
 //*--------------------UTILS-------------------------------

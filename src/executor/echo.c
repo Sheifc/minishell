@@ -1,11 +1,11 @@
 #include "minishell.h"
 
-static void	print_args(t_cmd *args, int i, int newline)
+static void	print_cmd(t_cmd *cmd, int i, int newline)
 {
-	while (args->arg[i])
+	while (cmd->arg[i])
 	{
-		printf("%s", args->arg[i]);
-		if (args->arg[i + 1])
+		printf("%s", cmd->arg[i]);
+		if (cmd->arg[i + 1])
 			printf(" ");
 		i++;
 	}
@@ -13,7 +13,7 @@ static void	print_args(t_cmd *args, int i, int newline)
 		printf("\n");
 }
 
-void	ft_echo(t_cmd *args)
+void	ft_echo(t_cmd *cmd)
 {
 	int	i;
 	int	j;
@@ -22,20 +22,20 @@ void	ft_echo(t_cmd *args)
 	i = 1;
 	j = 1;
 	newline = 1;
-	while (args->arg[i] && args->arg[i][0] == '-')
+	while (cmd->arg[i] && cmd->arg[i][0] == '-')
 	{
 		i++;
-		while (args->arg[1][j] == 'n')
+		while (cmd->arg[1][j] == 'n')
 		{
 			newline = 0;
 			j++;
 		}
-		if (args->arg[1][j] != '\0')
+		if (cmd->arg[1][j] != '\0')
 		{
 			newline = 1;
 			i--;
 			break ;
 		}
 	}
-	print_args(args, i, newline);
+	print_cmd(cmd, i, newline);
 }

@@ -1,99 +1,69 @@
 #include "minishell.h"
 
-void	wait_process(t_shell *data)
+void	get_status(t_shell *data)
 {
-	while ((wait(&data->status) > 0))
-	{
+	if (WIFEXITED(data->status))
+		data->status = WEXITSTATUS(data->status);
+	else if (WIFSIGNALED(data->status))
+		data->status = WTERMSIG(data->status);
+}
+
+/* void	wait_process(t_shell *data) // no funciona con wait
+{
+ 	if (wait(&data->status) == -1)
+		perror("Error: wait failed");
+	else
+	{ 
 		if (WIFEXITED(data->status))
 			data->status = WEXITSTATUS(data->status);
 		else if (WIFSIGNALED(data->status))
 			data->status = WTERMSIG(data->status);
 	}
-}
+} */
 
-void	redirection(t_cmd *current, int tmpout, int last_cmd)
+void	exec_one_cmd(t_shell *data, t_cmd *cmd)
 {
-	int fdpipe[2];
-
-	dup2(current->fdin, 0);
-	close(current->fdin);
-	if (last_cmd)
-	{
-		dprintf(2, "entra en last_cmd\n");
-		if (current->fdout == -1)
-			current->fdout = dup(tmpout);
-	}
-	else
-	{
-		dprintf(2, "entra en else\n");
-		pipe(fdpipe);
-		current->next->fdin = fdpipe[0];
-		if (current->fdout == -1){
-			current->fdout = fdpipe[1];
-			dprintf(2, "escrito en pipe\n");}
-		else{
-			close(fdpipe[1]);
-			dprintf(2, "cierro fdpipe[1]\n");}
-	}
-	dup2(current->fdout, 1);
-	close(current->fdout);
-}
-
-void	executer(t_shell *data, t_cmd *current)
-{
-	if (!execute_builtin(data))
+	set_fdin(data, cmd);
+	if (!execute_some_builtin(data, cmd))
 	{
 		data->pid = fork();
-		if (data->pid == 0)
-		{
-			get_path(data, current);
-			if (!data->path)
-			{
-				perror("Error: command not found");
-				exit(errno);
-			}
-			execve(data->path, current->arg, data->envp);
-			perror("Error: execve failed");
-			exit(errno);
-		}
-		else if (data->pid < 0)
+		if (data->pid < 0)
 			perror("Error: fork failed");
+		else if (data->pid == 0)
+		{
+			set_fdout(data, cmd);
+			if (!execute_builtin_forked(data, cmd))
+			{
+				get_path(data, cmd);
+				if (!data->path)
+				{
+					perror("Error: command not found");
+					exit(127);
+				}
+				execve(data->path, cmd->arg, data->envp);
+				perror("Error: execve failed");
+				exit(1);
+			}
+		}
 		else
-		if (current != NULL)
-			close(current->fdout);
+			close(cmd->fdout);
+		waitpid(data->pid, &(data->status), 0);
+		get_status(data);
 	}
 }
 
-void restart_fds(int tmpin, int tmpout)
-{	
-	dup2(tmpin, 0);
-	dup2(tmpout, 1);
-	close(tmpin);
-	close(tmpout);
-}
-
-void executor(t_shell *data)
+void	executor(t_shell *data)
 {
-	int tmpin;
-	int tmpout;
-	int i;
-	t_cmd *current;
+	t_cmd	*current;
 
-	i = -1;
 	count_commands(data);
 	current = data->cmd;
 	if (!current)
 		return ;
-	tmpin = dup(0);
-	tmpout = dup(1);
-	if (current->fdin == -1)
-		current->fdin = dup(tmpin);
-	while (++i < data->cmd_count)
-	{
-		redirection(current, tmpout, data->cmd_count - 1 == i);
-		executer(data, current);
-		current = current->next;
-	}
-	wait_process(data);
-	restart_fds(tmpin, tmpout);
+	set_tmp_fds(data);
+	if (data->cmd_count == 1)
+		exec_one_cmd(data, current);
+	else if (data->cmd_count > 1)
+		exec_multiple_cmds(data, current);
+	restart_fds(data);
 }

@@ -26,9 +26,9 @@ static int	update_pwd_oldpwd(t_env *env, const char *key, char *value)
 	return (1);
 }
 
-static char	*get_pwd(t_shell *data, char *path, char *old_pwd)
+static char	*get_pwd(t_shell *data, t_cmd *cmd, char *path, char *old_pwd)
 {
-	if (data->cmd->n_args == 1 || !ft_strncmp(data->cmd->arg[1], "~", 1))
+	if (cmd->n_args == 1 || !ft_strncmp(cmd->arg[1], "~\0", 2))
 	{
 		path = get_cd_value(data->env, "HOME");
 		if (!path)
@@ -37,7 +37,7 @@ static char	*get_pwd(t_shell *data, char *path, char *old_pwd)
 			perror("Error: HOME not found");
 		}
 	}
-	else if (!ft_strncmp(data->cmd->arg[1], "-", 1))
+	else if (!ft_strncmp(cmd->arg[1], "-", 1))
 	{
 		path = get_cd_value(data->env, "OLDPWD");
 		if (!path)
@@ -47,7 +47,7 @@ static char	*get_pwd(t_shell *data, char *path, char *old_pwd)
 		}
 	}
 	else
-		path = data->cmd->arg[1];
+		path = cmd->arg[1];
 	return (path);
 }
 
@@ -70,11 +70,11 @@ static void	update_variables(char *new_pwd, char *old_pwd, t_shell *data)
 	{
 		free(old_pwd);
 		free(new_pwd);
-		perror("Error: actualizando PWD");
+		perror("Error: updating PWD");
 	}
 }
 
-void	ft_cd(t_shell *data)
+void	ft_cd(t_shell *data, t_cmd *cmd)
 {
 	char	*pwd;
 	char	*old_pwd;
@@ -84,7 +84,7 @@ void	ft_cd(t_shell *data)
 	old_pwd = get_current_directory();
 	if (!old_pwd)
 		perror("Error: getting pwd");
-	pwd = get_pwd(data, pwd, old_pwd);
+	pwd = get_pwd(data, cmd, pwd, old_pwd);
 	if (chdir(pwd) < 0)
 	{
 		free(old_pwd);
