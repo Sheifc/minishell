@@ -103,7 +103,7 @@ re: fclean all
 #             Test compilation process             |
 # --------------------------------------------------
 
-TOKEN_FILES		=	token.c token_handles.c token_utils.c test_token.c \
+TOKEN_FILES		=	token.c token_handles.c token_utils.c test_token.c token_handles_utils.c\
 					wildcard.c wildcard_utils.c
 TOKEN_DIR		=	$(SRC_DIR)parser/
 TOKEN_OBJ_DIR	=	$(OBJ_DIR)parser/
@@ -118,7 +118,8 @@ test_token: $(TOKEN_OBJ)
 	$(CC) $(TOKEN_OBJ) -L $(LIBFT_DIR) $(LIBS) -o $@
 
 AST_FILES	= 	ast.c ast_utils.c ast_handles.c test_ast.c token.c token_handles.c \
-				token_utils.c syntax.c syntax_utils.c wildcard.c wildcard_utils.c
+				token_handles_utils.c token_utils.c syntax.c syntax_utils.c \
+				wildcard.c wildcard_utils.c
 AST_DIR		=	$(SRC_DIR)parser/
 AST_OBJ_DIR	=	$(OBJ_DIR)parser/
 AST_SRC		=	$(addprefix $(AST_DIR),$(AST_FILES))
@@ -132,7 +133,7 @@ test_ast: $(AST_OBJ)
 	$(CC) $(AST_OBJ) -L $(LIBFT_DIR) $(LIBS) -o $@
 
 CMD_FILES	= 	command.c command_utils.c command_handles.c command_exe.c test_command.c \
-				ast.c ast_utils.c ast_handles.c token.c token_handles.c \
+				ast.c ast_utils.c ast_handles.c token.c token_handles.c token_handles_utils.c \
 				token_utils.c syntax.c syntax_utils.c wildcard.c wildcard_utils.c
 CMD_DIR		=	$(SRC_DIR)parser/
 CMD_OBJ_DIR	=	$(OBJ_DIR)parser/
@@ -149,7 +150,7 @@ test_cmd: $(CMD_OBJ)
 directories:
 	mkdir -p $(AST_OBJ_DIR) $(TOKEN_OBJ_DIR) $(CMD_OBJ_DIR)
 
-# norminette src/parser/token.c src/parser/token_handles.c src/parser/token_utils.c
+# norminette src/parser/token.c src/parser/token_handles.c src/parser/token_handles_utils.c src/parser/token_utils.c
 # norminette src/parser/wildcard.c src/parser/wildcard_utils.c
 # norminette src/parser/ast.c src/parser/ast_handles.c src/parser/ast_utils.c
 # norminette src/parser/syntax.c src/parser/syntax_utils.c

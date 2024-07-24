@@ -4,13 +4,13 @@
 ASTNode	*build_redirect_node(Token *token, int level)
 {
 	if (token->type == T_OUTPUT)
-		return (create_node(NODE_COMMAND, ">", level));
+		return (create_node(NODE_OUTPUT, ">", level));
 	if (token->type == T_OUTPUT_APPEND)
-		return (create_node(NODE_COMMAND, ">>", level));
+		return (create_node(NODE_OUTPUT_APPEND, ">>", level));
 	if (token->type == T_INPUT)
-		return (create_node(NODE_COMMAND, "<", level));
+		return (create_node(NODE_INPUT, "<", level));
 	if (token->type == T_HEREDOC)
-		return (create_node(NODE_COMMAND, "<<", level));
+		return (create_node(NODE_HEREDOC, "<<", level));
 	return (create_node(NODE_UNKNOWN, "-", level));
 }
 
@@ -90,24 +90,20 @@ ASTNode	*handle_parentheses(Token **tokens, int num_tokens, int level)
 // Function to handle redirects
 ASTNode	*handle_redirection(Token **tokens, int num_tokens, int level)
 {
-	ASTNode	*root;
-	ASTNode	*redirect;
-	int		i;
-
-	i = -1;
-	while (++i < num_tokens)
+	if (num_tokens > 0)
 	{
-		if (tokens[i]->type == T_OUTPUT || tokens[i]->type == T_OUTPUT_APPEND
-			|| tokens[i]->type == T_INPUT || tokens[i]->type == T_HEREDOC)
+		if (tokens[0]->type == T_REDIRECT_ARG)
 		{
-			root = create_node(select_redirection(tokens[i]->type),
-					tokens[i]->value, level);
-			redirect = build_redirect_node(tokens[i], level + 1);
-			root->left = build_ast(tokens, i, level + 1);
-			root->right = redirect;
-			redirect->left = build_ast(tokens + i + 1, num_tokens - i - 1, level
-					+ 1);
-			return (root);
+			if ((tokens - 1)[0]->type == T_OUTPUT)
+				return (create_node(NODE_OUTPUT, tokens[0]->value, level));
+			if ((tokens - 1)[0]->type == T_OUTPUT_APPEND)
+				return (create_node(NODE_OUTPUT_APPEND, tokens[0]->value,
+						level));
+			if ((tokens - 1)[0]->type == T_INPUT)
+				return (create_node(NODE_INPUT, tokens[0]->value, level));
+			if ((tokens - 1)[0]->type == T_HEREDOC)
+				return (create_node(NODE_HEREDOC, tokens[0]->value, level));
+			return (create_node(NODE_UNKNOWN, tokens[0]->value, level));
 		}
 	}
 	return (NULL);

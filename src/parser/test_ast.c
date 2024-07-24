@@ -67,8 +67,8 @@ int	main(void)
 	{"(ls -la)", true},
 	{"export", true},
 	{"ls -la | grep 'txt' && cat file.txt > output.txt", true},
-	{"ls -la | grep 'txt' && cat file.txt > output.txt || echo 'Failed'", true},
-	{"(ls -l -a -r | grep 'txt') && (cat file.txt > output.txt || "
+	{"ls -la | grep 'txt' && cat file.txt >> output.txt || echo 'Failed'", true},
+	{"(ls -l -a -r | grep 'txt') && (sort < input.txt || "
 		"(echo 'Failed'&& mkdir new_dir))", true},
 	{"mkdir test && cd test || echo 'Could not create directory'", true},
 	{"echo 'Starting process'; (cd /tmp && touch temp_file) || "

@@ -2,11 +2,11 @@
 # define TOKEN_H
 
 # include "libft.h"
+# include <dirent.h>
 # include <stdbool.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
-# include <dirent.h>
 
 # define MAX_TOKENS 1000
 # define DELIMITERS " \r\n\t\v\f"
@@ -46,6 +46,7 @@ typedef enum _TokenType
 	T_OUTPUT_APPEND,
 	T_SEMICOLON,
 	T_WILDCARD,
+	T_REDIRECT_ARG,
 	T_UNKNOWN
 }				TokenType;
 
@@ -64,9 +65,22 @@ Token			**tokenize(const char *input, int *num_tokens);
 
 // token_handles
 void			handle_wildcards(char **start, Token **tokens, int *n_tokens);
+void			handle_unmatched_quotes(char **start, char *end, Token **tokens,
+					int *n_tokens);
 void			handle_quotes(char **start, Token **tokens, int *n_tokens,
 					char quote_char);
+void			handle_redirect_arg(char **start, Token **tokens,
+					int *n_tokens);
 void			handle_regular_tokens(char **start, Token **tokens,
+					int *n_tokens);
+
+// token_handles_utils
+void			handle_heredoc_token(char **start, Token **tokens,
+					int *n_tokens);
+void			handle_output_append_token(char **start, Token **tokens,
+					int *n_tokens);
+void			handle_input_token(char **start, Token **tokens, int *n_tokens);
+void			handle_output_token(char **start, Token **tokens,
 					int *n_tokens);
 
 // token_utils

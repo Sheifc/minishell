@@ -14,10 +14,11 @@
 # define M_OR "Or"
 # define M_PAREN "Parentesis"
 # define M_TEXT "Text"
-# define M_INPUT "Redirect"
-# define M_HEREDOC "Redirect"
-# define M_OUTPUT "Redirect"
-# define M_OUTPUT_APPEND "Redirect"
+# define M_REDIRECT "Redirect"
+# define M_INPUT "Input"
+# define M_HEREDOC "Heredoc"
+# define M_OUTPUT "Output"
+# define M_OUTPUT_APPEND "Output_append"
 # define M_SEMICOLON "Semicolon"
 # define M_UNKNOWN "Unknown"
 
@@ -34,6 +35,7 @@ typedef enum _NodeType
 	NODE_OR,
 	NODE_PARENTHESIS,
 	NODE_TEXT,
+	NODE_REDIRECT,
 	NODE_INPUT,
 	NODE_HEREDOC,
 	NODE_OUTPUT,

@@ -47,17 +47,19 @@ int	execute_operator(ASTNode *node, int input_fd, int output_fd)
 	int	left_result;
 	int	pipe_fds[2];
 
-	if (node->type == NODE_PIPE) 
+	if (node->type == NODE_PIPE)
 	{
 		if (pipe(pipe_fds) == -1)
 		{
 			perror("pipe");
 			exit(EXIT_FAILURE);
 		}
-		left_result = traverse_ast(node->left, input_fd, pipe_fds[1]);
 	}
-	else
+	else if (node->type != NODE_PIPE)
+	{
+		printf("   left: %s\n", node->left->value);
 		left_result = traverse_ast(node->left, input_fd, output_fd);
+	}
 	printf("%s\n", node->value);
 	if (node->type == NODE_AND)
 		return (handle_and(node, input_fd, output_fd, left_result));
@@ -67,7 +69,7 @@ int	execute_operator(ASTNode *node, int input_fd, int output_fd)
 		return (handle_parenthesis(node, left_result));
 	else if (node->type == NODE_PIPE)
 		return (handle_pipe(node, input_fd, output_fd));
-	else if (node->type == NODE_OUTPUT)
+	else if (node->type == NODE_REDIRECT)
 		return (handle_redirections(node, &input_fd, &output_fd));
 	else
 		return (-1);
@@ -79,10 +81,12 @@ int	traverse_ast(ASTNode *node, int input_fd, int output_fd)
 	Command	*cmd;
 	int		result;
 
+	printf(" * %s*\n", node->value);
 	if (node == NULL)
 		return (-1);
 	if (node->type == NODE_PIPE || node->type == NODE_AND
-		|| node->type == NODE_OR || node->type == NODE_PARENTHESIS || node->type == NODE_OUTPUT )
+		|| node->type == NODE_OR || node->type == NODE_PARENTHESIS
+		|| node->type == NODE_REDIRECT)
 		return (execute_operator(node, input_fd, output_fd));
 	else if (node->type == NODE_COMMAND)
 	{
@@ -92,7 +96,10 @@ int	traverse_ast(ASTNode *node, int input_fd, int output_fd)
 		free_command(cmd);
 		return (result);
 	}
-	traverse_ast(node->left, input_fd, output_fd);
-	traverse_ast(node->right, input_fd, output_fd);
+	else
+	{
+		traverse_ast(node->left, input_fd, output_fd);
+		traverse_ast(node->right, input_fd, output_fd);
+	}
 	return (0);
 }

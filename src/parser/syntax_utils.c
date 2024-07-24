@@ -21,7 +21,7 @@ bool	is_command_with_args(ASTNode *node)
 				"valido\e[0m\n", node->level, node->value, node->type);
 			return (false);
 		}
-		child = child->right;
+		child = child->left;
 	}
 	return (true);
 }
@@ -77,6 +77,8 @@ bool	is_binary_operator_valid(ASTNode *node)
 
 bool	is_redirection_valid(ASTNode *node)
 {
+	ASTNode	*child;
+
 	if (node == NULL)
 		return (false);
 	if (node->left == NULL || node->right == NULL)
@@ -85,16 +87,12 @@ bool	is_redirection_valid(ASTNode *node)
 			"operandos validos\e[0m\n", node->level, node->value, node->type);
 		return (false);
 	}
-	if (!is_command_with_args(node->left))
+	child = node->right;
+	if (!child || (child->type != NODE_INPUT && child->type != NODE_HEREDOC
+			&& child->type != NODE_OUTPUT && child->type != NODE_OUTPUT_APPEND))
 	{
-		printf("\e[31m ** Error redireccion: (%d)%s[%d]: %s no es un comando"
-			"\e[0m\n", node->level, node->value, node->type, node->left->value);
-		return (false);
-	}
-	if (!is_command_with_args_mandatory(node->right))
-	{
-		printf("\e[31m ** Error redireccion: (%d) %s[%d]: requiere argumento "
-			"obligatorio\e[0m\n", node->level, node->value, node->type);
+		printf("\e[31m ** Error comando: (%d) %s[%d]: no posee argumento "
+			"valido\e[0m\n", node->level, node->value, node->type);
 		return (false);
 	}
 	return (true);

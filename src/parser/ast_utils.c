@@ -49,6 +49,9 @@ NodeType	select_operator(TokenType type)
 		return (NODE_OR);
 	else if (type == T_SEMICOLON)
 		return (NODE_SEMICOLON);
+	else if (type == T_INPUT || type == T_HEREDOC || type == T_OUTPUT 
+		|| type == T_OUTPUT_APPEND)
+		return (NODE_REDIRECT);
 	else
 		return (NODE_UNKNOWN);
 }
@@ -70,11 +73,12 @@ int	find_operator(Token **tokens, int num_tokens)
 		else if (tokens[i]->type == T_PAREN_CLOSE)
 			depth--;
 		else if (depth == 0)
-		{
 			if (tokens[i]->type == T_OR || tokens[i]->type == T_AND
-				|| tokens[i]->type == T_SEMICOLON || tokens[i]->type == T_PIPE)
+				|| tokens[i]->type == T_SEMICOLON || tokens[i]->type == T_PIPE
+				|| tokens[i]->type == T_INPUT || tokens[i]->type == T_HEREDOC
+				|| tokens[i]->type == T_OUTPUT
+				|| tokens[i]->type == T_OUTPUT_APPEND)
 				last_operator_index = i;
-		}
 	}
 	if (depth < 0)
 		return (ERROR);
@@ -86,8 +90,8 @@ void	print_ast(ASTNode *root)
 {
 	int			i;
 	const char	*messages[] = {M_COMMAND, M_ARGUMENT, M_PIPE, M_AND, M_OR,
-		M_PAREN, M_TEXT, M_INPUT, M_HEREDOC, M_OUTPUT, M_OUTPUT_APPEND,
-		M_SEMICOLON, M_UNKNOWN};
+		M_PAREN, M_TEXT, M_REDIRECT, M_INPUT, M_HEREDOC, M_OUTPUT,
+		M_OUTPUT_APPEND, M_SEMICOLON, M_UNKNOWN};
 
 	if (root == NULL)
 		return ;

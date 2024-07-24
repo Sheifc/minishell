@@ -64,24 +64,48 @@ void	handle_quotes(char **start, Token **tokens, int *n_tokens,
 		handle_unmatched_quotes(start, end, tokens, n_tokens);
 }
 
+void	handle_redirect_arg(char **start, Token **tokens, int *n_tokens)
+{
+	char		*end;
+	char		temp;
+	TokenType	type;
+
+	end = *start + 1;
+	while (*end && !strchr(DELIMITERS, *end) && *end != '"' && *end != '\''
+		&& *end != '(' && *end != ')' && *end != '|' && *end != '<'
+		&& *end != '>' && *end != ';' && ft_strncmp(end, "&&", 2) != 0
+		&& ft_strncmp(end, "||", 2) != 0 && ft_strncmp(end, "<<", 2) != 0
+		&& ft_strncmp(end, ">>", 2) != 0)
+		end++;
+	if (end != *start + 1)
+	{
+		temp = *end;
+		*end = '\0';
+		type = T_REDIRECT_ARG;
+		tokens[*n_tokens] = create_token(type, *start + 1, true);
+		(*n_tokens)++;
+		*end = temp;
+		*start = end;
+	}
+}
+
 // Main function for token matching
 void	handle_regular_tokens(char **start, Token **tokens, int *n_tokens)
 {
-	if (strncmp(*start, "&&", 2) == 0)
+	if (ft_strncmp(*start, "&&", 2) == 0)
 		add_token(start, tokens, n_tokens, (Token){T_AND, "&&", false});
-	else if (strncmp(*start, "||", 2) == 0)
+	else if (ft_strncmp(*start, "||", 2) == 0)
 		add_token(start, tokens, n_tokens, (Token){T_OR, "||", false});
-	else if (strncmp(*start, "<<", 2) == 0)
-		add_token(start, tokens, n_tokens, (Token){T_HEREDOC, "<<", true});
-	else if (strncmp(*start, ">>", 2) == 0)
-		add_token(start, tokens, n_tokens, (Token){T_OUTPUT_APPEND, ">>",
-			true});
+	else if (ft_strncmp(*start, "<<", 2) == 0)
+		handle_heredoc_token(start, tokens, n_tokens);
+	else if (ft_strncmp(*start, ">>", 2) == 0)
+		handle_output_append_token(start, tokens, n_tokens);
 	else if (**start == '|')
 		add_token(start, tokens, n_tokens, (Token){T_PIPE, "|", false});
 	else if (**start == '<')
-		add_token(start, tokens, n_tokens, (Token){T_INPUT, "<", true});
+		handle_input_token(start, tokens, n_tokens);
 	else if (**start == '>')
-		add_token(start, tokens, n_tokens, (Token){T_OUTPUT, ">", true});
+		handle_output_token(start, tokens, n_tokens);
 	else if (**start == ';')
 		add_token(start, tokens, n_tokens, (Token){T_SEMICOLON, ";", false});
 	else if (**start == '(')

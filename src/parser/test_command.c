@@ -8,8 +8,7 @@ int	main(void)
 	bool		is_valid;
 	int			num_tokens;
 
-	// input = "((ls file* | wc) && (ls arch* | wc -l) && ls arch*.txt) | wc";
-	input = "ls file*.txt > output1.txt >> output2.txt";
+	input = "ls file*.txt | wc > out1.txt >> out2.txt > out3.txt >> out4.txt ";
 	printf("\e[35m\n------------------- * -------------------\n\e[0m");
 	tokens = tokenize(input, &num_tokens);
 	printf("input:\n%s\n", input);
@@ -25,3 +24,5 @@ int	main(void)
 		traverse_ast(ast, STDIN_FILENO, STDOUT_FILENO);
 	return (0);
 }
+
+// input = "((ls file* | wc) && (ls arch* | wc -l) && ls arch*.txt) | wc";
