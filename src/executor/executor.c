@@ -1,87 +1,56 @@
 #include "minishell.h"
 
-void	redirection(t_cmd *current, int tmpout, int last_cmd)
+void	get_status(t_shell *data)
 {
-	int fdpipe[2];
-
-	dup2(current->fdin, 0);
-	close(current->fdin);
-	if (last_cmd)
-	{
-		if (current->fdout == -1)
-			current->fdout = dup(tmpout);
-	}
-	else
-	{
-		pipe(fdpipe);
-		current->next->fdin = fdpipe[0];
-		if (current->fdout == -1)
-			current->fdout = fdpipe[1];
-		else
-			close(fdpipe[1]);
-	}
-	dup2(current->fdout, 1);
-	close(current->fdout);
+	if (WIFEXITED(data->status))
+		data->status = WEXITSTATUS(data->status);
+	else if (WIFSIGNALED(data->status))
+		data->status = WTERMSIG(data->status);
 }
 
-void	executer(t_shell *data, t_cmd *current, int i)
+void	exec_one_cmd(t_shell *data, t_cmd *cmd)
 {
-	if (!execute_builtin(data))
+	set_fdin(data, cmd);
+	if (!execute_some_builtin(data, cmd))
 	{
-		data->pid[i] = fork();
-		if (data->pid[i] == 0)
-		{
-			get_path(data, current);
-			if (!data->path)
-			{
-				perror("Error: command not found");
-				exit(errno);
-			}
-			execve(data->path, current->arg, data->envp);
-			perror("Error: execve failed");
-			exit(errno);
-		}
-		else if (data->pid[i] < 0)
+		data->pid = fork();
+		if (data->pid < 0)
 			perror("Error: fork failed");
+		else if (data->pid == 0)
+		{
+			set_fdout(data, cmd);
+			if (!execute_builtin_forked(data, cmd))
+			{
+				get_path(data, cmd);
+				if (!data->path)
+				{
+					perror("Error: command not found");
+					exit(127);
+				}
+				execve(data->path, cmd->arg, data->envp);
+				perror("Error: execve failed");
+				exit(1);
+			}
+		}
 		else
-		if (current != NULL)
-			close(current->fdout);
+			close(cmd->fdout);
+		waitpid(data->pid, &(data->status), 0);
+		get_status(data);
 	}
 }
 
-void restart_fds(int tmpin, int tmpout)
-{	
-	dup2(tmpin, 0);
-	dup2(tmpout, 1);
-	close(tmpin);
-	close(tmpout);
-}
-
-void executor(t_shell *data)
+void	executor(t_shell *data)
 {
-	int tmpin;
-	int tmpout;
-	int i;
-	t_cmd *current;
+	t_cmd	*current;
 
-	i = -1;
 	count_commands(data);
-	init_pid(data);
 	current = data->cmd;
 	if (!current)
 		return ;
-	tmpin = dup(0);
-	tmpout = dup(1);
-	if (current->fdin == -1)
-		current->fdin = dup(tmpin);
-	while (++i < data->cmd_count)
-	{
-		redirection(current, tmpout, data->cmd_count - 1 == i);
-		executer(data, current, i);
-		current = current->next;
-	}
-	waitpid(data->pid[data->cmd_count-1], &data->status, 0);
-	data->status = WEXITSTATUS(data->status);
-	end_processess(data->pid, data->cmd_count - 1);
-	restart_fds(tmpin, tmpout);
+	set_tmp_fds(data);
+	if (data->cmd_count == 1)
+		exec_one_cmd(data, current);
+	else if (data->cmd_count > 1)
+		exec_multiple_cmds(data, current);
+	restart_fds(data);
 }

@@ -53,6 +53,9 @@ FILES_EXEC      = exec_builtins.c  \
                   exit.c           \
                   export.c         \
                   unset.c          \
+				  set_fds.c		   \
+				  exec_multiple_cmds.c \
+				  exec_multiple_cmds2.c \
                   executor.c       \
                   path.c           \
                   printing.c
