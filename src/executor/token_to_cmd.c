@@ -32,7 +32,7 @@ t_cmd	*create_cmd_node(void)
 	return (node);
 }
 
-void	add_argument(t_cmd *cmd, char *token_content)
+void	add_argument2(t_cmd *cmd, char *token_content)
 {
 	char	**new_arg;
 	int		i;
@@ -89,7 +89,7 @@ int	fill_cmd_args(t_cmd *cmd, t_token **token) //, t_env *env
 		else if ((*token)->type == WORD || (*token)->type == QUOTE \
 			|| (*token)->type == DQUOTE)
 		{
-			add_argument(cmd, (*token)->content);
+			add_argument2(cmd, (*token)->content);
 			*token = (*token)->next;
 		}
 		else

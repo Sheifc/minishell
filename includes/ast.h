@@ -41,7 +41,8 @@ typedef enum _NodeType
 	NODE_OUTPUT,
 	NODE_OUTPUT_APPEND,
 	NODE_SEMICOLON,
-	NODE_UNKNOWN
+	NODE_UNKNOWN,
+	NODE_END
 }					NodeType;
 
 typedef struct _ASTNode
@@ -59,7 +60,8 @@ void				free_ast(ASTNode *root);
 ASTNode				*build_ast(Token **tokens, int num_tokens, int level);
 
 // AST handles
-ASTNode				*build_redirect_node(Token *token, int level);
+// ASTNode				*build_redirect_node(Token *token, int level);
+ASTNode				*build_redirect_node(Token **tokens, char *name, int num_tokens, int level);
 ASTNode				*build_command_node(Token **tokens, int n_token, int level);
 ASTNode				*handle_operators(Token **tokens, int n_token, int level,
 						int *pos);

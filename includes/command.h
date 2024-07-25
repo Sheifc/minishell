@@ -14,16 +14,26 @@
 # define WRITE 1
 # define CMD_BUFFER_SIZE 4096
 
+typedef struct OperatorStack {
+    NodeType type;
+    struct OperatorStack *next;
+} OperatorStack;
+
+
 typedef struct _Command
 {
-	char	*name;
-	char	**args;
-	int		arg_count;
-}			Command;
+	char			*name;
+	char			**arg;
+	int				n_args;
+	int				fdin;
+	int				fdout;
+	struct _Command	*next;
+	NodeType		operator;
+}					Command;
 
 // Command
-Command		*create_command(const char *name);
-int			traverse_ast(ASTNode *node, int input_fd, int output_fd);
+Command		*create_command(const char *name, int fdin, int fdout, NodeType ope);
+Command		*traverse_ast(ASTNode *node, int input_fd, int output_fd, OperatorStack **ope_stack);
 int			execute_operator(ASTNode *node, int input_fd, int output_fd);
 
 // Command utils
