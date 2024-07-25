@@ -49,9 +49,17 @@ NodeType	select_operator(TokenType type)
 		return (NODE_OR);
 	else if (type == T_SEMICOLON)
 		return (NODE_SEMICOLON);
-	else if (type == T_INPUT || type == T_HEREDOC || type == T_OUTPUT 
-		|| type == T_OUTPUT_APPEND)
-		return (NODE_REDIRECT);
+	else if (type == T_INPUT)
+		return (NODE_INPUT);
+	else if (type == T_HEREDOC)
+		return (NODE_HEREDOC);
+	else if (type == T_OUTPUT)
+		return (NODE_OUTPUT);
+	else if (type == T_OUTPUT_APPEND)
+		return (NODE_OUTPUT_APPEND);
+	// else if (type == T_INPUT || type == T_HEREDOC || type == T_OUTPUT 
+	// 	|| type == T_OUTPUT_APPEND)
+	// 	return (NODE_REDIRECT);
 	else
 		return (NODE_UNKNOWN);
 }

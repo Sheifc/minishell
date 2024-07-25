@@ -1,18 +1,18 @@
 #include "ast.h"
 
-// Function to create the corresponding redirect operator node
-ASTNode	*build_redirect_node(Token *token, int level)
-{
-	if (token->type == T_OUTPUT)
-		return (create_node(NODE_OUTPUT, ">", level));
-	if (token->type == T_OUTPUT_APPEND)
-		return (create_node(NODE_OUTPUT_APPEND, ">>", level));
-	if (token->type == T_INPUT)
-		return (create_node(NODE_INPUT, "<", level));
-	if (token->type == T_HEREDOC)
-		return (create_node(NODE_HEREDOC, "<<", level));
-	return (create_node(NODE_UNKNOWN, "-", level));
-}
+// // Function to create the corresponding redirect operator node
+// ASTNode	*build_redirect_node(Token *token, int level)
+// {
+// 	if (token->type == T_OUTPUT)
+// 		return (create_node(NODE_OUTPUT, ">", level));
+// 	if (token->type == T_OUTPUT_APPEND)
+// 		return (create_node(NODE_OUTPUT_APPEND, ">>", level));
+// 	if (token->type == T_INPUT)
+// 		return (create_node(NODE_INPUT, "<", level));
+// 	if (token->type == T_HEREDOC)
+// 		return (create_node(NODE_HEREDOC, "<<", level));
+// 	return (create_node(NODE_UNKNOWN, "-", level));
+// }
 
 // Function to build the command node and its arguments
 ASTNode	*build_command_node(Token **tokens, int num_tokens, int level)
@@ -40,6 +40,19 @@ ASTNode	*build_command_node(Token **tokens, int num_tokens, int level)
 				current = current->left;
 			}
 		}
+	}
+	return (root);
+}
+
+ASTNode	*build_redirect_node(Token **tokens, char *name, int num_tokens, int level)
+{
+	ASTNode	*root;
+
+	root = NULL;
+	if (num_tokens > 0)
+	{
+		root = create_node(NODE_COMMAND, name, level);
+		root->left = create_node(NODE_ARGUMENT, tokens[0]->value, level + 1);
 	}
 	return (root);
 }
@@ -95,15 +108,14 @@ ASTNode	*handle_redirection(Token **tokens, int num_tokens, int level)
 		if (tokens[0]->type == T_REDIRECT_ARG)
 		{
 			if ((tokens - 1)[0]->type == T_OUTPUT)
-				return (create_node(NODE_OUTPUT, tokens[0]->value, level));
+				return (build_redirect_node(tokens, "save_outfile", num_tokens, level));
 			if ((tokens - 1)[0]->type == T_OUTPUT_APPEND)
-				return (create_node(NODE_OUTPUT_APPEND, tokens[0]->value,
-						level));
+				return (build_redirect_node(tokens, "save_append", num_tokens, level));
 			if ((tokens - 1)[0]->type == T_INPUT)
-				return (create_node(NODE_INPUT, tokens[0]->value, level));
+				return (build_redirect_node(tokens, "save_infile", num_tokens, level));
 			if ((tokens - 1)[0]->type == T_HEREDOC)
-				return (create_node(NODE_HEREDOC, tokens[0]->value, level));
-			return (create_node(NODE_UNKNOWN, tokens[0]->value, level));
+				return (build_redirect_node(tokens, "heredoc", num_tokens, level));
+			return (build_redirect_node(tokens, "cat", num_tokens, level));
 		}
 	}
 	return (NULL);

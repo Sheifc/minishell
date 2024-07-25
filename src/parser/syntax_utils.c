@@ -88,8 +88,7 @@ bool	is_redirection_valid(ASTNode *node)
 		return (false);
 	}
 	child = node->right;
-	if (!child || (child->type != NODE_INPUT && child->type != NODE_HEREDOC
-			&& child->type != NODE_OUTPUT && child->type != NODE_OUTPUT_APPEND))
+	if (!child || (child->type != NODE_COMMAND))
 	{
 		printf("\e[31m ** Error comando: (%d) %s[%d]: no posee argumento "
 			"valido\e[0m\n", node->level, node->value, node->type);
