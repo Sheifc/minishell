@@ -66,7 +66,7 @@ int	main(void)
 	bool		is_valid;
 	int			num_tokens;
 
-	input = "ls file*.txt > out1.txt > out2.txt";
+	input = "(ls file*.txt | wc | wc && ls arch*.txt) > out1.txt > out2.txt";
 	printf("\e[35m\n------------------- * -------------------\n\e[0m");
 	tokens = tokenize(input, &num_tokens);
 	printf("input:\n%s\n", input);
@@ -77,12 +77,13 @@ int	main(void)
 	printf("\n**** AST: ****\n");
 	print_ast(ast);
 	is_valid = validate_ast(tokens, ast);
-	printf("\n**** Commands: ****\n");
+	printf("\n**** Generating Commands: ****\n");
 	OperatorStack *ope_stack = NULL;
+	PipeStack *pipe_stack = NULL;
 	if (is_valid)
-		cmd = traverse_ast(ast, STDIN_FILENO, STDOUT_FILENO, &ope_stack);
+		cmd = traverse_ast(ast, STDIN_FILENO, STDOUT_FILENO, &ope_stack, &pipe_stack);
 	current = cmd;
-	printf("\n**** Commands: ****\n");
+	printf("\n**** List ofCommands: ****\n");
 	while (current)
 	{
 		print_command(current);
@@ -94,11 +95,12 @@ int	main(void)
 	
 	return (0);
 }
-// input = "\"e\"\"c\"\"h\"\"o\" hola"
-// input = "cat /dev/random | head";
-// input = "cat | cat | ls";
-// input = "echo hola | cat > out1.txt";
-// input = "echo hola | echo hola | echo bye";
-// input = "ls -l file*.txt && ls -l arch*.txt > out1.txt";
-// input = "ls -l file*.txt | wc > out1.txt >> out2.txt >> out3.txt";
-// input = "((ls file* | wc) && (ls arch* | wc -l) && ls arch*.txt) | wc";
+	// input = "ls file*.txt > out1.txt > out2.txt";
+	// input = "\"e\"\"c\"\"h\"\"o\" hola"
+	// input = "cat /dev/random | head";
+	// input = "cat | cat | ls";
+	// input = "echo hola | cat > out1.txt";
+	// input = "echo hola | echo hola | echo bye";
+	// input = "ls -l file*.txt && ls -l arch*.txt > out1.txt";
+	// input = "ls -l file*.txt | wc > out1.txt >> out2.txt >> out3.txt";
+	// input = "((ls file* | wc) && (ls arch* | wc -l) && ls arch*.txt) | wc";

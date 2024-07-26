@@ -14,11 +14,16 @@
 # define WRITE 1
 # define CMD_BUFFER_SIZE 4096
 
-typedef struct OperatorStack {
+typedef struct _OperatorStack {
     NodeType type;
-    struct OperatorStack *next;
+    struct _OperatorStack *next;
 } OperatorStack;
 
+typedef struct _PipeStack {
+    int		fdin;
+    int		fdout;
+    struct _PipeStack *next;
+} PipeStack;
 
 typedef struct _Command
 {
@@ -27,13 +32,14 @@ typedef struct _Command
 	int				n_args;
 	int				fdin;
 	int				fdout;
+	struct _Command	*prev;
 	struct _Command	*next;
 	NodeType		operator;
 }					Command;
 
 // Command
 Command		*create_command(const char *name, int fdin, int fdout, NodeType ope);
-Command		*traverse_ast(ASTNode *node, int input_fd, int output_fd, OperatorStack **ope_stack);
+Command 	*traverse_ast(ASTNode *node, int input_fd, int output_fd, OperatorStack **ope_stack, PipeStack **pipe_stack);
 int			execute_operator(ASTNode *node, int input_fd, int output_fd);
 
 // Command utils
@@ -42,6 +48,7 @@ void		add_argument(Command *cmd, const char *arg);
 char		**build_cmd_args(Command *cmd);
 void		free_command(Command *cmd);
 void		print_command(Command *cmd);
+char		*nodeTypeToSymbol(NodeType type);
 
 // Command handles
 int			handle_pipe(ASTNode *node, int input_fd, int output_fd);

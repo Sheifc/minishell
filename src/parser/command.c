@@ -44,275 +44,107 @@ Command	*create_command_from_ast(ASTNode *node, int fdin, int fdout, NodeType op
 	return (cmd);
 }
 
-// Función para manejar la ejecución de operadores
-// int	execute_operator(ASTNode *node, int input_fd, int output_fd)
-// {
-// 	int	left_result;
-// 	int	pipe_fds[2];
+void	print_ope_stack(OperatorStack *head){
+	OperatorStack *current = head;
+	printf("Operation stack:\n");
+	while(current){
+		printf("  - type: %s\n", nodeTypeToSymbol(current->type));
+		current = current->next;
+	}
+}
 
-// 	if (node->type == NODE_PIPE)
-// 	{
-// 		if (pipe(pipe_fds) == -1)
-// 		{
-// 			perror("pipe");
-// 			exit(EXIT_FAILURE);
-// 		}
-// 	}
-// 	else if (node->type != NODE_PIPE)
-// 	{
-// 		printf("   left: %s\n", node->left->value);
-// 		left_result = 1;
-// 		// left_result = traverse_ast(node->left, input_fd, output_fd, NULL);
-// 	}
-// 	printf("%s\n", node->value);
-// 	if (node->type == NODE_AND)
-// 		return (handle_and(node, input_fd, output_fd, left_result));
-// 	else if (node->type == NODE_OR)
-// 		return (handle_or(node, input_fd, output_fd, left_result));
-// 	else if (node->type == NODE_PARENTHESIS)
-// 		return (handle_parenthesis(node, left_result));
-// 	else if (node->type == NODE_PIPE)
-// 		return (handle_pipe(node, input_fd, output_fd));
-// 	else if (node->type == NODE_REDIRECT)
-// 		return (handle_redirections(node, &input_fd, &output_fd));
-// 	else
-// 		return (-1);
-// }
+void	print_pipe_stack(PipeStack *head){
+	PipeStack *current = head;
+	printf("Pipe stack:\n");
+	while(current){
+		printf("  - fd_in:%d, fd_out:%d\n", current->fdin, current->fdout);
+		current = current->next;
+	}
+}
 
-// int	execute_operator2(ASTNode *node, int input_fd, int output_fd)
-// {
-// 	int	left_result;
-// 	int	pipe_fds[2];
-
-// 	if (node->type == NODE_PIPE)
-// 	{
-// 		if (pipe(pipe_fds) == -1)
-// 		{
-// 			perror("pipe");
-// 			exit(EXIT_FAILURE);
-// 		}
-// 	}
-// 	else if (node->type != NODE_PIPE)
-// 	{
-// 		printf("   left: %s\n", node->left->value);
-// 		left_result = 1;
-// 		// left_result = traverse_ast(node->left, input_fd, output_fd, NULL);
-// 	}
-// 	printf("%s\n", node->value);
-// 	if (node->type == NODE_AND)
-// 		return (handle_and(node, input_fd, output_fd, left_result));
-// 	else if (node->type == NODE_OR)
-// 		return (handle_or(node, input_fd, output_fd, left_result));
-// 	else if (node->type == NODE_PARENTHESIS)
-// 		return (handle_parenthesis(node, left_result));
-// 	else if (node->type == NODE_PIPE)
-// 		return (handle_pipe(node, input_fd, output_fd));
-// 	else if (node->type == NODE_REDIRECT)
-// 		return (handle_redirections(node, &input_fd, &output_fd));
-// 	else
-// 		return (-1);
-// }
-
-// Main function
-// Command	*traverse_ast(ASTNode *node, int input_fd, int output_fd, NodeType *ope)
-// {
-// 	Command *head = NULL;
-//     Command *tail = NULL;
-// 	Command	*cmd;
-
-// 	// printf(" * %s*\n", node->value);
-// 	if (node == NULL)
-// 		return (NULL);
-// 	// if (node->type == NODE_PIPE || node->type == NODE_AND
-// 	// 	|| node->type == NODE_OR || node->type == NODE_PARENTHESIS
-// 	// 	|| node->type == NODE_REDIRECT)
-// 	// 	return (execute_operator(node, input_fd, output_fd));
-// 	else if (node->type == NODE_COMMAND)
-// 	{
-// 		cmd = create_command_from_ast(node, input_fd, output_fd, ope);
-// 		print_command(cmd);
-// 		if (cmd) {
-// 			if (head == NULL) {
-// 				head = tail = cmd;
-// 			} else {
-// 				tail->next = cmd;
-// 			}
-// 			while (tail->next) {
-// 				tail = tail->next;
-// 			}
-// 		}
-// 		return (head);
-// 	}
-// 	else if (node->type == NODE_PIPE)
-// 	{
-// 		int pipe_fds[2];
-// 		pipe(pipe_fds);
-// 		printf(" pipes: %d, %d\n", pipe_fds[READ], pipe_fds[WRITE]);
-// 		Command *left_cmds = traverse_ast(node->left, input_fd, pipe_fds[WRITE], &node->type);
-// 		Command *right_cmds = traverse_ast(node->right, pipe_fds[READ], output_fd, &node->type);
-// 		if (left_cmds) {
-// 			if (head == NULL) {
-// 				head = tail = left_cmds;
-// 			} else {
-// 				tail->next = left_cmds;
-// 			}
-// 			while (tail->next) {
-// 				tail = tail->next;
-// 			}
-// 		}
-// 		if (right_cmds) {
-// 			if (head == NULL) {
-// 				head = tail = right_cmds;
-// 			} else {
-// 				tail->next = right_cmds;
-// 			}
-// 			while (tail->next) {
-// 				tail = tail->next;
-// 			}
-// 		}
-// 	}
-// 	else if (node->type == NODE_REDIRECT)
-// 	{
-// 		int fd = open(node->right->value, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-// 		Command *left_cmds = traverse_ast(node->left, input_fd, output_fd, &node->type);
-// 		Command *right_cmds = traverse_ast(node->right, input_fd, fd, &node->type);
-// 		if (left_cmds) {
-// 			if (head == NULL) {
-// 				head = tail = left_cmds;
-// 			} else {
-// 				tail->next = left_cmds;
-// 			}
-// 			while (tail->next) {
-// 				tail = tail->next;
-// 			}
-// 		}
-// 		if (right_cmds) {
-// 			if (head == NULL) {
-// 				head = tail = right_cmds;
-// 			} else {
-// 				tail->next = right_cmds;
-// 			}
-// 			while (tail->next) {
-// 				tail = tail->next;
-// 			}
-// 		}
-// 	}
-// 	else
-// 	{
-// 		Command *left_cmds = traverse_ast(node->left, input_fd, output_fd, &node->type);
-// 		Command *right_cmds = traverse_ast(node->right, input_fd, output_fd, &node->type);
-// 		if (left_cmds) {
-// 			if (head == NULL) {
-// 				head = tail = left_cmds;
-// 			} else {
-// 				tail->next = left_cmds;
-// 			}
-// 			while (tail->next) {
-// 				tail = tail->next;
-// 			}
-// 		}
-// 		if (right_cmds) {
-// 			if (head == NULL) {
-// 				head = tail = right_cmds;
-// 			} else {
-// 				tail->next = right_cmds;
-// 			}
-// 			while (tail->next) {
-// 				tail = tail->next;
-// 			}
-// 		}
-// 	}
-// 	return (head);
-// }
-
-void push_operator(OperatorStack **stack, NodeType type) {
-    OperatorStack *new_node = (OperatorStack *)malloc(sizeof(OperatorStack));
+void	push_operator(OperatorStack **stack, NodeType type) {
+    OperatorStack *new_node;
+    new_node = (OperatorStack *)malloc(sizeof(OperatorStack));
     new_node->type = type;
     new_node->next = *stack;
     *stack = new_node;
 }
 
-NodeType pop_operator(OperatorStack **stack) {
-    if (*stack == NULL) {
-        return NODE_END;
-    }
-    OperatorStack *top = *stack;
-    NodeType type = top->type;
-    *stack = top->next;
-    free(top);
-    return type;
+void	push_pipe(PipeStack **stack, int fdin, int fdout) {
+    PipeStack *new_node;
+    new_node = (PipeStack *)malloc(sizeof(PipeStack));
+    new_node->fdin = fdin;
+    new_node->fdout = fdout;
+    new_node->next = *stack;
+    *stack = new_node;
 }
 
-NodeType peek_operator(OperatorStack *stack) {
-    if (stack == NULL) {
-        return NODE_END;
-    }
+NodeType	pop_operator(OperatorStack **stack) {
+    OperatorStack *top;
+    NodeType type;
+    if (*stack == NULL)
+        return (NODE_END);
+    top = *stack;
+    type = top->type;
+    *stack = top->next;
+    free(top);
+    return (type);
+}
+
+PipeStack*	pop_pipe(PipeStack **stack) {
+	PipeStack	*top;
+    if (*stack == NULL)
+        return (NULL);
+    top = *stack;
+    *stack = top->next;
+	free(top);
+    return (*stack);
+}
+
+NodeType	peek_operator(OperatorStack *stack) {
+    if (stack == NULL)
+        return (NODE_END);
     return stack->type;
 }
 
-Command *traverse_ast(ASTNode *node, int input_fd, int output_fd, OperatorStack **ope_stack) {
+PipeStack* peek_pipe(PipeStack *stack) {
+    if (stack == NULL)
+        return (NULL);
+    return stack;
+}
+
+Command *traverse_ast(ASTNode *node, int input_fd, int output_fd, OperatorStack **ope_stack, PipeStack **pipe_stack) {
     Command *head = NULL;
     Command *tail = NULL;
     Command *cmd;
 
     if (node == NULL)
         return NULL;
-    
     if (node->type == NODE_COMMAND) {
-        NodeType parent_ope = peek_operator(*ope_stack);	
+        NodeType parent_ope = peek_operator(*ope_stack);
+		if (parent_ope == NODE_PARENTHESIS){
+			pop_operator(ope_stack);
+			parent_ope = peek_operator(*ope_stack);
+		}
         cmd = create_command_from_ast(node, input_fd, output_fd, parent_ope);
-		print_command(cmd);
+		// print_command(cmd);
 		pop_operator(ope_stack);
         return cmd;
     }
 	else if (node->type == NODE_PIPE)
 	{
         push_operator(ope_stack, node->type);
-        if (node->type == NODE_PIPE) {
-            int pipe_fds[2];
-            pipe(pipe_fds);
-            printf(" \e[1;36mpipes: (W)%d => (R)%d\e[0m\n", pipe_fds[WRITE], pipe_fds[READ]);
-            Command *left_cmds = traverse_ast(node->left, input_fd, pipe_fds[1], ope_stack);
-            Command *right_cmds = traverse_ast(node->right, pipe_fds[0], output_fd, ope_stack);
-            if (left_cmds) {
-				if (head == NULL) {
-					head = tail = left_cmds;
-				} else {
-					tail->next = left_cmds;
-				}
-				while (tail->next) {
-					tail = tail->next;
-				}
-			}
-			if (right_cmds) {
-				if (head == NULL) {
-					head = tail = right_cmds;
-				} else {
-					tail->next = right_cmds;
-				}
-				while (tail->next) {
-					tail = tail->next;
-				}
-			}
-        }
-	}
-	else if (node->type == NODE_OUTPUT || node->type == NODE_OUTPUT_APPEND)
-	{
-        push_operator(ope_stack, node->type);
-		int fd = output_fd;
-		if (ft_strncmp(node->value, ">>", 2)==0) {
-			fd = open(node->right->left->value, O_WRONLY | O_CREAT | O_APPEND, 0644);
-		} else if (ft_strncmp(node->value, ">", 1)==0) {
-			fd = open(node->right->left->value, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-		}
-		printf(" \e[1;36mfile: (W)%d\e[0m\n", fd);
-		Command *left_cmds = traverse_ast(node->left, input_fd, fd, ope_stack);
-		Command *right_cmds = traverse_ast(node->right, input_fd, output_fd, ope_stack);
+		int pipe_fds[2];
+		pipe(pipe_fds);
+		printf(" \e[1;36mpipes: (W)%d => (R)%d\e[0m\n", pipe_fds[WRITE], pipe_fds[READ]);
+		Command *left_cmds = traverse_ast(node->left, input_fd, pipe_fds[WRITE], ope_stack, pipe_stack);
+		Command *right_cmds = traverse_ast(node->right, pipe_fds[READ], output_fd, ope_stack, pipe_stack);
 		if (left_cmds) {
 			if (head == NULL) {
 				head = tail = left_cmds;
 			} else {
 				tail->next = left_cmds;
+				left_cmds->prev = tail;
 			}
 			while (tail->next) {
 				tail = tail->next;
@@ -323,6 +155,44 @@ Command *traverse_ast(ASTNode *node, int input_fd, int output_fd, OperatorStack 
 				head = tail = right_cmds;
 			} else {
 				tail->next = right_cmds;
+				right_cmds->prev = tail;
+			}
+			while (tail->next) {
+				tail = tail->next;
+			}
+		}
+	}
+	else if (node->type == NODE_OUTPUT || node->type == NODE_OUTPUT_APPEND)
+	{
+        push_operator(ope_stack, node->type);
+		int fd = output_fd;
+		if (ft_strncmp(node->value, ">>", 2) == 0) {
+			fd = open(node->right->left->value, O_WRONLY | O_CREAT | O_APPEND, 0644);
+		} else if (ft_strncmp(node->value, ">", 1) == 0) {
+			fd = open(node->right->left->value, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		}
+        push_pipe(pipe_stack, input_fd, fd);
+		printf(" \e[1;36mfile: (W)%d\e[0m\n", fd);
+		Command *left_cmds = traverse_ast(node->left, input_fd, output_fd, ope_stack, pipe_stack);
+		Command *right_cmds = traverse_ast(node->right, input_fd, output_fd, ope_stack, pipe_stack);
+		if (left_cmds) {
+			if (head == NULL) {
+				head = tail = left_cmds;
+			} else {
+				tail->next = left_cmds;
+				left_cmds->prev = tail;
+			}
+			while (tail->next) {
+				tail = tail->next;
+			}
+			tail->fdout = fd;
+		}
+		if (right_cmds) {
+			if (head == NULL) {
+				head = tail = right_cmds;
+			} else {
+				tail->next = right_cmds;
+				right_cmds->prev = tail;
 			}
 			while (tail->next) {
 				tail = tail->next;
@@ -332,13 +202,14 @@ Command *traverse_ast(ASTNode *node, int input_fd, int output_fd, OperatorStack 
 	else if (node->type == NODE_AND || node->type == NODE_OR)
 	{
         push_operator(ope_stack, node->type);
-		Command *left_cmds = traverse_ast(node->left, input_fd, output_fd, ope_stack);
-		Command *right_cmds = traverse_ast(node->right, input_fd, output_fd, ope_stack);
+		Command *left_cmds = traverse_ast(node->left, input_fd, output_fd, ope_stack, pipe_stack);
+		Command *right_cmds = traverse_ast(node->right, input_fd, output_fd, ope_stack, pipe_stack);
 		if (left_cmds) {
 			if (head == NULL) {
 				head = tail = left_cmds;
 			} else {
 				tail->next = left_cmds;
+				left_cmds->prev = tail;
 			}
 			while (tail->next) {
 				tail = tail->next;
@@ -349,6 +220,7 @@ Command *traverse_ast(ASTNode *node, int input_fd, int output_fd, OperatorStack 
 				head = tail = right_cmds;
 			} else {
 				tail->next = right_cmds;
+				right_cmds->prev = tail;
 			}
 			while (tail->next) {
 				tail = tail->next;
@@ -357,20 +229,25 @@ Command *traverse_ast(ASTNode *node, int input_fd, int output_fd, OperatorStack 
 	}
 	else if (node->type == NODE_PARENTHESIS)
 	{
+		NodeType parent_ope = peek_operator(*ope_stack);
+		if (parent_ope == NODE_OUTPUT){
+			output_fd = peek_pipe(*pipe_stack)->fdout;
+			pop_pipe(pipe_stack);
+		}
         push_operator(ope_stack, node->type);
-		Command *left_cmds = traverse_ast(node->left, input_fd, output_fd, ope_stack);
+		Command *left_cmds = traverse_ast(node->left, input_fd, output_fd, ope_stack, pipe_stack);
 		if (left_cmds) {
 			if (head == NULL) {
 				head = tail = left_cmds;
 			} else {
 				tail->next = left_cmds;
+				left_cmds->prev = tail;
 			}
 			while (tail->next) {
 				tail = tail->next;
 			}
 		}
 	}
-    
 	// else {
     //     // Handle other node types as needed
     //     traverse_ast(node->left, input_fd, output_fd, ope_stack);

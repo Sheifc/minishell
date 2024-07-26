@@ -11,7 +11,7 @@ void	lexer(char *prompt, t_token **tok)
 	// Command	*cmd = NULL;
 	// Command		*current = NULL;
 	// OperatorStack *ope_stack = NULL;
-
+	// PipeStack *pipe_stack = NULL;
 
 	// ast = NULL;
 	// printf("\e[35m\n------------------- * -------------------\n\e[0m");
@@ -28,7 +28,7 @@ void	lexer(char *prompt, t_token **tok)
 	// 	printf("Es válido: %d\n",is_valid);
 	// 	if (is_valid)
 	// 	{
-	// 		cmd = traverse_ast(ast, STDIN_FILENO, STDOUT_FILENO, &ope_stack);
+	// 		cmd = traverse_ast(ast, STDIN_FILENO, STDOUT_FILENO, &ope_stack, &pipe_stack);
 	// 		current = cmd;
 	// 		printf("\n**** Commands: ****\n");
 	// 		while (current)
