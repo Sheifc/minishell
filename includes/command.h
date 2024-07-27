@@ -25,6 +25,11 @@ typedef struct _PipeStack {
     struct _PipeStack *next;
 } PipeStack;
 
+typedef struct _Fds {
+    int in;
+    int out;
+} Fds;
+
 typedef struct _Command
 {
 	char			*name;
@@ -38,8 +43,8 @@ typedef struct _Command
 }					Command;
 
 // Command
-Command		*create_command(const char *name, int fdin, int fdout, NodeType ope);
-Command 	*traverse_ast(ASTNode *node, int input_fd, int output_fd, OperatorStack **ope_stack, PipeStack **pipe_stack);
+Command		*create_command(const char *name, Fds fds, NodeType ope);
+Command 	*traverse_ast(ASTNode *node, Fds fds, OperatorStack **ope_stack, PipeStack **pipe_stack);
 int			execute_operator(ASTNode *node, int input_fd, int output_fd);
 
 // Command utils

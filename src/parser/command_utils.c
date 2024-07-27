@@ -91,8 +91,6 @@ char *nodeTypeToSymbol(NodeType type)
             return "||";
         case NODE_PARENTHESIS:
             return "()";
-        case NODE_TEXT:
-            return "TEXT";
         case NODE_INPUT:
             return "<";
         case NODE_HEREDOC:

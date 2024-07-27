@@ -10,6 +10,14 @@ void execute_commands(Command *commands) {
 		printf("\e[0m - Ejecutando comando: \e[33m%s\e[0m -\e[32m\n", current->name);
 		if (current->operator == NODE_END && (ft_strncmp(current->name, "save_outfile", 12) == 0 || ft_strncmp(current->name, "save_append", 12) == 0)){
 		} else {
+			if (ft_strncmp(current->name, "read_infile", 11) == 0)
+			{
+				if (current->fdin != STDIN_FILENO) {
+					close(current->fdin);
+				}
+				current = current->next;
+				continue ;
+			}
 			if (ft_strncmp(current->name, "save_outfile", 12) == 0 || ft_strncmp(current->name, "save_append", 12) == 0){
 				current->name = ft_strdup("cat");
 				current->arg[0] = ft_strdup("cat");
@@ -66,7 +74,7 @@ int	main(void)
 	bool		is_valid;
 	int			num_tokens;
 
-	input = "(ls file*.txt | wc | wc && ls arch*.txt) > out1.txt > out2.txt";
+	input = "echo hola | cat > out1.txt";
 	printf("\e[35m\n------------------- * -------------------\n\e[0m");
 	tokens = tokenize(input, &num_tokens);
 	printf("input:\n%s\n", input);
@@ -80,8 +88,11 @@ int	main(void)
 	printf("\n**** Generating Commands: ****\n");
 	OperatorStack *ope_stack = NULL;
 	PipeStack *pipe_stack = NULL;
+	Fds fds;
+	fds.in = STDIN_FILENO;
+	fds.out = STDOUT_FILENO;
 	if (is_valid)
-		cmd = traverse_ast(ast, STDIN_FILENO, STDOUT_FILENO, &ope_stack, &pipe_stack);
+		cmd = traverse_ast(ast, fds, &ope_stack, &pipe_stack);
 	current = cmd;
 	printf("\n**** List ofCommands: ****\n");
 	while (current)
@@ -95,6 +106,11 @@ int	main(void)
 	
 	return (0);
 }
+	// input = "cat out1.txt | sort";
+	// input = "sort << EOF";
+	// input = "ls -l file*.txt ; ls -l *[1].txt";
+	// input = "sort < out1.txt";
+	// input = "(ls file*.txt | wc | wc && ls arch*.txt) > out1.txt >> out2.txt";
 	// input = "ls file*.txt > out1.txt > out2.txt";
 	// input = "\"e\"\"c\"\"h\"\"o\" hola"
 	// input = "cat /dev/random | head";

@@ -57,9 +57,6 @@ NodeType	select_operator(TokenType type)
 		return (NODE_OUTPUT);
 	else if (type == T_OUTPUT_APPEND)
 		return (NODE_OUTPUT_APPEND);
-	// else if (type == T_INPUT || type == T_HEREDOC || type == T_OUTPUT 
-	// 	|| type == T_OUTPUT_APPEND)
-	// 	return (NODE_REDIRECT);
 	else
 		return (NODE_UNKNOWN);
 }
@@ -98,8 +95,8 @@ void	print_ast(ASTNode *root)
 {
 	int			i;
 	const char	*messages[] = {M_COMMAND, M_ARGUMENT, M_PIPE, M_AND, M_OR,
-		M_PAREN, M_TEXT, M_REDIRECT, M_INPUT, M_HEREDOC, M_OUTPUT,
-		M_OUTPUT_APPEND, M_SEMICOLON, M_UNKNOWN};
+		M_PAREN, M_INPUT, M_HEREDOC, M_OUTPUT, M_OUTPUT_APPEND, M_SEMICOLON,
+		M_UNKNOWN};
 
 	if (root == NULL)
 		return ;

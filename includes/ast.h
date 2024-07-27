@@ -13,8 +13,6 @@
 # define M_AND "And"
 # define M_OR "Or"
 # define M_PAREN "Parentesis"
-# define M_TEXT "Text"
-# define M_REDIRECT "Redirect"
 # define M_INPUT "Input"
 # define M_HEREDOC "Heredoc"
 # define M_OUTPUT "Output"
@@ -34,8 +32,6 @@ typedef enum _NodeType
 	NODE_AND,
 	NODE_OR,
 	NODE_PARENTHESIS,
-	NODE_TEXT,
-	NODE_REDIRECT,
 	NODE_INPUT,
 	NODE_HEREDOC,
 	NODE_OUTPUT,

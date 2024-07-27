@@ -112,7 +112,7 @@ ASTNode	*handle_redirection(Token **tokens, int num_tokens, int level)
 			if ((tokens - 1)[0]->type == T_OUTPUT_APPEND)
 				return (build_redirect_node(tokens, "save_append", num_tokens, level));
 			if ((tokens - 1)[0]->type == T_INPUT)
-				return (build_redirect_node(tokens, "save_infile", num_tokens, level));
+				return (build_redirect_node(tokens, "read_infile", num_tokens, level));
 			if ((tokens - 1)[0]->type == T_HEREDOC)
 				return (build_redirect_node(tokens, "heredoc", num_tokens, level));
 			return (build_redirect_node(tokens, "cat", num_tokens, level));
