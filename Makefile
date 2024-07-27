@@ -31,9 +31,12 @@ FILES_PARSER    = init.c    	   \
                   syntaxis.c       \
 				  heredoc.c 	   \
 				  parser_utils.c	\
-				  command.c command_utils.c command_handles.c command_exe.c \
-				  ast.c ast_utils.c ast_handles.c token.c token_handles.c token_handles_utils.c \
-				  token_utils.c syntax.c syntax_utils.c wildcard.c wildcard_utils.c
+				  command.c command_utils.c command_handles1.c command_handles2.c command_exe.c \
+				  stack_operations.c stack_pipes.c \
+				  ast.c ast_utils.c ast_handles.c \
+				  token.c token_handles.c token_handles_utils.c token_utils.c \
+				  syntax.c syntax_utils.c \
+				  wildcard.c wildcard_utils.c
 
 FILES_EXEC      = exec_builtins.c  \
                   exec_utils.c     \
@@ -134,9 +137,12 @@ test_ast: $(AST_OBJ)
 	@$(MAKE) -s all bonus printf gnl -C $(LIBFT_DIR)
 	$(CC) $(AST_OBJ) -L $(LIBFT_DIR) $(LIBS) -o $@
 
-CMD_FILES	= 	command.c command_utils.c command_handles.c command_exe.c test_command.c \
-				ast.c ast_utils.c ast_handles.c token.c token_handles.c token_handles_utils.c \
-				token_utils.c syntax.c syntax_utils.c wildcard.c wildcard_utils.c
+CMD_FILES	= 	test_command.c command.c command_utils.c command_handles1.c command_handles2.c command_exe.c \
+				stack_operations.c stack_pipes.c \
+				ast.c ast_utils.c ast_handles.c \
+				token.c token_handles.c token_handles_utils.c token_utils.c \
+				syntax.c syntax_utils.c \
+				wildcard.c wildcard_utils.c
 CMD_DIR		=	$(SRC_DIR)parser/
 CMD_OBJ_DIR	=	$(OBJ_DIR)parser/
 CMD_SRC		=	$(addprefix $(CMD_DIR),$(CMD_FILES))

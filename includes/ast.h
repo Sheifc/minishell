@@ -20,6 +20,21 @@
 # define M_SEMICOLON "Semicolon"
 # define M_UNKNOWN "Unknown"
 
+# define OPE_COMMAND "COMMAND"
+# define OPE_ARGUMENT "ARGUMENT"
+# define OPE_PIPE "|"
+# define OPE_AND "&&"
+# define OPE_OR "||"
+# define OPE_PAREN "()"
+# define OPE_INPUT "<"
+# define OPE_HEREDOC "<<"
+# define OPE_OUTPUT ">"
+# define OPE_OUTPUT_APPEND ">>"
+# define OPE_SEMICOLON ";"
+# define OPE_UNKNOWN "UNKNOWN"
+# define OPE_END "END"
+# define OPE_UNDEFINED "UNDEFINED"
+
 # define OK 0
 # define NOT_FOUND -1
 # define ERROR -2
@@ -38,7 +53,8 @@ typedef enum _NodeType
 	NODE_OUTPUT_APPEND,
 	NODE_SEMICOLON,
 	NODE_UNKNOWN,
-	NODE_END
+	NODE_END,
+	NODE_UNDEFINED
 }					NodeType;
 
 typedef struct _ASTNode
@@ -56,8 +72,8 @@ void				free_ast(ASTNode *root);
 ASTNode				*build_ast(Token **tokens, int num_tokens, int level);
 
 // AST handles
-// ASTNode				*build_redirect_node(Token *token, int level);
-ASTNode				*build_redirect_node(Token **tokens, char *name, int num_tokens, int level);
+ASTNode				*build_redirect_node(Token **tokens, char *name,
+						int num_tokens, int level);
 ASTNode				*build_command_node(Token **tokens, int n_token, int level);
 ASTNode				*handle_operators(Token **tokens, int n_token, int level,
 						int *pos);
@@ -66,7 +82,7 @@ ASTNode				*handle_redirection(Token **tokens, int n_token, int level);
 
 // AST utils
 int					find_matching_paren(Token **tokens, int start, int n_token);
-NodeType			select_redirection(TokenType type);
+const char			*nodeTypeToSymbol(NodeType type);
 NodeType			select_operator(TokenType type);
 int					find_operator(Token **tokens, int num_tokens);
 void				print_ast(ASTNode *root);

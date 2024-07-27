@@ -3,6 +3,7 @@
 
 # include "ast.h"
 # include "libft.h"
+# include "stacks.h"
 # include "syntax.h"
 # include <fcntl.h>
 # include <stdbool.h>
@@ -14,21 +15,11 @@
 # define WRITE 1
 # define CMD_BUFFER_SIZE 4096
 
-typedef struct _OperatorStack {
-    NodeType type;
-    struct _OperatorStack *next;
-} OperatorStack;
-
-typedef struct _PipeStack {
-    int		fdin;
-    int		fdout;
-    struct _PipeStack *next;
-} PipeStack;
-
-typedef struct _Fds {
-    int in;
-    int out;
-} Fds;
+typedef struct _Fds
+{
+	int				in;
+	int				out;
+}					Fds;
 
 typedef struct _Command
 {
@@ -43,33 +34,47 @@ typedef struct _Command
 }					Command;
 
 // Command
-Command		*create_command(const char *name, Fds fds, NodeType ope);
-Command 	*traverse_ast(ASTNode *node, Fds fds, OperatorStack **ope_stack, PipeStack **pipe_stack);
-int			execute_operator(ASTNode *node, int input_fd, int output_fd);
+Command				*traverse_ast(ASTNode *node, Fds fds,
+						OperatorStack **ope_stack, PipeStack **pipe_stack);
 
 // Command utils
-void		print_fd_contents(int fd);
-void		add_argument(Command *cmd, const char *arg);
-char		**build_cmd_args(Command *cmd);
-void		free_command(Command *cmd);
-void		print_command(Command *cmd);
-char		*nodeTypeToSymbol(NodeType type);
+void				print_fd_contents(int fd);
+void				add_argument(Command *cmd, const char *arg);
+char				**build_cmd_args(Command *cmd);
+void				free_command(Command *cmd);
+void				print_command(Command *cmd);
 
-// Command handles
-int			handle_pipe(ASTNode *node, int input_fd, int output_fd);
-int			handle_and(ASTNode *node, int input_fd, int output_fd,
-				int left_result);
-int			handle_or(ASTNode *node, int input_fd, int output_fd,
-				int left_result);
-int			handle_parenthesis(ASTNode *node, int left_result);
-int			handle_redirections(ASTNode *node, int *input_fd, int *output_fd);
+// Command handles1
+Command				*handle_node_command(ASTNode *node, Fds fds,
+						OperatorStack **ope_stack);
+Command				*handle_node_pipe(ASTNode *node, Fds fds,
+						OperatorStack **ope_stack, PipeStack **pipe_stack);
+Command				*handle_node_output(ASTNode *node, Fds fds,
+						OperatorStack **ope_stack, PipeStack **pipe_stack);
+Command				*handle_node_input(ASTNode *node, Fds fds,
+						OperatorStack **ope_stack, PipeStack **pipe_stack);
+Command				*handle_node_heredoc(ASTNode *node, Fds fds,
+						OperatorStack **ope_stack, PipeStack **pipe_stack);
+
+// Command handles2
+Command				*create_command(const char *name, Fds fds, NodeType ope);
+Command				*create_command_from_ast(ASTNode *node, Fds fds,
+						NodeType ope);
+void				append_commands(Command **head, Command **tail,
+						Command *new_cmds);
+Command				*handle_node_and_or_semicolon(ASTNode *node, Fds fds,
+						OperatorStack **ope_stack, PipeStack **pipe_stack);
+Command				*handle_node_parenthesis(ASTNode *node, Fds fds,
+						OperatorStack **ope_stack, PipeStack **pipe_stack);
 
 // Command exe
-int			execute_command(Command *cmd, int input_fd, int output_fd);
-pid_t		create_child_process(void);
-void		setup_child_process(Command *cmd, int input_fd, int output_fd,
-				int pipe_fds[2]);
-void		handle_parent_process(pid_t pid, int pipe_fds[2], int *status);
-void		setup_redirections(int input_fd, int output_fd, int pipe_write_fd);
+int					execute_command(Command *cmd, int input_fd, int output_fd);
+pid_t				create_child_process(void);
+void				setup_child_process(Command *cmd, int input_fd,
+						int output_fd, int pipe_fds[2]);
+void				handle_parent_process(pid_t pid, int pipe_fds[2],
+						int *status);
+void				setup_redirections(int input_fd, int output_fd,
+						int pipe_write_fd);
 
 #endif

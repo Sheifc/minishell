@@ -24,18 +24,13 @@ int	find_matching_paren(Token **tokens, int start, int num_tokens)
 }
 
 // Function to select the type of redirection
-NodeType	select_redirection(TokenType type)
+const char	*nodeTypeToSymbol(NodeType type)
 {
-	if (type == T_OUTPUT)
-		return (NODE_OUTPUT);
-	else if (type == T_OUTPUT_APPEND)
-		return (NODE_OUTPUT_APPEND);
-	else if (type == T_INPUT)
-		return (NODE_INPUT);
-	else if (type == T_HEREDOC)
-		return (NODE_HEREDOC);
-	else
-		return (NODE_UNKNOWN);
+	const char	*symbol[] = {OPE_COMMAND, OPE_ARGUMENT, OPE_PIPE, OPE_AND,
+		OPE_OR, OPE_PAREN, OPE_INPUT, OPE_HEREDOC, OPE_OUTPUT,
+		OPE_OUTPUT_APPEND, OPE_SEMICOLON, OPE_UNKNOWN, OPE_END};
+
+	return (symbol[type]);
 }
 
 // Function to select the type of operator

@@ -74,7 +74,7 @@ int	main(void)
 	bool		is_valid;
 	int			num_tokens;
 
-	input = "echo hola | cat > out1.txt";
+	input = "(ls file*.txt | wc | wc && ls arch*.txt) > out1.txt >> out2.txt";
 	printf("\e[35m\n------------------- * -------------------\n\e[0m");
 	tokens = tokenize(input, &num_tokens);
 	printf("input:\n%s\n", input);

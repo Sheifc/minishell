@@ -75,41 +75,6 @@ void	free_command(Command *cmd)
 	}
 }
 
-char *nodeTypeToSymbol(NodeType type)
-{
-    switch (type)
-    {
-        case NODE_COMMAND:
-            return "COMMAND";
-        case NODE_ARGUMENT:
-            return "ARGUMENT";
-        case NODE_PIPE:
-            return "|";
-        case NODE_AND:
-            return "&&";
-        case NODE_OR:
-            return "||";
-        case NODE_PARENTHESIS:
-            return "()";
-        case NODE_INPUT:
-            return "<";
-        case NODE_HEREDOC:
-            return "<<";
-        case NODE_OUTPUT:
-            return ">";
-        case NODE_OUTPUT_APPEND:
-            return ">>";
-        case NODE_SEMICOLON:
-            return ";";
-        case NODE_UNKNOWN:
-            return "UNKNOWN";
-        case NODE_END:
-            return "END";
-        default:
-            return "UNDEFINED";
-    }
-}
-
 // Función para imprimir un nodo de comando (para debug)
 void	print_command(Command *cmd)
 {
@@ -119,6 +84,8 @@ void	print_command(Command *cmd)
 	i = -1;
 	while (++i < cmd->n_args)
 		printf("    Arg[%d]: %s\n", i, cmd->arg[i]);
-	printf("  \e[34mfd_in: %d\e[0m, \e[35mfd_out: %d\e[0m\n", cmd->fdin, cmd->fdout);
-	printf("  next_operator: %s [%d]\n", nodeTypeToSymbol(cmd->operator), cmd->operator);
+	printf("  \e[34mfd_in: %d\e[0m, \e[35mfd_out: %d\e[0m\n", cmd->fdin,
+		cmd->fdout);
+	printf("  next_operator: %s [%d]\n", nodeTypeToSymbol(cmd->operator),
+		cmd->operator);
 }
