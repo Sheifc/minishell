@@ -57,11 +57,36 @@ typedef struct _Token
 	bool		expect_arg;
 }				Token;
 
+typedef struct _word_features
+{
+	int			start;
+	int			pos;
+	bool		btw_quotes;
+	bool		new_word;
+}				t_word_features;
+
 // token
 Token			*create_token(TokenType type, const char *value, bool exp_arg);
 void			free_token2(Token *token);
 int				verify_tokens(Token **tokens, int *n_tokens);
 Token			**tokenize(const char *input, int *num_tokens);
+
+// token_preprocess
+char			*process_word(const char *input, int start, int length,
+					char *output);
+int				get_operation_size(const char *str);
+void			handle_character(const char *input, char **output,
+					t_word_features *ft);
+bool			ok_count_quotes(const char *str);
+char			*preprocess_input(const char *input);
+
+// token_preprocess_utils
+char			*remove_quotes(const char *input);
+char			*add_quotes(const char *converted_word, char *quote);
+char			*get_converted_word(const char *palabra, int longitud);
+void			toggle_between_quotes(t_word_features *ft);
+void			handle_spaces_and_operators(const char *in, char **output,
+					t_word_features *ft);
 
 // token_handles
 void			handle_wildcards(char **start, Token **tokens, int *n_tokens);
@@ -75,6 +100,7 @@ void			handle_regular_tokens(char **start, Token **tokens,
 					int *n_tokens);
 
 // token_handles_utils
+bool			is_operator(const char *str);
 void			handle_heredoc_token(char **start, Token **tokens,
 					int *n_tokens);
 void			handle_output_append_token(char **start, Token **tokens,

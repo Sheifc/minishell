@@ -47,15 +47,17 @@ int	verify_tokens(Token **tokens, int *n_tokens)
 			balance_quotes++;
 	if (balance_quotes % 2 != 0)
 		printf("\e[31m ** Error quotes: el numero de commillas **\e[0m\n");
-	return (balance_parentheses | balance_quotes);
+	return (balance_parentheses | balance_quotes % 2);
 }
 
-Token	**tokenize(const char *input, int *n_tokens)
+Token	**tokenize(const char *originalInput, int *n_tokens)
 {
 	Token	**tokens;
 	char	*input_copy;
 	char	*start;
+	char	*input;
 
+	input = preprocess_input(originalInput);
 	tokens = (Token **)malloc(MAX_TOKENS * sizeof(Token *));
 	*n_tokens = 0;
 	input_copy = ft_strdup(input);

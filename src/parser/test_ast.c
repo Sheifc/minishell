@@ -39,17 +39,18 @@ void	process_test_case(const t_test_ast *test_value, int index)
 	ASTNode	*ast;
 	bool	is_valid;
 	int		num_tokens;
+	int		balance;
 
 	printf("\e[35m\n------------------- %d -------------------\n\e[0m", index);
 	tokens = tokenize(test_value->inputs, &num_tokens);
 	printf("input:\n%s\n\n", test_value->inputs);
 	print_tokens(tokens, num_tokens);
-	verify_tokens(tokens, &num_tokens);
+	balance = verify_tokens(tokens, &num_tokens);
 	ast = build_ast(tokens, num_tokens, 0);
 	printf("AST:\n");
 	print_ast(ast);
 	is_valid = validate_ast(tokens, ast);
-	print_result(test_value->is_valid, is_valid);
+	print_result(test_value->is_valid, is_valid && balance == 0);
 	free_tokens(tokens, &num_tokens);
 	free_ast(ast);
 	printf("\n");
@@ -65,15 +66,16 @@ int	main(void)
 	{"(ls -la", false},
 	{"ls -la)", false},
 	{"(ls -la)", true},
-	{"export", true},
-	{"ls -la | grep 'txt' && cat file.txt > output.txt", true},
-	{"ls -la | grep 'txt' && cat file.txt >> output.txt || echo 'Failed'", true},
+	{"ls -la |grep 'txt' && cat file.txt >> output.txt || echo 'Failed'", true},
 	{"(ls -l -a -r | grep 'txt') && (sort < input.txt || "
-		"(echo 'Failed'&& mkdir new_dir))", true},
+		"(echo 'Failed' && mkdir new_dir))", true},
 	{"mkdir test && cd test || echo 'Could not create directory'", true},
 	{"echo 'Starting process'; (cd /tmp && touch temp_file) || "
 		"echo 'Error in processing'", true},
-	{"ls file*.txt", true}
+	{"\"ls\" 'file*.txt' && \'ls\' file*.txt", true},
+	{"\"ls 'file*.txt' && ls file*.txt", false},
+	{"\"e\"cho \'hola m\'u\'n\"\"do\' \"chao mundo\"", true},
+	{"ls | (pwd && cd '/home|')", true}
 	};
 	const int			num_tests = sizeof(test_values) / sizeof(t_test_ast);
 

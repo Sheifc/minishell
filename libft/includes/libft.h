@@ -6,7 +6,7 @@
 /*   By: svilla-d <svilla-d@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 12:05:09 by sheferna          #+#    #+#             */
-/*   Updated: 2024/07/19 13:36:39 by svilla-d         ###   ########.fr       */
+/*   Updated: 2024/07/29 18:17:42 by svilla-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,6 +135,14 @@ size_t				ft_strlcpy(char *dst, const char *src, size_t dstsize);
 */
 size_t				ft_strlcat(char *dst, const char *src, size_t dstsize);
 /**
+ * @brief Concatenates a source string to the end of a destination string.
+ * @param dest The destination string to which the source string will be appended.
+ * @param src The source string to append to the end of the destination string.
+ * @return A pointer to the end of the destination string after the concatenation.
+ *         If `dest` is `NULL`, the function returns `NULL`.
+ */
+char				*ft_strcat(char *dest, const char *src);
+/**
  * @brief Converts a lower-case letter to the corresponding
 		upper-case letter.
  * @param c The letter to convert.
@@ -185,6 +193,17 @@ char				*ft_strrchr(const char *s, int c);
 		using unsigned characters, so that '\200' is greater than '\0'.
 */
 int					ft_strncmp(const char *s1, const char *s2, size_t n);
+/**
+ * @brief Compares characters. Characters that appear after
+		a '\0' character are not compared.
+ * @param s1 The first string.
+ * @param s2 The second string.
+ * @returns An integer greater than,
+		equal to, or less than 0, according as the string s1 is greater
+		than, equal to, or less than the string s2. The comparison is done
+		using unsigned characters, so that '\200' is greater than '\0'.
+*/
+int					ft_strcmp(const char *s1, const char *s2);
 /**
  * @brief Locates the first occurrence of c (converted
 		to an unsigned char) in string s.

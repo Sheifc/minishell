@@ -24,7 +24,7 @@ bool	is_ast_valid(ASTNode *root)
 		return (is_binary_operator_valid(root));
 	else if (root->type == NODE_PARENTHESIS)
 		return (is_parenthesis_valid(root));
-	else if (root->type == NODE_INPUT|| root->type == NODE_HEREDOC
+	else if (root->type == NODE_INPUT || root->type == NODE_HEREDOC
 		|| root->type == NODE_OUTPUT || root->type == NODE_OUTPUT_APPEND)
 		return (is_redirection_valid(root));
 	else

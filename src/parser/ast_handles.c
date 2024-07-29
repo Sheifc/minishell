@@ -24,12 +24,11 @@ ASTNode	*build_command_node(Token **tokens, int num_tokens, int level)
 	root = NULL;
 	if (num_tokens > 0)
 	{
-		if (tokens[0]->type == T_ARG || tokens[0]->type == T_TEXT
-			|| tokens[0]->type == T_WILDCARD)
-			return (create_node(NODE_ARGUMENT, tokens[0]->value, level + 1));
-		root = create_node(NODE_COMMAND, tokens[0]->value, level);
+		i = -1;
+		while (tokens[++i]->type == T_QUOTE)
+			;
+		root = create_node(NODE_COMMAND, tokens[i]->value, level);
 		current = root;
-		i = 0;
 		while (++i < num_tokens)
 		{
 			if (tokens[i]->type == T_ARG || tokens[i]->type == T_TEXT
@@ -44,7 +43,8 @@ ASTNode	*build_command_node(Token **tokens, int num_tokens, int level)
 	return (root);
 }
 
-ASTNode	*build_redirect_node(Token **tokens, char *name, int num_tokens, int level)
+ASTNode	*build_redirect_node(Token **tokens, char *name, int num_tokens,
+		int level)
 {
 	ASTNode	*root;
 
@@ -108,13 +108,17 @@ ASTNode	*handle_redirection(Token **tokens, int num_tokens, int level)
 		if (tokens[0]->type == T_REDIRECT_ARG)
 		{
 			if ((tokens - 1)[0]->type == T_OUTPUT)
-				return (build_redirect_node(tokens, "save_outfile", num_tokens, level));
+				return (build_redirect_node(tokens, "save_outfile", num_tokens,
+						level));
 			if ((tokens - 1)[0]->type == T_OUTPUT_APPEND)
-				return (build_redirect_node(tokens, "save_append", num_tokens, level));
+				return (build_redirect_node(tokens, "save_append", num_tokens,
+						level));
 			if ((tokens - 1)[0]->type == T_INPUT)
-				return (build_redirect_node(tokens, "read_infile", num_tokens, level));
+				return (build_redirect_node(tokens, "read_infile", num_tokens,
+						level));
 			if ((tokens - 1)[0]->type == T_HEREDOC)
-				return (build_redirect_node(tokens, "heredoc", num_tokens, level));
+				return (build_redirect_node(tokens, "heredoc", num_tokens,
+						level));
 			return (build_redirect_node(tokens, "cat", num_tokens, level));
 		}
 	}

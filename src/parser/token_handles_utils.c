@@ -1,5 +1,11 @@
 #include "token.h"
 
+bool	is_operator(const char *str)
+{
+	return (strcmp(str, "&&") == 0 || strcmp(str, "||") == 0 || strcmp(str,
+			"|") == 0 || strcmp(str, ";") == 0);
+}
+
 void	handle_heredoc_token(char **start, Token **tokens, int *n_tokens)
 {
 	add_token(start, tokens, n_tokens, (Token){T_HEREDOC, "<<", true});

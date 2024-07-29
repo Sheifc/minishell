@@ -108,7 +108,9 @@ re: fclean all
 #             Test compilation process             |
 # --------------------------------------------------
 
-TOKEN_FILES		=	token.c token_handles.c token_utils.c test_token.c token_handles_utils.c\
+TOKEN_FILES		=	test_token.c token.c token_utils.c			\
+					token_handles.c token_handles_utils.c		\
+					token_preprocess.c token_preprocess_utils.c \
 					wildcard.c wildcard_utils.c
 TOKEN_DIR		=	$(SRC_DIR)parser/
 TOKEN_OBJ_DIR	=	$(OBJ_DIR)parser/
@@ -122,8 +124,11 @@ test_token: $(TOKEN_OBJ)
 	@$(MAKE) -s all bonus printf gnl -C $(LIBFT_DIR)
 	$(CC) $(TOKEN_OBJ) -L $(LIBFT_DIR) $(LIBS) -o $@
 
-AST_FILES	= 	ast.c ast_utils.c ast_handles.c test_ast.c token.c token_handles.c \
-				token_handles_utils.c token_utils.c syntax.c syntax_utils.c \
+AST_FILES	= 	test_ast.c ast.c ast_utils.c ast_handles.c 	\
+				syntax.c syntax_utils.c						\
+				token.c token_utils.c						\
+				token_handles.c token_handles_utils.c		\
+				token_preprocess.c token_preprocess_utils.c \
 				wildcard.c wildcard_utils.c
 AST_DIR		=	$(SRC_DIR)parser/
 AST_OBJ_DIR	=	$(OBJ_DIR)parser/
@@ -138,10 +143,12 @@ test_ast: $(AST_OBJ)
 	$(CC) $(AST_OBJ) -L $(LIBFT_DIR) $(LIBS) -o $@
 
 CMD_FILES	= 	test_command.c command.c command_utils.c command_handles1.c command_handles2.c command_exe.c \
-				stack_operations.c stack_pipes.c \
-				ast.c ast_utils.c ast_handles.c \
-				token.c token_handles.c token_handles_utils.c token_utils.c \
-				syntax.c syntax_utils.c \
+				stack_operations.c stack_pipes.c			\
+				ast.c ast_utils.c ast_handles.c 			\
+				syntax.c syntax_utils.c						\
+				token.c token_utils.c						\
+				token_handles.c token_handles_utils.c		\
+				token_preprocess.c token_preprocess_utils.c \
 				wildcard.c wildcard_utils.c
 CMD_DIR		=	$(SRC_DIR)parser/
 CMD_OBJ_DIR	=	$(OBJ_DIR)parser/

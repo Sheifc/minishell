@@ -82,7 +82,7 @@ ASTNode				*handle_redirection(Token **tokens, int n_token, int level);
 
 // AST utils
 int					find_matching_paren(Token **tokens, int start, int n_token);
-const char			*nodeTypeToSymbol(NodeType type);
+const char			*node_type_to_symbol(NodeType type);
 NodeType			select_operator(TokenType type);
 int					find_operator(Token **tokens, int num_tokens);
 void				print_ast(ASTNode *root);

@@ -24,7 +24,7 @@ int	find_matching_paren(Token **tokens, int start, int num_tokens)
 }
 
 // Function to select the type of redirection
-const char	*nodeTypeToSymbol(NodeType type)
+const char	*node_type_to_symbol(NodeType type)
 {
 	const char	*symbol[] = {OPE_COMMAND, OPE_ARGUMENT, OPE_PIPE, OPE_AND,
 		OPE_OR, OPE_PAREN, OPE_INPUT, OPE_HEREDOC, OPE_OUTPUT,

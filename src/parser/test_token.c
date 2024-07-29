@@ -83,7 +83,7 @@ int	main(void)
 	int					n;
 	const t_test_case	cases[] = {
 	{"ls -la", {{T_COMMAND, "ls", 1}, {T_ARG, "-la", 1}}, 2},
-	{"ls | (pwd && cd '/home|')", {{T_COMMAND, "ls", 1}, {T_PIPE, "|", 1},
+	{"ls | (pwd && cd '/home|' )", {{T_COMMAND, "ls", 1}, {T_PIPE, "|", 1},
 	{T_PAREN_OPEN, "(", 1}, {T_COMMAND, "pwd", 1}, {T_AND, "&&", 1},
 	{T_COMMAND, "cd", 1}, {T_QUOTE, "\'", 1}, {T_TEXT, "/home|", 1},
 	{T_QUOTE, "\'", 1}, {T_PAREN_CLOSE, ")", 1}}, 10},

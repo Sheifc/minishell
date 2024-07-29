@@ -8,7 +8,7 @@ void	print_ope_stack(OperatorStack *head)
 	printf("Operation stack:\n");
 	while (current)
 	{
-		printf("  - type: %s\n", nodeTypeToSymbol(current->type));
+		printf("  - type: %s\n", node_type_to_symbol(current->type));
 		current = current->next;
 	}
 }
