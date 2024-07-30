@@ -11,7 +11,7 @@ void	get_status(t_shell *data)
 void	exec_one_cmd(t_shell *data, t_cmd *cmd)
 {
 	set_fdin(data, cmd);
-	if (!execute_some_builtin(data, cmd))
+	if (!execute_builtin(data, cmd))
 	{
 		data->pid = fork();
 		if (data->pid < 0)
@@ -19,18 +19,15 @@ void	exec_one_cmd(t_shell *data, t_cmd *cmd)
 		else if (data->pid == 0)
 		{
 			set_fdout(data, cmd);
-			if (!execute_builtin_forked(data, cmd))
+			get_path(data, cmd);
+			if (!data->path)
 			{
-				get_path(data, cmd);
-				if (!data->path)
-				{
-					perror("Error: command not found");
-					exit(127);
-				}
-				execve(data->path, cmd->arg, data->envp);
-				perror("Error: execve failed");
-				exit(1);
+				perror("Error: command not found");
+				exit(127);
 			}
+			execve(data->path, cmd->arg, data->envp);
+			perror("Error: execve failed");
+			exit(1);
 		}
 		else
 			close(cmd->fdout);

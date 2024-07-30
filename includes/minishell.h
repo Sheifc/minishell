@@ -95,6 +95,7 @@ void	execute_echo(t_shell *data, t_cmd *cmd);
 int		execute_builtin(t_shell *data, t_cmd *cmd);
 int		execute_builtin_forked(t_shell *data, t_cmd *cmd);
 int		execute_some_builtin(t_shell *data, t_cmd *cmd);
+int		execute_builtin_all_forked(t_shell *data, t_cmd *cmd);
 void	run_single_cmd(t_shell *data, t_cmd *cmd);
 void	get_status(t_shell *data);
 // cd.c
