@@ -10,6 +10,15 @@ void	run_single_cmd(t_shell *data, t_cmd *cmd)
 			perror("Error: command not found");
 			exit(127);
 		}
+		if (cmd->fdout != -1) // Redirigir la salida si fdout está configurado
+		{
+			if (dup2(cmd->fdout, 1) == -1)
+			{
+				perror("dup2 failed for cmd->fdout");
+				exit(EXIT_FAILURE);
+			}
+			close(cmd->fdout);
+		}
 		if (execve(data->path, cmd->arg, data->envp) < 0)
 		{
 			perror("Error: execve failed");
@@ -17,19 +26,6 @@ void	run_single_cmd(t_shell *data, t_cmd *cmd)
 		}
 	}
 }
-/* 	execute_echo(data, cmd);
-	get_path(data, cmd);
-	if (!data->path)
-	{
-		perror("Error: command not found");
-		exit(127);
-	}
-	if (execve(data->path, cmd->arg, data->envp) < 0)
-	{
-		perror("Error: execve failed");
-		exit(1);
-	}
-}*/
 
 void	exec_multiple_cmds(t_shell *data, t_cmd *cmd)
 {
@@ -72,6 +68,15 @@ void	exec_multiple_cmds(t_shell *data, t_cmd *cmd)
 		{
 			close(fdpipe[0]);
 			close(fdpipe[1]);
+			if (cmd->fdout != -1) // Redirigir la salida si fdout está configurado
+			{
+				if (dup2(cmd->fdout, 1) == -1)
+				{
+					perror("dup2 failed for cmd->fdout");
+					exit(EXIT_FAILURE);
+				}
+				close(cmd->fdout);
+			}
 		}
 		if (dup2(cmd->fdin, 0) == -1)
 		{
