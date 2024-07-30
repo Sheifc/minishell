@@ -11,9 +11,9 @@ void	execute_commands(Command *commands)
 	{
 		printf("\e[0m - Ejecutando comando: \e[33m%s\e[0m -\e[32m\n",
 			current->name);
-		if (current->operator== NODE_END && (ft_strncmp(current->name,
+		if (current->operator == NODE_END && (ft_strncmp(current->name,
 					"save_outfile", 12) == 0 || ft_strncmp(current->name,
-					"save_append", 12) == 0))
+					"save_append", 11) == 0))
 		{
 		}
 		else
@@ -28,7 +28,7 @@ void	execute_commands(Command *commands)
 				continue ;
 			}
 			if (ft_strncmp(current->name, "save_outfile", 12) == 0
-				|| ft_strncmp(current->name, "save_append", 12) == 0)
+				|| ft_strncmp(current->name, "save_append", 11) == 0)
 			{
 				current->name = ft_strdup("cat");
 				current->arg[0] = ft_strdup("cat");
@@ -96,7 +96,7 @@ int	main(void)
 
 	cmd = NULL;
 	current = NULL;
-	input = "(\"ls\" file*.txt | \"wc\" | wc && ls arch*.txt) > out1.txt >> "
+	input = "(echo hola {$USER} 'hola $USER' | \"ls\" file*.txt | \"wc\" | wc && ls arch*.txt) > out1.txt >> "
 		"out2.txt";
 	printf("\e[35m\n------------------- * -------------------\n\e[0m");
 	tokens = tokenize(input, &num_tokens);

@@ -42,8 +42,8 @@ void	process_test_case(const t_test_ast *test_value, int index)
 	int		balance;
 
 	printf("\e[35m\n------------------- %d -------------------\n\e[0m", index);
-	tokens = tokenize(test_value->inputs, &num_tokens);
 	printf("input:\n%s\n\n", test_value->inputs);
+	tokens = tokenize(test_value->inputs, &num_tokens);
 	print_tokens(tokens, num_tokens);
 	balance = verify_tokens(tokens, &num_tokens);
 	ast = build_ast(tokens, num_tokens, 0);
@@ -75,7 +75,7 @@ int	main(void)
 	{"\"ls\" 'file*.txt' && \'ls\' file*.txt", true},
 	{"\"ls 'file*.txt' && ls file*.txt", false},
 	{"\"e\"cho \'hola m\'u\'n\"\"do\' \"chao mundo\"", true},
-	{"ls | (pwd && cd '/home|')", true}
+	{"ls | (pwd && echo '/home|' $USERS {$USER} '$USER' )", true}
 	};
 	const int			num_tests = sizeof(test_values) / sizeof(t_test_ast);
 

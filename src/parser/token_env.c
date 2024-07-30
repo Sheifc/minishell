@@ -1,0 +1,96 @@
+#include "token.h"
+
+char	*initialize_result(const char *input)
+{
+	char	*result;
+
+	result = (char *)malloc((strlen(input) + 1) * sizeof(char));
+	ft_strcpy(result, input);
+	return (result);
+}
+
+char	*extract_variable_name(const char *start)
+{
+	char	var_name[256];
+	int		var_length;
+	char	*var_name_dynamic;
+
+	var_length = 0;
+	while (*start && (ft_isalnum(*start) || *start == '_'))
+	{
+		var_name[var_length++] = *start;
+		start++;
+	}
+	var_name[var_length] = '\0';
+	var_name_dynamic = (char *)malloc((var_length + 1) * sizeof(char));
+	ft_strcpy(var_name_dynamic, var_name);
+	return (var_name_dynamic);
+}
+
+char	*replace_variable(const char *pos, char *result, const char *name)
+{
+	char	*value;
+	char	*new_result;
+	size_t	new_length;
+
+	value = getenv(name);
+	if (value)
+	{
+		new_length = ft_strlen(result) + ft_strlen(value) - ft_strlen(name) - 1;
+		new_result = (char *)malloc((new_length + 1) * sizeof(char));
+		strncpy(new_result, result, pos - result);
+		ft_strcpy(new_result + (pos - result), value);
+		ft_strcpy(new_result + (pos - result) + ft_strlen(value), pos
+			+ ft_strlen(name) + 1);
+		free(result);
+		return (new_result);
+	}
+	else
+	{
+		new_length = ft_strlen(result) - ft_strlen(name) - 1;
+		new_result = (char *)malloc((new_length + 1) * sizeof(char));
+		strncpy(new_result, result, pos - result);
+		ft_strcpy(new_result + (pos - result), pos + ft_strlen(name) + 1);
+		free(result);
+		return (new_result);
+	}
+}
+
+int	is_btw_single_quotes(const char *str, const char *pos)
+{
+	int			in_single_quotes;
+	const char	*ptr;
+
+	in_single_quotes = 0;
+	ptr = str;
+	while (ptr < pos)
+	{
+		if (*ptr == '\'')
+			in_single_quotes = !in_single_quotes;
+		ptr++;
+	}
+	return (in_single_quotes);
+}
+
+char	*replace_env_variables(const char *input)
+{
+	char	*result;
+	char	*pos;
+	char	*var_name;
+
+	result = initialize_result(input);
+	pos = ft_strchr(result, '$');
+	while (pos)
+	{
+		if (is_btw_single_quotes(result, pos))
+		{
+			pos = ft_strchr(pos + 1, '$');
+			continue ;
+		}
+		var_name = extract_variable_name(pos + 1);
+		result = replace_variable(pos, result, var_name);
+		free(var_name);
+		pos = ft_strchr(result, '$');
+	}
+	return (result);
+}

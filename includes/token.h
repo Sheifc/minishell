@@ -2,6 +2,7 @@
 # define TOKEN_H
 
 # include "libft.h"
+# include <ctype.h>
 # include <dirent.h>
 # include <stdbool.h>
 # include <stdio.h>
@@ -9,6 +10,7 @@
 # include <string.h>
 
 # define MAX_TOKENS 1000
+# define MAX_LENGTH 8192
 # define DELIMITERS " \r\n\t\v\f"
 # define NOMATCH -1
 
@@ -87,6 +89,14 @@ char			*get_converted_word(const char *palabra, int longitud);
 void			toggle_between_quotes(t_word_features *ft);
 void			handle_spaces_and_operators(const char *in, char **output,
 					t_word_features *ft);
+
+// token_env
+char			*initialize_result(const char *input);
+char			*extract_variable_name(const char *start);
+char			*replace_variable(const char *pos, char *result,
+					const char *var_name);
+int				is_btw_single_quotes(const char *str, const char *pos);
+char			*replace_env_variables(const char *input);
 
 // token_handles
 void			handle_wildcards(char **start, Token **tokens, int *n_tokens);

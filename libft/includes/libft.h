@@ -6,7 +6,7 @@
 /*   By: svilla-d <svilla-d@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 12:05:09 by sheferna          #+#    #+#             */
-/*   Updated: 2024/07/29 18:17:42 by svilla-d         ###   ########.fr       */
+/*   Updated: 2024/07/30 13:38:41 by svilla-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,6 +125,13 @@ void				*ft_memmove(void *dst, const void *src, size_t len);
 */
 size_t				ft_strlcpy(char *dst, const char *src, size_t dstsize);
 /**
+ * @brief Copy strings.
+ * @param dst The string dst.
+ * @param src The string source.
+ * @returns src.
+ */
+char				*ft_strcpy(char *dest, const char *src);
+/**
  * @brief Concatenate strings
 		with the same input parameters and output result as snprintf(3).
  * @param dst The string dst.
@@ -136,9 +143,11 @@ size_t				ft_strlcpy(char *dst, const char *src, size_t dstsize);
 size_t				ft_strlcat(char *dst, const char *src, size_t dstsize);
 /**
  * @brief Concatenates a source string to the end of a destination string.
- * @param dest The destination string to which the source string will be appended.
+
+* @param dest The destination string to which the source string will be appended.
  * @param src The source string to append to the end of the destination string.
- * @return A pointer to the end of the destination string after the concatenation.
+
+* @return A pointer to the end of the destination string after the concatenation.
  *         If `dest` is `NULL`, the function returns `NULL`.
  */
 char				*ft_strcat(char *dest, const char *src);
@@ -279,7 +288,6 @@ char				*ft_strdup(const char *s);
  */
 char				*ft_strndup(const char *s, size_t n);
 
-
 // ---------------------- Additional functions libft -------------------------
 /**
  * @brief Using malloc, returns a substring of the string 's' which
@@ -384,7 +392,8 @@ t_list				*ft_lstnew(void *content);
 /**
  * @brief Add the node 'new' to the end of the linked list 'lst'.
  * @param lst The pointer to the first node of the linked list.
- * @param new The pointer to the node to add at the beginning to the linked list.
+
+	* @param new The pointer to the node to add at the beginning to the linked list.
  */
 void				ft_lstadd_front(t_list **lst, t_list *new);
 /**
@@ -451,9 +460,9 @@ t_list				*ft_lstmap(t_list *lst, void *(*f)(void *),
 
 long				ft_atol(const char *str);
 /**
- * @brief Checks for any whitespace character. Whitespace characters are: 
- * 		  space, form-feed ('\f'), newline ('\n'), carriage return ('\r'), 
- * 		  horizontal tab ('\t'), and vertical tab ('\v').
+ * @brief Checks for any whitespace character. Whitespace characters are:
+ * 			space, form-feed ('\f'), newline ('\n'), carriage return ('\r'),
+ * 			horizontal tab ('\t'), and vertical tab ('\v').
  * @param c The character to check.
  * @returns Non-zero if the character is a whitespace character, 0 otherwise.
  */
@@ -466,18 +475,18 @@ void				ft_free_matrix(char **matrix);
 // ----------------- ft_printf functions ------------------------------------
 /**
  * @brief Outputs the string 'format' to the standard output, replacing
- * 		  any format specifiers with the values from the additional arguments.
- * @param format The format string containing the text to be written 
- * 		  to stdout and the format specifiers, 
- * 		  which define how subsequent arguments are converted for output.
- * @returns The number of characters printed (excluding the null byte 
+ * 			any format specifiers with the values from the additional arguments.
+ * @param format The format string containing the text to be written
+ * 			to stdout and the format specifiers,
+ * 			which define how subsequent arguments are converted for output.
+ * @returns The number of characters printed (excluding the null byte
  * 			used to end
  *          output to strings).
  */
 int					ft_printf(char const *format, ...);
 /**
  * @brief Handles the printing of various types based on the 'format' specifier.
- * @param format The format specifier character (e.g., 's' for string, 
+ * @param format The format specifier character (e.g., 's' for string,
  * 		'd' for decimal integer).
  * @param ap A va_list representing the arguments passed to the format string.
  * @returns The number of characters printed for the given format.
@@ -490,8 +499,8 @@ int					print_format(char format, va_list ap);
  */
 int					ft_putchar_pf(int c);
 /**
- * @brief Prints a string to the standard output. If the string is NULL, 
- * 		  prints "(null)".
+ * @brief Prints a string to the standard output. If the string is NULL,
+ * 			prints "(null)".
  * @param str The string to print.
  * @returns The number of characters printed.
  */

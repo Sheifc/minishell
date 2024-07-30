@@ -38,6 +38,7 @@ FILES_PARSER    = init.c    	   \
 				  token.c token_utils.c							\
 				  token_handles.c token_handles_utils.c			\
 				  token_preprocess.c token_preprocess_utils.c 	\
+				  token_env.c									\
 				  wildcard.c wildcard_utils.c
 
 FILES_EXEC      = exec_builtins.c  \
@@ -113,6 +114,7 @@ re: fclean all
 TOKEN_FILES		=	test_token.c token.c token_utils.c			\
 					token_handles.c token_handles_utils.c		\
 					token_preprocess.c token_preprocess_utils.c \
+					token_env.c									\
 					wildcard.c wildcard_utils.c
 TOKEN_DIR		=	$(SRC_DIR)parser/
 TOKEN_OBJ_DIR	=	$(OBJ_DIR)parser/
@@ -131,6 +133,7 @@ AST_FILES	= 	test_ast.c ast.c ast_utils.c ast_handles.c 	\
 				token.c token_utils.c						\
 				token_handles.c token_handles_utils.c		\
 				token_preprocess.c token_preprocess_utils.c \
+				token_env.c									\
 				wildcard.c wildcard_utils.c
 AST_DIR		=	$(SRC_DIR)parser/
 AST_OBJ_DIR	=	$(OBJ_DIR)parser/
@@ -151,6 +154,7 @@ CMD_FILES	= 	test_command.c command.c command_utils.c command_handles1.c command
 				token.c token_utils.c						\
 				token_handles.c token_handles_utils.c		\
 				token_preprocess.c token_preprocess_utils.c \
+				token_env.c									\
 				wildcard.c wildcard_utils.c
 CMD_DIR		=	$(SRC_DIR)parser/
 CMD_OBJ_DIR	=	$(OBJ_DIR)parser/
@@ -167,12 +171,12 @@ test_cmd: $(CMD_OBJ)
 directories:
 	mkdir -p $(AST_OBJ_DIR) $(TOKEN_OBJ_DIR) $(CMD_OBJ_DIR)
 
-# norminette src/parser/token.c src/parser/token_handles.c src/parser/token_handles_utils.c src/parser/token_utils.c
-# norminette src/parser/wildcard.c src/parser/wildcard_utils.c
-# norminette src/parser/ast.c src/parser/ast_handles.c src/parser/ast_utils.c
-# norminette src/parser/syntax.c src/parser/syntax_utils.c
-# norminette src/parser/command.c src/parser/command_utils.c src/parser/command_handles.c src/parser/command_exe.c src/parser/test_command.c
-# norminette src/parser/test_token.c src/parser/test_ast.c
-# norminette includes/token.h includes/ast.h includes/syntax.h includes/command.h
+# norminette src/parser/token*
+# norminette src/parser/wildcard*
+# norminette src/parser/ast*
+# norminette src/parser/syntax*
+# norminette src/parser/command*
+# norminette src/parser/test_*
+# norminette includes/token.h includes/ast.h includes/syntax.h includes/command.h includes/stacks.h
 
 .PHONY: all clean fclean re test_token test_ast directories

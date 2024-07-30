@@ -56,7 +56,7 @@ void	handle_quotes(char **start, Token **tokens, int *n_tokens,
 			free(token_value);
 		}
 		token_value = ft_strndup(end, 1);
-		tokens[(*n_tokens)++] = create_token(T_QUOTE, token_value, false);
+		tokens[(*n_tokens)++] = create_token(T_QUOTE, token_value, true);
 		free(token_value);
 		*start = end + 1;
 	}

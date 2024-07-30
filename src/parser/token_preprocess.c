@@ -65,9 +65,10 @@ bool	ok_count_quotes(const char *str)
 
 char	*preprocess_input(const char *input)
 {
-	char			*output;
+	char			*clean_input;
 	t_word_features	feat;
 	int				len;
+	char			*preproc_input;
 
 	if (ok_count_quotes(input) == false)
 		return ((char *)input);
@@ -75,12 +76,14 @@ char	*preprocess_input(const char *input)
 	feat.btw_quotes = false;
 	feat.new_word = true;
 	feat.start = 0;
-	output = (char *)malloc((len + 1) * sizeof(char));
-	output[0] = '\0';
+	clean_input = (char *)malloc(MAX_LENGTH * sizeof(char));
+	clean_input[0] = '\0';
 	feat.pos = -1;
 	while (++feat.pos <= len)
-		handle_character(input, &output, &feat);
+		handle_character(input, &clean_input, &feat);
 	if (!feat.new_word)
-		process_word(input, feat.start, len - feat.start, output);
-	return (output);
+		process_word(input, feat.start, len - feat.start, clean_input);
+	preproc_input = replace_env_variables(clean_input);
+	free(clean_input);
+	return (preproc_input);
 }
