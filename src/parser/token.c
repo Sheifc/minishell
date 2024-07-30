@@ -73,5 +73,7 @@ Token	**tokenize(const char *originalInput, int *n_tokens)
 			handle_regular_tokens(&start, tokens, n_tokens);
 	}
 	free(input_copy);
+	if (input)
+		free(input);
 	return (tokens);
 }

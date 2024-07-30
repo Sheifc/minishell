@@ -53,26 +53,32 @@ char	**build_cmd_args(Command *cmd)
 }
 
 // Función para liberar un comando
-void	free_command(Command *cmd)
+void	free_commands(Command **head)
 {
-	int	i;
+	int		i;
+	Command	*next_node;
 
-	if (cmd)
+	if (*head == NULL)
+		return ;
+	next_node = (*head)->next;
+	if (*head)
 	{
-		if (cmd->name)
-			free(cmd->name);
-		if (cmd->arg)
+		if ((*head)->name)
+			free((*head)->name);
+		if ((*head)->arg)
 		{
 			i = -1;
-			while (++i < cmd->n_args)
+			while (++i < (*head)->n_args)
 			{
-				if (cmd->arg[i])
-					free(cmd->arg[i]);
+				if ((*head)->arg[i])
+					free((*head)->arg[i]);
 			}
-			free(cmd->arg);
+			free((*head)->arg);
 		}
-		free(cmd);
+		free((*head));
 	}
+	*head = NULL;
+	free_commands(&next_node);
 }
 
 // Función para imprimir un nodo de comando (para debug)

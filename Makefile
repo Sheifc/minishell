@@ -31,7 +31,8 @@ FILES_PARSER    = init.c    	   \
                   syntaxis.c       \
 				  heredoc.c 	   \
 				  parser_utils.c	\
-				  command.c command_utils.c command_handles1.c command_handles2.c command_exe.c \
+				  command.c command_utils.c command_handles1.c	\
+				  command_handles2.c command_exe.c command_extra.c \
 				  stack_operations.c stack_pipes.c				\
 				  ast.c ast_utils.c ast_handles.c 				\
 				  syntax.c syntax_utils.c						\
@@ -126,7 +127,7 @@ $(TOKEN_OBJ_DIR)%.o: $(TOKEN_DIR)%.c | directories
 
 test_token: $(TOKEN_OBJ)
 	@$(MAKE) -s all bonus printf gnl -C $(LIBFT_DIR)
-	$(CC) $(TOKEN_OBJ) -L $(LIBFT_DIR) $(LIBS) -o $@
+	$(CC) $(TOKEN_OBJ) -L $(LIBFT_DIR) $(LIBS) $(LDFLAGS) -o $@
 
 AST_FILES	= 	test_ast.c ast.c ast_utils.c ast_handles.c 	\
 				syntax.c syntax_utils.c						\
@@ -145,9 +146,10 @@ $(AST_OBJ_DIR)%.o: $(AST_DIR)%.c | directories
 
 test_ast: $(AST_OBJ)
 	@$(MAKE) -s all bonus printf gnl -C $(LIBFT_DIR)
-	$(CC) $(AST_OBJ) -L $(LIBFT_DIR) $(LIBS) -o $@
+	$(CC) $(AST_OBJ) -L $(LIBFT_DIR) $(LIBS) $(LDFLAGS) -o $@
 
-CMD_FILES	= 	test_command.c command.c command_utils.c command_handles1.c command_handles2.c command_exe.c \
+CMD_FILES	= 	test_command.c command.c command_utils.c command_handles1.c	\
+				command_handles2.c command_exe.c command_extra.c \
 				stack_operations.c stack_pipes.c			\
 				ast.c ast_utils.c ast_handles.c 			\
 				syntax.c syntax_utils.c						\
@@ -166,7 +168,7 @@ $(CMD_OBJ_DIR)%.o: $(CMD_DIR)%.c | directories
 
 test_cmd: $(CMD_OBJ)
 	@$(MAKE) -s all bonus printf gnl -C $(LIBFT_DIR)
-	$(CC) $(CMD_OBJ) -L $(LIBFT_DIR) $(LIBS) -o $@
+	$(CC) $(CMD_OBJ) -L $(LIBFT_DIR) $(LIBS) $(LDFLAGS) -o $@
 
 directories:
 	mkdir -p $(AST_OBJ_DIR) $(TOKEN_OBJ_DIR) $(CMD_OBJ_DIR)

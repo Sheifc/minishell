@@ -71,7 +71,10 @@ char	*preprocess_input(const char *input)
 	char			*preproc_input;
 
 	if (ok_count_quotes(input) == false)
-		return ((char *)input);
+	{
+		preproc_input = ft_strdup(input);
+		return (preproc_input);
+	}
 	len = ft_strlen(input);
 	feat.btw_quotes = false;
 	feat.new_word = true;

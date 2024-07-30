@@ -15,15 +15,16 @@ ASTNode	*create_node(NodeType type, char *value, int level)
 }
 
 // Function to free the AST memory
-void	free_ast(ASTNode *root)
+void	free_ast(ASTNode **root)
 {
-	if (root == NULL)
+	if ((*root) == NULL)
 		return ;
-	free_ast(root->left);
-	free_ast(root->right);
-	if (root->value)
-		free(root->value);
-	free(root);
+	free_ast(&(*root)->left);
+	free_ast(&(*root)->right);
+	if ((*root)->value)
+		free((*root)->value);
+	free(*root);
+	*root = NULL;
 }
 
 // Main function to build the AST

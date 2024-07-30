@@ -68,7 +68,7 @@ typedef struct _ASTNode
 
 // AST
 ASTNode				*create_node(NodeType type, char *value, int level);
-void				free_ast(ASTNode *root);
+void				free_ast(ASTNode **root);
 ASTNode				*build_ast(Token **tokens, int num_tokens, int level);
 
 // AST handles

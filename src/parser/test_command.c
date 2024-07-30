@@ -1,10 +1,152 @@
 #include "command.h"
 
+// void	execute_commands(Command *commands)
+// {
+// 	Command	*current;
+// 	pid_t	pid;
+// 	int		status;
+
+// 	current = commands;
+// 	while (current)
+// 	{
+// 		printf("\e[0m - Ejecutando comando: \e[33m%s\e[0m -\e[32m\n",
+// 			current->name);
+// 		if (current->operator == NODE_END && (ft_strncmp(current->name,
+// 					"save_outfile", 12) == 0 || ft_strncmp(current->name,
+// 					"save_append", 11) == 0))
+// 		{
+// 		}
+// 		else
+// 		{
+// 			if (ft_strncmp(current->name, "read_infile", 11) == 0)
+// 			{
+// 				if (current->fdin != STDIN_FILENO)
+// 				{
+// 					close(current->fdin);
+// 				}
+// 				current = current->next;
+// 				continue ;
+// 			}
+// 			if (ft_strncmp(current->name, "save_outfile", 12) == 0
+// 				|| ft_strncmp(current->name, "save_append", 11) == 0)
+// 			{
+// 				current->name = ft_strdup("cat");
+// 				current->arg[0] = ft_strdup("cat");
+// 			}
+// 			pid = fork();
+// 			if (pid == 0)
+// 			{
+// 				// Child process
+// 				if (current->fdin != STDIN_FILENO)
+// 				{
+// 					dup2(current->fdin, STDIN_FILENO);
+// 					close(current->fdin);
+// 				}
+// 				if (current->fdout != STDOUT_FILENO)
+// 				{
+// 					dup2(current->fdout, STDOUT_FILENO);
+// 					close(current->fdout);
+// 				}
+// 				execvp(current->name, current->arg);
+// 				perror("execvp");
+// 				exit(EXIT_FAILURE);
+// 			}
+// 			else if (pid < 0)
+// 			{
+// 				perror("fork");
+// 				exit(EXIT_FAILURE);
+// 			}
+// 			// Parent process
+// 			if (current->fdin != STDIN_FILENO)
+// 			{
+// 				close(current->fdin);
+// 			}
+// 			if (current->fdout != STDOUT_FILENO)
+// 			{
+// 				if (!current->next || current->next->fdout != current->fdout)
+// 					close(current->fdout);
+// 			}
+// 			// Wait for the child process to finish
+// 			waitpid(pid, &status, 0);
+// 			printf("\e[0m");
+// 			// Check if the command was executed successfully
+// 			if (WIFEXITED(status) && WEXITSTATUS(status) != 0)
+// 			{
+// 				fprintf(stderr, "Command failed with status %d: %s\n",
+// 					WEXITSTATUS(status), current->name);
+// 			}
+// 		}
+// 		// Move to the next command
+// 		current = current->next;
+// 	}
+// }
+
+void	handle_child_process(Command *current)
+{
+	if (current->fdin != STDIN_FILENO)
+	{
+		dup2(current->fdin, STDIN_FILENO);
+		close(current->fdin);
+	}
+	if (current->fdout != STDOUT_FILENO)
+	{
+		dup2(current->fdout, STDOUT_FILENO);
+		close(current->fdout);
+	}
+	execvp(current->name, current->arg);
+	perror("execvp");
+	exit(EXIT_FAILURE);
+}
+
+void	handle_parent_process2(Command *current, pid_t pid)
+{
+	int	status;
+
+	if (current->fdin != STDIN_FILENO)
+		close(current->fdin);
+	if (current->fdout != STDOUT_FILENO)
+	{
+		if (!current->next || current->next->fdout != current->fdout)
+			close(current->fdout);
+	}
+	waitpid(pid, &status, 0);
+	printf("\e[0m");
+	if (WIFEXITED(status) && WEXITSTATUS(status) != 0)
+		fprintf(stderr, "Command failed with status %d: %s\n",
+			WEXITSTATUS(status), current->name);
+}
+
+void	execute_command2(Command *current)
+{
+	pid_t	pid;
+
+	if (ft_strncmp(current->name, "read_infile", 11) == 0)
+	{
+		if (current->fdin != STDIN_FILENO)
+			close(current->fdin);
+		current = current->next;
+	}
+	else
+	{
+		if (ft_strncmp(current->name, "save_outfile", 12) == 0
+			|| ft_strncmp(current->name, "save_append", 11) == 0)
+		{
+			current->name = ft_strdup("cat");
+			current->arg[0] = ft_strdup("cat");
+		}
+		pid = fork();
+		if (pid == 0)
+			handle_child_process(current);
+		else if (pid < 0)
+			exit(EXIT_FAILURE);
+		else
+			handle_parent_process2(current, pid);
+	}
+}
+
 void	execute_commands(Command *commands)
 {
 	Command	*current;
-	pid_t	pid;
-	int		status;
 
 	current = commands;
 	while (current)
@@ -17,115 +159,33 @@ void	execute_commands(Command *commands)
 		{
 		}
 		else
-		{
-			if (ft_strncmp(current->name, "read_infile", 11) == 0)
-			{
-				if (current->fdin != STDIN_FILENO)
-				{
-					close(current->fdin);
-				}
-				current = current->next;
-				continue ;
-			}
-			if (ft_strncmp(current->name, "save_outfile", 12) == 0
-				|| ft_strncmp(current->name, "save_append", 11) == 0)
-			{
-				current->name = ft_strdup("cat");
-				current->arg[0] = ft_strdup("cat");
-			}
-			pid = fork();
-			if (pid == 0)
-			{
-				// Child process
-				if (current->fdin != STDIN_FILENO)
-				{
-					dup2(current->fdin, STDIN_FILENO);
-					close(current->fdin);
-				}
-				if (current->fdout != STDOUT_FILENO)
-				{
-					dup2(current->fdout, STDOUT_FILENO);
-					close(current->fdout);
-				}
-				execvp(current->name, current->arg);
-				perror("execvp");
-				exit(EXIT_FAILURE);
-			}
-			else if (pid < 0)
-			{
-				perror("fork");
-				exit(EXIT_FAILURE);
-			}
-			// Parent process
-			if (current->fdin != STDIN_FILENO)
-			{
-				close(current->fdin);
-			}
-			if (current->fdout != STDOUT_FILENO)
-			{
-				if (!current->next || current->next->fdout != current->fdout)
-					close(current->fdout);
-			}
-			// Wait for the child process to finish
-			waitpid(pid, &status, 0);
-			printf("\e[0m");
-			// Check if the command was executed successfully
-			if (WIFEXITED(status) && WEXITSTATUS(status) != 0)
-			{
-				fprintf(stderr, "Command failed with status %d: %s\n",
-					WEXITSTATUS(status), current->name);
-			}
-		}
-		// Move to the next command
+			execute_command2(current);
 		current = current->next;
 	}
 }
 
 int	main(void)
 {
-	const char		*input;
-	Token			**tokens;
-	ASTNode			*ast;
-	Command			*cmd;
-	Command			*current;
-	bool			is_valid;
-	int				num_tokens;
-	OperatorStack	*ope_stack;
-	PipeStack		*pipe_stack;
-	Fds				fds;
+	Token		**tokens;
+	ASTNode		*ast;
+	int			num_tokens;
+	Command		*cmd;
+	const char	*input = "(ls file*.txt | wc | wc && ls arch*.txt) > out1.txt "
+		">> out2.txt";
 
-	cmd = NULL;
-	current = NULL;
-	input = "(echo hola {$USER} 'hola $USER' | \"ls\" file*.txt | \"wc\" | wc && ls arch*.txt) > out1.txt >> "
-		"out2.txt";
 	printf("\e[35m\n------------------- * -------------------\n\e[0m");
-	tokens = tokenize(input, &num_tokens);
 	printf("input:\n%s\n", input);
-	printf("\n**** Tokens: ****\n");
-	print_tokens(tokens, num_tokens);
-	verify_tokens(tokens, &num_tokens);
-	ast = build_ast(tokens, num_tokens, 0);
-	printf("\n**** AST: ****\n");
-	print_ast(ast);
-	is_valid = validate_ast(tokens, ast);
-	printf("\n**** Generating Commands: ****\n");
-	ope_stack = NULL;
-	pipe_stack = NULL;
-	fds.in = STDIN_FILENO;
-	fds.out = STDOUT_FILENO;
-	if (is_valid)
-		cmd = traverse_ast(ast, fds, &ope_stack, &pipe_stack);
-	current = cmd;
-	printf("\n**** List ofCommands: ****\n");
-	while (current)
-	{
-		print_command(current);
-		current = current->next;
-	}
+	tokens = tokenize_input(input, &num_tokens);
+	ast = create_ast(tokens, num_tokens);
+	cmd = generate_commands(ast, validate_and_free_tokens(tokens, &num_tokens,
+				ast), (Fds){STDIN_FILENO, STDOUT_FILENO});
+	print_commands(cmd);
 	printf("\n**** Ejecutando: ****\n");
 	execute_commands(cmd);
+	free_commands(&cmd);
 	return (0);
 }
+
 // input = "cat out1.txt | sort";
 // input = "sort << EOF";
 // input = "ls -l file*.txt ; ls -l *[1].txt";

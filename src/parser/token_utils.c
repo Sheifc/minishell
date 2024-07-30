@@ -4,14 +4,17 @@ void	free_tokens(Token **tokens, int *num_tokens)
 {
 	int	i;
 
-	if (tokens)
+	if (tokens && *tokens)
 	{
 		i = -1;
 		while (++i < *num_tokens)
+		{
 			free_token2(tokens[i]);
-		free(tokens);
+			tokens[i] = NULL;
+		}
+		free(*tokens);
 	}
-	tokens = NULL;
+	*tokens = NULL;
 	*num_tokens = 0;
 }
 

@@ -41,7 +41,7 @@ Command				*traverse_ast(ASTNode *node, Fds fds,
 void				print_fd_contents(int fd);
 void				add_argument(Command *cmd, const char *arg);
 char				**build_cmd_args(Command *cmd);
-void				free_command(Command *cmd);
+void				free_commands(Command **head);
 void				print_command(Command *cmd);
 
 // Command handles1
@@ -76,5 +76,13 @@ void				handle_parent_process(pid_t pid, int pipe_fds[2],
 						int *status);
 void				setup_redirections(int input_fd, int output_fd,
 						int pipe_write_fd);
+
+// Command extra
+Token				**tokenize_input(const char *input, int *num_tokens);
+ASTNode				*create_ast(Token **tokens, int num_tokens);
+bool				validate_and_free_tokens(Token **tokens, int *num_tokens,
+						ASTNode *ast);
+Command				*generate_commands(ASTNode *ast, bool is_valid, Fds fds);
+void				print_commands(Command *cmd);
 
 #endif
