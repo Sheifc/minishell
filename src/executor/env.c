@@ -23,6 +23,19 @@ void	init_env(t_shell *data, char **envp)
 	fill_env_list(&(data->export), envp, &j);
 }
 
+void	print_env(t_env *env)
+{
+	t_env	*current;
+
+	current = env;
+	while (current != NULL)
+	{
+		if (current->value && *(current->value) != '\0')
+			printf("%s=%s\n", current->key, current->value);
+		current = current->next;
+	}
+}
+
 void	ft_env(t_env *env)
 {
 	print_list(env);
