@@ -11,7 +11,7 @@ int	execute_builtin(t_shell *data, t_cmd *cmd)
 	else if (!ft_strncmp(data->cmd->arg[0], "cd\0", 3))
 		return (ft_cd(data, cmd), 1);
 	else if (!ft_strncmp(data->cmd->arg[0], "export\0", 7))
-		return (ft_export(data), 1);
+		return (ft_export(data, cmd), 1);
 	else if (!ft_strncmp(data->cmd->arg[0], "unset\0", 6))
 		return (ft_unset(data), 1);
 	else if (!ft_strncmp(data->cmd->arg[0], "env\0", 4))
@@ -22,7 +22,7 @@ int	execute_builtin(t_shell *data, t_cmd *cmd)
 		return (0);
 }
 
-int	execute_builtin_forked(t_shell *data, t_cmd *cmd)
+/* int	execute_builtin_forked(t_shell *data, t_cmd *cmd)
 {
 	if (data->cmd->n_args == 0)
 		return (0);
@@ -99,4 +99,4 @@ int	execute_builtin_all_forked(t_shell *data, t_cmd *cmd)
 	}
 	else
 		return (0);
-}
+} */

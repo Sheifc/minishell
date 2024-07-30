@@ -56,10 +56,10 @@ FILES_EXEC      = exec_builtins.c  \
                   env.c            \
                   exit.c           \
                   export.c         \
+				  export_utils.c   \
                   unset.c          \
 				  set_fds.c		   \
 				  exec_multiple_cmds.c \
-				  exec_multiple_cmds2.c \
                   executor.c       \
                   path.c           \
                   printing.c

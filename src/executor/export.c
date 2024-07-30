@@ -1,48 +1,104 @@
 #include "minishell.h"
 
-static void	handle_vars(t_shell *data)
+void	pop_node_export(t_env **head, char *str)
 {
-	char	*key;
-	char	*value;
-	int		i;
+	t_env	*previous;
+	t_env	*current;
 
-	i = 1;
-	while (i < data->cmd->n_args)
+	if (*head == NULL)
+		return ;
+	current = *head;
+	if (ft_strncmp(current->key, str, ft_strlen(str)+1) == 0)
 	{
-		get_key_value(data->cmd->arg[i++], &key, &value);
-		pop(&data->export, key);
-		add(&data->export, key, value);
-		if (value)
-		{
-			pop(&data->env, key);
-			add(&data->env, key, value);
-		}
+		*head = (*head)->next;
+		free_env_node(&current);
+		return ;
+	}
+	previous = *head;
+	current = (*head)->next;
+	while (current && ft_strncmp(current->key, str, ft_strlen(str)+1))
+	{
+		previous = current;
+		current = current->next;
+	}
+	if (current)
+	{
+		previous->next = current->next;
+		free_env_node(&current);
 	}
 }
 
-void	ft_export(t_shell *data)
+void	sort_export(t_shell *data)
 {
-	t_env	*export;
-	t_env	*temp;
+	t_env	*one;
+	t_env	*other;
 
-	handle_vars(data);
-	if (data->cmd->n_args > 1)
-		return ;
-	export = data->export;
-	while (export->key != NULL && export->next != NULL)
+	one = data->export;
+	while (one && one->next)
 	{
-		temp = export;
-		while (temp->key && temp->next)
+		other = data->export;
+		while (other->next)
 		{
-			if (ft_strncmp(temp->key, temp->next->key, ft_strlen(temp->key)
-					+ 1) > 0)
+			if (ft_strncmp(other->key, other->next->key,
+					ft_strlen(other->key)) > 0)
 			{
-				ft_swap(&temp->key, &temp->next->key);
-				ft_swap(&temp->value, &temp->next->value);
+				ft_swap(&other->key, &other->next->key);
+				ft_swap(&other->value, &other->next->value);
 			}
-			temp = temp->next;
+			other = other->next;
 		}
-		export = export->next;
+		one = one->next;
 	}
-	print_list(data->export);
+}
+
+void	add_node_export(int i, t_cmd *cmd, t_env **env)
+{
+	char	**str;
+	t_env	*aux;
+	int		j;
+
+	aux = *env;
+	str = cmd->arg;
+	while (str[++i])
+	{
+		j = 0;
+		while (str[i][j])
+		{
+			if (str[i][j] == '=')
+				break ;
+			j++;
+		}
+		aux = new_node(j);
+		ft_strlcpy(aux->key, str[i], ++j);
+		if (str[i][j - 1] != '=')
+			aux->value = ft_strdup("");
+		else
+			aux->value = ft_strdup(&str[i][j]);
+		pop_node_export(env, aux->key);
+		addback_node(env, aux);
+		aux->next = NULL;
+	}
+}
+
+void	ft_export(t_shell *data, t_cmd *cmd)
+{
+	int	i;
+
+	i = -1;
+	if (cmd->n_args > 1)
+	{
+		if (!is_valid(data))
+			return ;
+		add_node_export(0, cmd, &data->export);
+		while (cmd->arg[++i])
+		{
+			if (ft_strchr(cmd->arg[i], '='))
+				add_node_export(0, cmd, &data->env);
+		}
+	}
+	else
+	{
+		sort_export(data);
+		print_export(data);
+	}
 }

@@ -91,11 +91,7 @@ void	token_to_cmd(t_shell *data);
 //*--------------------BUILTINS----------------------------
 
 // exec_builtins.c
-void	execute_echo(t_shell *data, t_cmd *cmd);
 int		execute_builtin(t_shell *data, t_cmd *cmd);
-int		execute_builtin_forked(t_shell *data, t_cmd *cmd);
-int		execute_some_builtin(t_shell *data, t_cmd *cmd);
-int		execute_builtin_all_forked(t_shell *data, t_cmd *cmd);
 void	run_single_cmd(t_shell *data, t_cmd *cmd);
 void	get_status(t_shell *data);
 // cd.c
@@ -106,7 +102,12 @@ void	ft_echo(t_cmd *cmd);
 // env.c
 void	ft_env(t_env *env);
 // export.c
-void	ft_export(t_shell *data);
+int		is_valid(t_shell *data);
+t_env	*new_node(int i);
+void	addback_node(t_env **export, t_env *aux);
+void	print_export(t_shell *data);
+t_env	*new_node(int i);
+void	ft_export(t_shell *data, t_cmd *cmd);
 // exit.c
 void	ft_exit(t_cmd *cmd);
 // pwd.c
