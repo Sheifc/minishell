@@ -15,37 +15,47 @@ static int	isnum(char *str)
 	return (1);
 }
 
+static void	print_numeric_error(char *arg)
+{
+	ft_putstr_fd("exit: ", 2);
+	ft_putstr_fd(arg, 2);
+	ft_putendl_fd(": numeric argument required", 2);
+}
+
+static int	check_too_many_arguments(t_cmd *cmd)
+{
+	if (cmd->n_args > 2)
+	{
+		ft_putendl_fd("exit: too many arguments", 2);
+		return (1);
+	}
+	return (0);
+}
+
 void	ft_exit(t_cmd *cmd)
 {
 	int		exit_code;
 	long	num;
 
 	exit_code = 1;
-	if (cmd->n_args > 2)
-	{
-		ft_putendl_fd("exit: too many arguments", 2);
-		exit_code = 1;
-	}
+	ft_putstr_fd("exit\n", 2);
+	if (check_too_many_arguments(cmd))
+		return ;
 	else if (cmd->n_args == 2)
 	{
 		if (isnum(cmd->arg[1]) == 0)
 		{
-			ft_putstr_fd("exit: ", 2);
-			ft_putstr_fd(cmd->arg[1], 2);
-			ft_putendl_fd(": numeric argument required", 2);
+			print_numeric_error(cmd->arg[1]);
 			exit(255);
 		}
 		errno = 0;
 		num = ft_atol(cmd->arg[1]);
 		if (errno == ERANGE || num > LONG_MAX || num < LONG_MIN)
 		{
-			ft_putstr_fd("exit: ", 2);
-			ft_putstr_fd(cmd->arg[1], 2);
-			ft_putendl_fd(": numeric argument required", 2);
+			print_numeric_error(cmd->arg[1]);
 			exit(255);
 		}
 		exit_code = (int)(num % 256);
 	}
-	printf("exit\n");
 	exit(exit_code);
 }
