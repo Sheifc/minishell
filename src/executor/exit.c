@@ -30,7 +30,7 @@ void	ft_exit(t_cmd *cmd)
 				" numeric argument required\n");
 			exit(255);
 		}
-		exit_code = ft_atoi(cmd->arg[1]);
+		exit_code = ft_atoi(cmd->arg[1]) % 256;
 	}
 	printf("exit\n");
 	exit(exit_code);
