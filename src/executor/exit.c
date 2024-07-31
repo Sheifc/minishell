@@ -17,7 +17,7 @@ static int	isnum(char *str)
 
 static void	print_numeric_error(char *arg)
 {
-	ft_putstr_fd("exit: ", 2);
+	ft_putstr_fd("minishell: exit: ", 2);
 	ft_putstr_fd(arg, 2);
 	ft_putendl_fd(": numeric argument required", 2);
 }
@@ -26,7 +26,7 @@ static int	check_too_many_arguments(t_cmd *cmd)
 {
 	if (cmd->n_args > 2)
 	{
-		ft_putendl_fd("exit: too many arguments", 2);
+		ft_putendl_fd("minishell: exit: too many arguments", 2);
 		return (1);
 	}
 	return (0);
