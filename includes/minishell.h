@@ -28,65 +28,15 @@
 void	init(t_shell *data, char **envp);
 void	init_struct(t_shell *data, char **envp);
 
-//*--------------------LEXER-------------------------------
-// lexer.c
-void	lexer(char *prompt, t_token **tok);
-// tokenizator.c
-void	set_token(int type, char *prompt, t_token **tok, int *i);
-// setter.c
-void	setter(int type, char *prompt, t_token **tok, int *i);
-// create_lists.c
-void	create_list(int type, t_token **tok, char *content);
-// printer.c
-void	print_lists(t_token *tok);
-void	print_cmd_list(t_cmd *cmd);
-// quote_stuff.c
-int		quote_stuff(int *i, char *prompt);
-int		dquote_stuff(int *i, char *prompt);
-// utils.c
-void	heredoc_in(char *prompt, t_token **tok, int *i);
-void	append_out(char *prompt, t_token **tok, int *i);
 
-//*--------------------PARSER-------------------------------
-void	parser(t_token **tok, char **envp, t_env *env);
-
-//*--------------------EXPAND_VARIABLES---------------------
-// expand_variables.c
-void	expand_variables(t_token **token, t_shell *data);
-
-// exp_utils.c
-int		is_there_a_dollar(char *str);
-char	*expand_utils2(char *line, char *temp, int *i, int *temp_len);
-char	*replace_dollar(char *line, t_shell *data);
-
-// expand_utils.c
-char	*expand_utils(char *line, char *temp, int *i, int *temp_len);
-char	*expand_heredoc(char *line, t_env *env);
-
-// syntaxis.c
-int		syntaxis_is_ok(t_token **token);
 // parser_main.c
 int		only_spaces(char *prompt);
 void	clear_structs(t_token **token, t_cmd **cmd);
 void	init_struct(t_shell *data, char **envp);
 
-//*--------------------HEREDOC--------------------------------
-void	heredoc_handler(int signum);
-void	save_heredoc(t_cmd *cmd, t_token **tok, t_env *env);
-int		heredoc(t_shell *data, t_cmd *cmd, t_token **tok);
-
 //*--------------------SIGNALS--------------------------------
 void	init_signals(void);
 void	sigint_handler(int signum);
-
-//*--------------------TOKEN-TO-CMD------------------------
-void	add_cmd_to_list(t_cmd **head, t_cmd *new_cmd);
-t_cmd	*create_cmd_node(void);
-void	add_argument2(t_cmd *cmd, char *token_content);
-int		handle_redirection1(t_cmd *cmd, t_token **token); //, t_env *env
-int		fill_cmd_args(t_cmd *cmd, t_token **token); //, t_env *env
-int		add_cmd_to_shell(t_cmd **cmd_list, t_token **token); //, t_env *env
-void	token_to_cmd(t_shell *data);
 
 //*--------------------BUILTINS----------------------------
 

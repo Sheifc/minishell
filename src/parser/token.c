@@ -5,20 +5,23 @@ Token	*create_token(TokenType type, const char *value, bool expect_arg)
 	Token	*token;
 
 	token = (Token *)malloc(sizeof(Token));
+	if (!token)
+		return (NULL);
 	token->type = type;
-	token->value = strdup(value);
+	token->value = ft_strdup(value);
 	token->expect_arg = expect_arg;
 	return (token);
 }
 
-void	free_token2(Token *token)
+void	free_token2(Token **token)
 {
-	if (token)
+	if (*token)
 	{
-		free(token->value);
-		free(token);
+		if ((*token)->value)
+			free((*token)->value);
+		free(*token);
 	}
-	token = NULL;
+	*token = NULL;
 }
 
 int	verify_tokens(Token **tokens, int *n_tokens)
@@ -59,6 +62,8 @@ Token	**tokenize(const char *originalInput, int *n_tokens)
 
 	input = preprocess_input(originalInput);
 	tokens = (Token **)malloc(MAX_TOKENS * sizeof(Token *));
+	if (!tokens)
+		return (NULL);
 	*n_tokens = 0;
 	input_copy = ft_strdup(input);
 	start = input_copy;
@@ -73,7 +78,6 @@ Token	**tokenize(const char *originalInput, int *n_tokens)
 			handle_regular_tokens(&start, tokens, n_tokens);
 	}
 	free(input_copy);
-	if (input)
-		free(input);
+	free(input);
 	return (tokens);
 }

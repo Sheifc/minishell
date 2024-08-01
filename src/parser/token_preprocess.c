@@ -80,7 +80,8 @@ char	*preprocess_input(const char *input)
 	feat.new_word = true;
 	feat.start = 0;
 	clean_input = (char *)malloc(MAX_LENGTH * sizeof(char));
-	clean_input[0] = '\0';
+	if (!clean_input)
+		return (NULL);
 	feat.pos = -1;
 	while (++feat.pos <= len)
 		handle_character(input, &clean_input, &feat);

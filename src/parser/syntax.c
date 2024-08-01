@@ -20,7 +20,7 @@ bool	is_ast_valid(ASTNode *root)
 	else if (root->type == NODE_COMMAND)
 		return (is_command_with_args(root));
 	else if (root->type == NODE_AND || root->type == NODE_OR
-		|| root->type == NODE_PIPE || root->type == NODE_SEMICOLON)
+		|| root->type == NODE_PIPE)
 		return (is_binary_operator_valid(root));
 	else if (root->type == NODE_PARENTHESIS)
 		return (is_parenthesis_valid(root));

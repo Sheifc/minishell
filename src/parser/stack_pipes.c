@@ -18,6 +18,8 @@ void	push_pipe(PipeStack **stack, int fdin, int fdout)
 	PipeStack	*new_node;
 
 	new_node = (PipeStack *)malloc(sizeof(PipeStack));
+	if (!new_node)
+		return ;
 	new_node->fdin = fdin;
 	new_node->fdout = fdout;
 	new_node->next = *stack;

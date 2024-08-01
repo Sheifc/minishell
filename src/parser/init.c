@@ -4,14 +4,14 @@ void	init_struct(t_shell *data, char **envp)
 {
 	data->token = NULL;
 	data->cmd = NULL;
-    data->env = NULL;
-    data->export = NULL;
-    data->prompt = NULL;
-    data->envp = envp;
-    data->path = NULL;
-    data->status = 0;
-    data->pid = 0;
-    data->cmd_count = 0;
+	data->env = NULL;
+	data->export = NULL;
+	data->prompt = NULL;
+	data->envp = envp;
+	data->path = NULL;
+	data->status = 0;
+	data->pid = 0;
+	data->cmd_count = 0;
 }
 
 void	sigint_handler(int signum)
@@ -20,23 +20,23 @@ void	sigint_handler(int signum)
 	{
 		printf("\n");
 		rl_on_new_line();
-		//rl_replace_line("", 0);
+		// rl_replace_line("", 0);
 		rl_redisplay();
 	}
 }
 
-void    init_signals()
+void	init_signals(void)
 {
-    signal(SIGINT, sigint_handler);
-    signal(SIGQUIT, SIG_IGN);
-    signal(SIGTSTP, SIG_IGN);
+	signal(SIGINT, sigint_handler);
+	signal(SIGQUIT, SIG_IGN);
+	signal(SIGTSTP, SIG_IGN);
 }
 
-void    init(t_shell *data, char **envp)
+void	init(t_shell *data, char **envp)
 {
-    init_signals();
-    init_struct(data, envp);
-    init_env(data, envp);
+	init_signals();
+	init_struct(data, envp);
+	init_env(data, envp);
 }
 
 /* 

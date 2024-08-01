@@ -1,6 +1,24 @@
 #include "command.h"
 
-Command	*traverse_ast(ASTNode *node, Fds fds, OperatorStack **ope_stack,
+void	postprocess_cmds(t_cmd *cmd)
+{
+	if (cmd == NULL)
+		return ;
+	if (ft_strcmp(cmd->name, "cat") == 0 && cmd->fdin == 0 && cmd->n_args == 1)
+	{
+		close(cmd->fdout);
+		cmd->fdout = STDOUT_FILENO;
+		if (cmd->operator == NODE_PIPE)
+		{
+			close(cmd->next->fdin);
+			cmd->next->fdin = STDIN_FILENO;
+		}
+	}
+	cmd = cmd->next;
+	postprocess_cmds(cmd);
+}
+
+t_cmd	*traverse_ast(ASTNode *node, Fds fds, OperatorStack **ope_stack,
 	PipeStack **pipe_stack)
 {
 	if (node == NULL)

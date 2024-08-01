@@ -20,25 +20,26 @@ void	print_fd_contents(int fd)
 }
 
 // Función para agregar un argumento al nodo de comando
-void	add_argument(Command *cmd, const char *arg)
+void	add_argument(t_cmd *cmd, const char *arg)
 {
 	int		i;
-	char	**args;
+	char	**new_args;
 
-	args = (char **)malloc((cmd->n_args + 2) * sizeof(char *));
+	new_args = (char **)malloc((cmd->n_args + 2) * sizeof(char *));
+	if (!new_args)
+		return ;
 	i = -1;
 	while (++i < cmd->n_args)
-		args[i] = cmd->arg[i];
-	args[cmd->n_args] = (char *)malloc((ft_strlen(arg) + 1) * sizeof(char));
-	ft_strlcpy(args[cmd->n_args], arg, ft_strlen(arg) + 1);
+		new_args[i] = cmd->arg[i];
+	new_args[cmd->n_args] = ft_strdup(arg);
 	free(cmd->arg);
-	cmd->arg = args;
-	args[cmd->n_args + 1] = NULL;
+	cmd->arg = new_args;
+	new_args[cmd->n_args + 1] = NULL;
 	cmd->n_args++;
 }
 
 // Función crear comando para execvp
-char	**build_cmd_args(Command *cmd)
+char	**build_cmd_args(t_cmd *cmd)
 {
 	int		i;
 	char	**args;
@@ -53,10 +54,10 @@ char	**build_cmd_args(Command *cmd)
 }
 
 // Función para liberar un comando
-void	free_commands(Command **head)
+void	free_commands(t_cmd **head)
 {
 	int		i;
-	Command	*next_node;
+	t_cmd	*next_node;
 
 	if (*head == NULL)
 		return ;
@@ -82,7 +83,7 @@ void	free_commands(Command **head)
 }
 
 // Función para imprimir un nodo de comando (para debug)
-void	print_command(Command *cmd)
+void	print_command(t_cmd *cmd)
 {
 	int	i;
 

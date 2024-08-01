@@ -1,8 +1,8 @@
 #include "command.h"
 
-// void	execute_commands(Command *commands)
+// void	execute_commands(t_cmd *commands)
 // {
-// 	Command	*current;
+// 	t_cmd	*current;
 // 	pid_t	pid;
 // 	int		status;
 
@@ -72,7 +72,7 @@
 // 			// Check if the command was executed successfully
 // 			if (WIFEXITED(status) && WEXITSTATUS(status) != 0)
 // 			{
-// 				fprintf(stderr, "Command failed with status %d: %s\n",
+// 				fprintf(stderr, "t_cmd failed with status %d: %s\n",
 // 					WEXITSTATUS(status), current->name);
 // 			}
 // 		}
@@ -81,7 +81,7 @@
 // 	}
 // }
 
-void	handle_child_process(Command *current)
+void	handle_child_process(t_cmd *current)
 {
 	if (current->fdin != STDIN_FILENO)
 	{
@@ -98,7 +98,7 @@ void	handle_child_process(Command *current)
 	exit(EXIT_FAILURE);
 }
 
-void	handle_parent_process2(Command *current, pid_t pid)
+void	handle_parent_process2(t_cmd *current, pid_t pid)
 {
 	int	status;
 
@@ -112,15 +112,15 @@ void	handle_parent_process2(Command *current, pid_t pid)
 	waitpid(pid, &status, 0);
 	printf("\e[0m");
 	if (WIFEXITED(status) && WEXITSTATUS(status) != 0)
-		fprintf(stderr, "Command failed with status %d: %s\n",
+		fprintf(stderr, "t_cmd failed with status %d: %s\n",
 			WEXITSTATUS(status), current->name);
 }
 
-void	execute_command2(Command *current)
+void	execute_command2(t_cmd *current)
 {
 	pid_t	pid;
 
-	if (ft_strncmp(current->name, "read_infile", 11) == 0)
+	if (ft_strcmp(current->name, "read_infile") == 0)
 	{
 		if (current->fdin != STDIN_FILENO)
 			close(current->fdin);
@@ -128,9 +128,11 @@ void	execute_command2(Command *current)
 	}
 	else
 	{
-		if (ft_strncmp(current->name, "save_outfile", 12) == 0
-			|| ft_strncmp(current->name, "save_append", 11) == 0)
+		if (ft_strcmp(current->name, "save_outfile") == 0
+			|| ft_strcmp(current->name, "save_append") == 0)
 		{
+			free(current->name);
+			free(current->arg[0]);
 			current->name = ft_strdup("cat");
 			current->arg[0] = ft_strdup("cat");
 		}
@@ -144,9 +146,9 @@ void	execute_command2(Command *current)
 	}
 }
 
-void	execute_commands(Command *commands)
+void	execute_commands(t_cmd *commands)
 {
-	Command	*current;
+	t_cmd	*current;
 
 	current = commands;
 	while (current)
@@ -169,7 +171,7 @@ int	main(void)
 	Token		**tokens;
 	ASTNode		*ast;
 	int			num_tokens;
-	Command		*cmd;
+	t_cmd		*cmd;
 	const char	*input = "(ls file*.txt | wc | wc && ls arch*.txt) > out1.txt "
 		">> out2.txt";
 

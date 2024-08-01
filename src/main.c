@@ -11,22 +11,23 @@ void	handle_empty_or_whitespace_commands(char **prompt)
 
 static void	minishell(t_shell *data)
 {
-	if (data->token != NULL && syntaxis_is_ok(&data->token) == 1)
-	{
+	// if (data->token != NULL && syntaxis_is_ok(&data->token) == 1)
+	// {
 		// expand_variables(&data->token, data);
-		token_to_cmd(data);
+		// token_to_cmd(data);
+
 		if (data->cmd != NULL)
 		{
 			executor(data);
 			clear_structs(&data->token, &data->cmd);
 		}
-	}
+	// }
 }
 
 int	main(int argc, char **argv, char **envp)
 {
-	t_shell	data;
-
+	t_shell		data;
+	int			num_tokens;
 	init(&data, envp);
 	while (1)
 	{
@@ -35,7 +36,12 @@ int	main(int argc, char **argv, char **envp)
 			break ;
 		add_history(data.prompt);
 		handle_empty_or_whitespace_commands(&data.prompt);
-		lexer(data.prompt, &data.token);
+		data.tokens = tokenize_input(data.prompt, &num_tokens);
+		data.ast = create_ast(data.tokens, num_tokens);
+		data.cmd = generate_commands(data.ast,
+				validate_and_free_tokens(data.tokens, &num_tokens, data.ast),
+				(Fds){0, 1});
+		print_commands(data.cmd);
 		minishell(&data);
 		free(data.prompt);
 		data.cmd_count = 0;

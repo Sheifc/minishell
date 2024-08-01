@@ -69,7 +69,7 @@ typedef struct _word_features
 
 // token
 Token			*create_token(TokenType type, const char *value, bool exp_arg);
-void			free_token2(Token *token);
+void			free_token2(Token **token);
 int				verify_tokens(Token **tokens, int *n_tokens);
 Token			**tokenize(const char *input, int *num_tokens);
 

@@ -8,14 +8,13 @@ void	free_tokens(Token **tokens, int *num_tokens)
 	{
 		i = -1;
 		while (++i < *num_tokens)
-		{
-			free_token2(tokens[i]);
-			tokens[i] = NULL;
-		}
+			free_token2(&tokens[i]);
 		free(*tokens);
+		*tokens = NULL;
 	}
-	*tokens = NULL;
+	free(tokens);
 	*num_tokens = 0;
+	tokens = NULL;
 }
 
 void	skip_delimiters(char **start)

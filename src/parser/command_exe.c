@@ -1,7 +1,7 @@
 #include "command.h"
 
 // Ejecución de comando
-int	execute_command(Command *cmd, int input_fd, int output_fd)
+int	execute_command(t_cmd *cmd, int input_fd, int output_fd)
 {
 	int		pipe_fds[2];
 	pid_t	pid;
@@ -35,7 +35,7 @@ pid_t	create_child_process(void)
 	return (pid);
 }
 
-void	setup_child_process(Command *cmd, int input_fd, int output_fd,
+void	setup_child_process(t_cmd *cmd, int input_fd, int output_fd,
 		int pipe_fds[2])
 {
 	setup_redirections(input_fd, output_fd, pipe_fds[1]);

@@ -1,23 +1,17 @@
 #include "command.h"
 
 // Función para crear un nodo de comando
-Command	*create_command(const char *name, Fds fds, NodeType ope)
+t_cmd	*create_command(const char *name, Fds fds, NodeType ope)
 {
-	Command	*cmd;
+	t_cmd	*cmd;
 
-	cmd = (Command *)malloc(sizeof(Command));
+	cmd = (t_cmd *)malloc(sizeof(t_cmd));
 	if (!cmd)
 	{
 		perror("malloc");
 		exit(EXIT_FAILURE);
 	}
 	cmd->name = ft_strdup(name);
-	if (!cmd->name)
-	{
-		perror("strdup");
-		free(cmd);
-		exit(EXIT_FAILURE);
-	}
 	cmd->arg = NULL;
 	cmd->n_args = 0;
 	cmd->fdin = fds.in;
@@ -28,9 +22,9 @@ Command	*create_command(const char *name, Fds fds, NodeType ope)
 	return (cmd);
 }
 
-Command	*create_command_from_ast(ASTNode *node, Fds fds, NodeType ope)
+t_cmd	*create_command_from_ast(ASTNode *node, Fds fds, NodeType ope)
 {
-	Command	*cmd;
+	t_cmd	*cmd;
 	ASTNode	*arg_node;
 
 	cmd = create_command(node->value, fds, ope);
@@ -44,7 +38,7 @@ Command	*create_command_from_ast(ASTNode *node, Fds fds, NodeType ope)
 	return (cmd);
 }
 
-void	append_commands(Command **head, Command **tail, Command *new_cmds)
+void	append_commands(t_cmd **head, t_cmd **tail, t_cmd *new_cmds)
 {
 	if (new_cmds)
 	{
@@ -65,13 +59,13 @@ void	append_commands(Command **head, Command **tail, Command *new_cmds)
 	}
 }
 
-Command	*handle_node_and_or_semicolon(ASTNode *node, Fds fds,
+t_cmd	*handle_node_and_or_semicolon(ASTNode *node, Fds fds,
 	OperatorStack **ope_stack, PipeStack **pipe_stack)
 {
-	Command	*head;
-	Command	*tail;
-	Command	*left_cmds;
-	Command	*right_cmds;
+	t_cmd	*head;
+	t_cmd	*tail;
+	t_cmd	*left_cmds;
+	t_cmd	*right_cmds;
 
 	push_operator(ope_stack, node->type);
 	head = NULL;
@@ -83,13 +77,13 @@ Command	*handle_node_and_or_semicolon(ASTNode *node, Fds fds,
 	return (head);
 }
 
-Command	*handle_node_parenthesis(ASTNode *node, Fds fds,
+t_cmd	*handle_node_parenthesis(ASTNode *node, Fds fds,
 	OperatorStack **ope_stack, PipeStack **pipe_stack)
 {
 	NodeType	parent_ope;
-	Command		*head;
-	Command		*tail;
-	Command		*left_cmds;
+	t_cmd		*head;
+	t_cmd		*tail;
+	t_cmd		*left_cmds;
 
 	parent_ope = peek_operator(*ope_stack);
 	if (parent_ope == NODE_OUTPUT || parent_ope == NODE_OUTPUT_APPEND)
