@@ -40,7 +40,7 @@ int	main(int argc, char **argv, char **envp)
 		data.ast = create_ast(data.tokens, num_tokens);
 		data.cmd = generate_commands(data.ast,
 				validate_and_free_tokens(data.tokens, &num_tokens, data.ast),
-				(Fds){0, 1});
+				(Fds){-1, -1});
 		print_commands(data.cmd);
 		minishell(&data);
 		free(data.prompt);
