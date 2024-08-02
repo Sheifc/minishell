@@ -22,6 +22,8 @@ bool	is_ast_valid(ASTNode *root)
 	else if (root->type == NODE_AND || root->type == NODE_OR
 		|| root->type == NODE_PIPE)
 		return (is_binary_operator_valid(root));
+	else if (root->type == NODE_SEMICOLON)
+		return (is_ast_valid(root->left) && is_ast_valid(root->right));
 	else if (root->type == NODE_PARENTHESIS)
 		return (is_parenthesis_valid(root));
 	else if (root->type == NODE_INPUT || root->type == NODE_HEREDOC

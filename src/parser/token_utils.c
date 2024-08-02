@@ -19,7 +19,7 @@ void	free_tokens(Token **tokens, int *num_tokens)
 
 void	skip_delimiters(char **start)
 {
-	while (**start && strchr(DELIMITERS, **start))
+	while (**start && ft_strchr(DELIMITERS, **start))
 		(*start)++;
 }
 
@@ -39,9 +39,9 @@ void	add_cmd_arg_token(char **start, Token **tokens, int *n_tokens)
 	end = *start;
 	while (*end && !strchr(DELIMITERS, *end) && *end != '"' && *end != '\''
 		&& *end != '(' && *end != ')' && *end != '|' && *end != '<'
-		&& *end != '>' && *end != ';' && strncmp(end, "&&", 2) != 0
-		&& strncmp(end, "||", 2) != 0 && strncmp(end, "<<", 2) != 0
-		&& strncmp(end, ">>", 2) != 0)
+		&& *end != '>' && *end != ';' && ft_strncmp(end, "&&", 2) != 0
+		&& ft_strncmp(end, "||", 2) != 0 && ft_strncmp(end, "<<", 2) != 0
+		&& ft_strncmp(end, ">>", 2) != 0)
 		end++;
 	temp = *end;
 	*end = '\0';

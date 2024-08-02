@@ -1,12 +1,14 @@
 #include "minishell.h"
 
-void	handle_empty_or_whitespace_commands(char **prompt)
+int	handle_empty_or_whitespace_commands(char **prompt)
 {
 	if (!ft_strlen(*prompt) || only_spaces(*prompt) == 1)
 	{
 		free(*prompt);
-		*prompt = readline(M "Mini" W "shell" G "--> " RST);
+		// *prompt = readline(M "Mini" W "shell" G "--> " RST);
+		return (false);
 	}
+	return (true);
 }
 
 static void	minishell(t_shell *data)
@@ -35,17 +37,19 @@ int	main(int argc, char **argv, char **envp)
 		if (!data.prompt)
 			break ;
 		add_history(data.prompt);
-		handle_empty_or_whitespace_commands(&data.prompt);
-		data.tokens = tokenize_input(data.prompt, &num_tokens);
-		data.ast = create_ast(data.tokens, num_tokens);
-		data.cmd = generate_commands(data.ast,
-				validate_and_free_tokens(data.tokens, &num_tokens, data.ast),
-				(Fds){-1, -1});
-		print_commands(data.cmd);
-		minishell(&data);
-		free(data.prompt);
-		data.cmd_count = 0;
-		data.prompt = NULL;
+		if (handle_empty_or_whitespace_commands(&data.prompt))
+		{
+			data.tokens = tokenize_input(data.prompt, &num_tokens);
+			data.ast = create_ast(data.tokens, num_tokens);
+			data.cmd = generate_commands(data.ast,
+					validate_and_free_tokens(data.tokens, &num_tokens, data.ast),
+					(Fds){-1, -1});
+			print_commands(data.cmd);
+			minishell(&data);
+			free(data.prompt);
+			data.cmd_count = 0;
+			data.prompt = NULL;
+		}
 	}
 	free_all(&data);
 	return ((void)argc, (void)argv, data.status);

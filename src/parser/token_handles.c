@@ -8,7 +8,7 @@ void	handle_wildcards(char **start, Token **tokens, int *n_tokens)
 	bool	found;
 
 	end = *start;
-	while (*end && !strchr(" \r\n\t\v\f\"'()|<>;&", *end))
+	while (*end && !ft_strchr(" \r\n\t\v\f\"'()|<>;&", *end))
 		end++;
 	temp = *end;
 	*end = '\0';
@@ -71,7 +71,7 @@ void	handle_redirect_arg(char **start, Token **tokens, int *n_tokens)
 	TokenType	type;
 
 	end = *start + 1;
-	while (*end && !strchr(DELIMITERS, *end) && *end != '"' && *end != '\''
+	while (*end && !ft_strchr(DELIMITERS, *end) && *end != '"' && *end != '\''
 		&& *end != '(' && *end != ')' && *end != '|' && *end != '<'
 		&& *end != '>' && *end != ';' && ft_strncmp(end, "&&", 2) != 0
 		&& ft_strncmp(end, "||", 2) != 0 && ft_strncmp(end, "<<", 2) != 0
