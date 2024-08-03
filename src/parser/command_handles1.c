@@ -5,19 +5,22 @@ t_cmd	*handle_node_command(ASTNode *node, Fds fds, OperatorStack **ope_stack)
 	NodeType	parent_ope;
 	t_cmd		*cmd;
 
+	cmd = NULL;
 	parent_ope = peek_operator(*ope_stack);
 	if (parent_ope == NODE_PARENTHESIS)
 	{
 		pop_operator(ope_stack);
 		parent_ope = peek_operator(*ope_stack);
 	}
-	cmd = create_command_from_ast(node, fds, parent_ope);
+	if (ft_strcmp(node->value, "save_outfile") != 0 && ft_strcmp(node->value,
+			"read_infile") != 0 && ft_strcmp(node->value, "save_append") != 0)
+		cmd = create_command_from_ast(node, fds, parent_ope);
 	pop_operator(ope_stack);
 	return (cmd);
 }
 
 t_cmd	*handle_node_pipe(ASTNode *node, Fds fds, OperatorStack **ope_stack,
-	PipeStack **pipe_stack)
+		PipeStack **pipe_stack)
 {
 	t_cmd	*head;
 	t_cmd	*tail;
@@ -26,22 +29,22 @@ t_cmd	*handle_node_pipe(ASTNode *node, Fds fds, OperatorStack **ope_stack,
 	int		pipe_fds[2];
 
 	pipe(pipe_fds);
-	// printf(" \e[1;36mpipes: (W)%d => (R)%d\e[0m\n", pipe_fds[WRITE],
-	// 	pipe_fds[READ]);
+	printf(" \e[1;36mpipes: (W)%d => (R)%d\e[0m\n", pipe_fds[WRITE],
+		pipe_fds[READ]);
 	push_operator(ope_stack, node->type);
 	head = NULL;
 	tail = NULL;
-	left_cmds = traverse_ast(node->left, (Fds){fds.in, pipe_fds[WRITE]},
-			ope_stack, pipe_stack);
-	right_cmds = traverse_ast(node->right, (Fds){pipe_fds[READ], fds.out},
-			ope_stack, pipe_stack);
+	left_cmds = traverse_ast(node->left, (Fds){fds.in, fds.out}, ope_stack,
+			pipe_stack);
+	right_cmds = traverse_ast(node->right, (Fds){fds.in, fds.out}, ope_stack,
+			pipe_stack);
 	append_commands(&head, &tail, left_cmds);
 	append_commands(&head, &tail, right_cmds);
 	return (head);
 }
 
 t_cmd	*handle_node_output(ASTNode *node, Fds fds, OperatorStack **ope_stack,
-	PipeStack **pipe_stack)
+		PipeStack **pipe_stack)
 {
 	int		fd;
 	t_cmd	*head;
@@ -70,7 +73,7 @@ t_cmd	*handle_node_output(ASTNode *node, Fds fds, OperatorStack **ope_stack,
 }
 
 t_cmd	*handle_node_input(ASTNode *node, Fds fds, OperatorStack **ope_stack,
-	PipeStack **pipe_stack)
+		PipeStack **pipe_stack)
 {
 	t_cmd	*head;
 	t_cmd	*tail;
@@ -89,7 +92,7 @@ t_cmd	*handle_node_input(ASTNode *node, Fds fds, OperatorStack **ope_stack,
 }
 
 t_cmd	*handle_node_heredoc(ASTNode *node, Fds fds, OperatorStack **ope_stack,
-	PipeStack **pipe_stack)
+		PipeStack **pipe_stack)
 {
 	int		fd;
 	t_cmd	*head;
@@ -99,7 +102,7 @@ t_cmd	*handle_node_heredoc(ASTNode *node, Fds fds, OperatorStack **ope_stack,
 
 	push_operator(ope_stack, node->type);
 	fd = open("heredoc_temp", O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	write(fd, node->right->left->value, strlen(node->right->left->value)); 
+	write(fd, node->right->left->value, strlen(node->right->left->value));
 	close(fd);
 	fds.in = open("heredoc_temp", O_RDONLY);
 	head = NULL;
