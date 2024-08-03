@@ -59,8 +59,8 @@ void	exec_multiple_cmds(t_shell *data, t_cmd *cmd)
 			close(fdpipe[0]);
 			if (cmd->fdout != -1)
 			{
-				dprintf(2, "cmd->arg[1]: %s\n", cmd->arg[1]);
-				dprintf(2, "cmd->fdout: %d\n", cmd->fdout);
+				//dprintf(2, "cmd->arg[1]: %s\n", cmd->arg[1]);
+				//dprintf(2, "cmd->fdout: %d\n", cmd->fdout);
 				if (dup2(cmd->fdout, STDOUT_FILENO) == -1)
 				{
 					perror("dup2 failed for cmd->fdout");
@@ -109,7 +109,7 @@ void	exec_multiple_cmds(t_shell *data, t_cmd *cmd)
 		close(cmd->fdout);
 		if (cmd->fdin != -1)
 			close(cmd->fdin);
-		dprintf(2, "cmd->fdout en el padre: %d\n", cmd->fdout);
+		//dprintf(2, "cmd->fdout en el padre: %d\n", cmd->fdout);
 		if (cmd->fdout != -1)
 			close(cmd->fdout);
 		if (cmd->next)
