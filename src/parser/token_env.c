@@ -72,6 +72,21 @@ int	is_btw_single_quotes(const char *str, const char *pos)
 	return (in_single_quotes);
 }
 
+int is_preceded_by_double_less(const char *str, const char *pos) {
+    const char *p;
+
+	p = pos - 1;
+    while (p > str && ft_strchr(DELIMITERS, *p))
+        p--;
+    if (p > str && *p == '<')
+	{
+        p--;
+        if (p > str && *p == '<')
+            return 1;
+    }
+    return 0;
+}
+
 char	*replace_env_variables(const char *input)
 {
 	char	*result;
@@ -82,7 +97,7 @@ char	*replace_env_variables(const char *input)
 	pos = ft_strchr(result, '$');
 	while (pos)
 	{
-		if (is_btw_single_quotes(result, pos))
+		if (is_btw_single_quotes(result, pos) || is_preceded_by_double_less(result, pos))
 		{
 			pos = ft_strchr(pos + 1, '$');
 			continue ;

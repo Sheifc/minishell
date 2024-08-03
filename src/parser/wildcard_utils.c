@@ -37,7 +37,7 @@ int	handle_brackets(const char *pattern, const char *string)
 {
 	const char	*end;
 
-	end = strchr(pattern + 1, ']');
+	end = ft_strchr(pattern + 1, ']');
 	if (end == NULL)
 		return (NOMATCH);
 	if (char_in_set(*string, pattern + 1))

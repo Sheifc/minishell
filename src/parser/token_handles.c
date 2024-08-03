@@ -82,7 +82,9 @@ void	handle_redirect_arg(char **start, Token **tokens, int *n_tokens)
 		temp = *end;
 		*end = '\0';
 		type = T_REDIRECT_ARG;
-		tokens[*n_tokens] = create_token(type, *start + 1, true);
+		while (ft_strchr(DELIMITERS, **start))
+			(*start)++;
+		tokens[*n_tokens] = create_token(type, *start, true);
 		(*n_tokens)++;
 		*end = temp;
 		*start = end;
