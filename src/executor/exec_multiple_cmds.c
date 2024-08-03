@@ -10,7 +10,7 @@ void	run_single_cmd(t_shell *data, t_cmd *cmd)
 			perror("Error: command not found");
 			exit(127);
 		}
-		if (cmd->fdout != -1) // Redirigir la salida si fdout está configurado
+		if (cmd->fdout != -1)
 		{
 			if (dup2(cmd->fdout, 1) == -1)
 			{
@@ -57,18 +57,33 @@ void	exec_multiple_cmds(t_shell *data, t_cmd *cmd)
 		if (cmd->next)
 		{
 			close(fdpipe[0]);
-			if (dup2(fdpipe[1], 1) == -1)
+			if (cmd->fdout != -1)
 			{
-				perror("dup2 failed for fdpipe[1]");
-				exit(EXIT_FAILURE);
+				dprintf(2, "cmd->arg[1]: %s\n", cmd->arg[1]);
+				dprintf(2, "cmd->fdout: %d\n", cmd->fdout);
+				if (dup2(cmd->fdout, STDOUT_FILENO) == -1)
+				{
+					perror("dup2 failed for cmd->fdout");
+					exit(EXIT_FAILURE);
+				}
+				close(cmd->fdout);
+				close(fdpipe[1]);
 			}
-			close(fdpipe[1]);
+			else
+			{
+				if (dup2(fdpipe[1], 1) == -1)
+				{
+					perror("dup2 failed for fdpipe[1]");
+					exit(EXIT_FAILURE);
+				}
+				close(fdpipe[1]);
+			}
 		}
 		else
 		{
 			close(fdpipe[0]);
 			close(fdpipe[1]);
-			if (cmd->fdout != -1) // Redirigir la salida si fdout está configurado
+			if (cmd->fdout != -1)
 			{
 				if (dup2(cmd->fdout, 1) == -1)
 				{
@@ -83,6 +98,7 @@ void	exec_multiple_cmds(t_shell *data, t_cmd *cmd)
 			perror("dup2 failed for cmd->fdin");
 			exit(EXIT_FAILURE);
 		}
+
 		close(cmd->fdin);
 		run_single_cmd(data, cmd);
 		exit(EXIT_SUCCESS);
@@ -90,8 +106,12 @@ void	exec_multiple_cmds(t_shell *data, t_cmd *cmd)
 	else
 	{
 		close(fdpipe[1]);
+		close(cmd->fdout);
 		if (cmd->fdin != -1)
 			close(cmd->fdin);
+		dprintf(2, "cmd->fdout en el padre: %d\n", cmd->fdout);
+		if (cmd->fdout != -1)
+			close(cmd->fdout);
 		if (cmd->next)
 		{
 			cmd->next->fdin = fdpipe[0];
