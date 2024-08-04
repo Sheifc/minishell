@@ -26,12 +26,8 @@
 
 //*--------------------INIT--------------------------------
 void	init(t_shell *data, char **envp);
-void	init_struct(t_shell *data, char **envp);
-
-
-// parser_main.c
 int		only_spaces(char *prompt);
-void	init_struct(t_shell *data, char **envp);
+void	init_shell(t_shell *data, char **envp);
 
 //*--------------------SIGNALS--------------------------------
 void	init_signals(void);

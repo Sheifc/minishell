@@ -17,7 +17,7 @@ OBJ_PARSER_DIR  = $(OBJ_DIR)parser/
 
 FILES_SRC       = main.c
 
-FILES_PARSER	=	init.c parser_utils.c								\
+FILES_PARSER	=	parser_utils.c										\
 					command.c command_utils.c command_handles1.c		\
 					command_handles2.c command_exe.c command_extra.c	\
 					stack_operations.c stack_pipes.c					\
@@ -29,7 +29,9 @@ FILES_PARSER	=	init.c parser_utils.c								\
 					token_env.c											\
 					wildcard.c wildcard_utils.c
 
-FILES_EXEC      = exec_builtins.c  \
+FILES_EXEC      = init.c		   \
+				  signals.c   	   \
+				  exec_builtins.c  \
                   exec_utils.c     \
 				  free_env.c 	   \
 				  free_token.c	   \

@@ -1,18 +1,7 @@
 #include "minishell.h"
 
-void	init_struct(t_shell *data, char **envp)
-{
-	data->cmd = NULL;
-	data->env = NULL;
-	data->export = NULL;
-	data->prompt = NULL;
-	data->envp = envp;
-	data->path = NULL;
-	data->status = 0;
-	data->pid = 0;
-	data->cmd_count = 0;
-}
-
+// this 2 functions are not gonna be used for the project that ones to use are gonna be the ones in the comments bellow, 
+//commented only for incompatibilities with my mac
 void	sigint_handler(int signum)
 {
 	if (signum == SIGINT)
@@ -31,15 +20,7 @@ void	init_signals(void)
 	signal(SIGTSTP, SIG_IGN);
 }
 
-void	init(t_shell *data, char **envp)
-{
-	init_signals();
-	init_struct(data, envp);
-	init_env(data, envp);
-}
-
-/* 
-extern int	g_sig;
+/* extern int	g_sig;
 
 void	heredoc_handler(int signum)
 {
@@ -49,9 +30,7 @@ void	heredoc_handler(int signum)
 
 void	signal_d(t_shell *data)
 {
-	free_data(data);
-	free_env_node(&data->env);
-	free_env_node(&data->export);
+	free_all(data);
 	printf("exit\n");
 	exit(data->status);
 }
@@ -62,17 +41,17 @@ void	signal_c(int signal)
 	if (g_sig == 1)
 	{
 		write(1, "\033[K\n", 5);
-		rl_replace_line("", 0);
+		//rl_replace_line("", 0);
 		rl_redisplay();
 	}
 	else if (g_sig == 0)
 	{
 		rl_on_new_line();
-		rl_replace_line("", 0);
+		//rl_replace_line("", 0);
 		rl_redisplay();
 		write(1, "\033[K\n", 5);
 		rl_on_new_line();
-		rl_replace_line("", 0);
+		//rl_replace_line("", 0);
 		rl_redisplay();
 	}
 }
@@ -83,7 +62,7 @@ void	signal_quit(int signal)
 	write(2, "Quit (core dumped)\n", 20);
 }
 
-void	init_signal(void)
+void	init_signals(void)
 {
 	signal(SIGTSTP, SIG_IGN);
 	if (g_sig == 0)
@@ -91,5 +70,4 @@ void	init_signal(void)
 	else
 		signal(SIGQUIT, signal_quit);
 	signal(SIGINT, signal_c);
-}
-*/
+} */

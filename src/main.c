@@ -5,10 +5,9 @@ int	handle_empty_or_whitespace_commands(char **prompt)
 	if (!ft_strlen(*prompt) || only_spaces(*prompt) == 1)
 	{
 		free(*prompt);
-		// *prompt = readline(M "Mini" W "shell" G "--> " RST);
-		return (false);
+		return (0);
 	}
-	return (true);
+	return (1);
 }
 
 static void	minishell(t_shell *data)
@@ -17,7 +16,6 @@ static void	minishell(t_shell *data)
 	{
 		executor(data);
 		free_cmd_list(&data->cmd);
-		//clear_structs(&data->cmd);
 	}
 }
 
