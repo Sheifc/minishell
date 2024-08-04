@@ -13,17 +13,12 @@ int	handle_empty_or_whitespace_commands(char **prompt)
 
 static void	minishell(t_shell *data)
 {
-	// if (data->token != NULL && syntaxis_is_ok(&data->token) == 1)
-	// {
-		// expand_variables(&data->token, data);
-		// token_to_cmd(data);
-
-		if (data->cmd != NULL)
-		{
-			executor(data);
-			clear_structs(&data->token, &data->cmd);
-		}
-	// }
+	if (data->cmd != NULL)
+	{
+		executor(data);
+		free_cmd_list(&data->cmd);
+		//clear_structs(&data->cmd);
+	}
 }
 
 int	main(int argc, char **argv, char **envp)

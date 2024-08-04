@@ -10,6 +10,7 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
+# include "structures.h"
 
 # define READ 0
 # define WRITE 1
@@ -21,7 +22,7 @@ typedef struct _Fds
 	int			out;
 }				Fds;
 
-typedef struct _cmd
+/* typedef struct _cmd
 {
 	char		*name;
 	char		**arg;
@@ -31,7 +32,7 @@ typedef struct _cmd
 	struct _cmd	*prev;
 	struct _cmd	*next;
 	NodeType	operator;
-}				t_cmd;
+}				t_cmd; */
 
 // Command
 void			postprocess_cmds(t_cmd *cmd);
