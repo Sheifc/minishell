@@ -10,7 +10,7 @@ void	run_single_cmd(t_shell *data, t_cmd *cmd)
 			perror("Error: command not found");
 			exit(127);
 		}
-		if (cmd->fdout != -1)
+/* 		if (cmd->fdout != -1)
 		{
 			if (dup2(cmd->fdout, 1) == -1)
 			{
@@ -18,7 +18,7 @@ void	run_single_cmd(t_shell *data, t_cmd *cmd)
 				exit(EXIT_FAILURE);
 			}
 			close(cmd->fdout);
-		}
+		} */
 		if (execve(data->path, cmd->arg, data->envp) < 0)
 		{
 			perror("Error: execve failed");
@@ -41,67 +41,110 @@ void	exec_multiple_cmds(t_shell *data, t_cmd *cmd)
 		perror("dup failed for cmd->fdin");
 		exit(EXIT_FAILURE);
 	}
-	if (pipe(fdpipe) < 0)
+	if (cmd->operator == NODE_AND)
 	{
-		perror("pipe failed");
-		exit(EXIT_FAILURE);
-	}
-	pid = fork();
-	if (pid < 0)
-	{
-		perror("fork failed");
-		exit(EXIT_FAILURE);
-	}
-	else if (pid == 0)
-	{
-		if (cmd->next)
+		pid = fork();
+		if (pid < 0)
 		{
-			close(fdpipe[0]);
+			perror("fork failed");
+			exit(EXIT_FAILURE);
+		}
+		else if (pid == 0)
+		{
 			if (cmd->fdout != -1)
 			{
-				//dprintf(2, "cmd->arg[1]: %s\n", cmd->arg[1]);
-				//dprintf(2, "cmd->fdout: %d\n", cmd->fdout);
 				if (dup2(cmd->fdout, STDOUT_FILENO) == -1)
 				{
 					perror("dup2 failed for cmd->fdout");
 					exit(EXIT_FAILURE);
 				}
 				close(cmd->fdout);
-				close(fdpipe[1]);
 			}
-			else
+			if (dup2(cmd->fdin, 0) == -1)
 			{
-				if (dup2(fdpipe[1], 1) == -1)
-				{
-					perror("dup2 failed for fdpipe[1]");
-					exit(EXIT_FAILURE);
-				}
-				close(fdpipe[1]);
+				perror("dup2 failed for cmd->fdin");
+				exit(EXIT_FAILURE);
 			}
+			close(cmd->fdin);
+			run_single_cmd(data, cmd);
+			exit(EXIT_SUCCESS);
 		}
 		else
 		{
-			close(fdpipe[0]);
-			close(fdpipe[1]);
+			close(cmd->fdout);
+			if (cmd->fdin != -1)
+				close(cmd->fdin);
 			if (cmd->fdout != -1)
-			{
-				if (dup2(cmd->fdout, 1) == -1)
-				{
-					perror("dup2 failed for cmd->fdout");
-					exit(EXIT_FAILURE);
-				}
 				close(cmd->fdout);
+			if (cmd->next)
+			{
+				exec_multiple_cmds(data, cmd->next);
 			}
+			waitpid(data->pid, &(data->status), 0);
+			get_status(data);
 		}
-		if (dup2(cmd->fdin, 0) == -1)
+	}
+	else if (cmd->operator != NODE_AND)
+	{
+		if (pipe(fdpipe) < 0)
 		{
-			perror("dup2 failed for cmd->fdin");
+			perror("pipe failed");
 			exit(EXIT_FAILURE);
 		}
-
-		close(cmd->fdin);
-		run_single_cmd(data, cmd);
-		exit(EXIT_SUCCESS);
+		pid = fork();
+		if (pid < 0)
+		{
+			perror("fork failed");
+			exit(EXIT_FAILURE);
+		}
+		else if (pid == 0)
+		{
+			if (cmd->next)
+			{
+				close(fdpipe[0]);
+				if (cmd->fdout != -1)
+				{
+					if (dup2(cmd->fdout, STDOUT_FILENO) == -1)
+					{
+						perror("dup2 failed for cmd->fdout");
+						exit(EXIT_FAILURE);
+					}
+					close(cmd->fdout);
+					close(fdpipe[1]);
+				}
+				else
+				{
+					if (dup2(fdpipe[1], 1) == -1)
+					{
+						perror("dup2 failed for fdpipe[1]");
+						exit(EXIT_FAILURE);
+					}
+					close(fdpipe[1]);
+				}
+			}
+			else
+			{
+				close(fdpipe[0]);
+				close(fdpipe[1]);
+				if (cmd->fdout != -1)
+				{
+					if (dup2(cmd->fdout, 1) == -1)
+					{
+						perror("dup2 failed for cmd->fdout");
+						exit(EXIT_FAILURE);
+					}
+					close(cmd->fdout);
+				}
+			}
+			if (dup2(cmd->fdin, 0) == -1)
+			{
+				perror("dup2 failed for cmd->fdin");
+				exit(EXIT_FAILURE);
+			}
+			close(cmd->fdin);
+			run_single_cmd(data, cmd);
+			exit(EXIT_SUCCESS);
+		}
 	}
 	else
 	{
@@ -109,7 +152,6 @@ void	exec_multiple_cmds(t_shell *data, t_cmd *cmd)
 		close(cmd->fdout);
 		if (cmd->fdin != -1)
 			close(cmd->fdin);
-		//dprintf(2, "cmd->fdout en el padre: %d\n", cmd->fdout);
 		if (cmd->fdout != -1)
 			close(cmd->fdout);
 		if (cmd->next)
@@ -119,7 +161,9 @@ void	exec_multiple_cmds(t_shell *data, t_cmd *cmd)
 		}
 		else
 			close(fdpipe[0]);
-		waitpid(pid, &(data->status), 0);
-		data->status = WEXITSTATUS(data->status);
+		//waitpid(pid, &(data->status), 0);
+		//data->status = WEXITSTATUS(data->status);
+		waitpid(data->pid, &(data->status), 0);
+		get_status(data);
 	}
 }
