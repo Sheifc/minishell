@@ -30,7 +30,6 @@ void	run_single_cmd(t_shell *data, t_cmd *cmd)
 
 void	exec_node_and(t_shell *data, t_cmd **cmd)
 {
-	//print_commands(*cmd);
 	exec_one_cmd(data, *cmd);
 	if ((*cmd)->next && data->status == 0 && (*cmd)->operator == NODE_AND)
 	{
@@ -51,7 +50,6 @@ void	exec_node_or(t_shell *data, t_cmd *cmd)
 
 void	exec_node_and(t_shell *data, t_cmd *cmd)
 {
-	//print_commands(*cmd);
 	exec_one_cmd(data, cmd);
 	if (cmd->next && data->status == 0 && cmd->operator == NODE_AND)
 	{
@@ -67,7 +65,20 @@ void	exec_multiple_cmds(t_shell *data, t_cmd *cmd)
 
 	if (!cmd)
 		return ;
-	if (cmd->operator != NODE_AND && cmd->operator != NODE_OR)
+	if (cmd != NULL && (cmd->operator == NODE_AND || cmd->operator == NODE_OR))
+	{
+		if (cmd->operator == NODE_AND)
+		{
+			exec_node_and(data, cmd);
+		}
+		else if (cmd->operator == NODE_OR)
+		{
+			exec_node_or(data, cmd);
+		}
+		else
+			exec_multiple_cmds(data, cmd->next);
+	}
+	else if (cmd->operator != NODE_AND && cmd->operator != NODE_OR)
 	{
 		if (pipe(fdpipe) < 0)
 		{
@@ -146,13 +157,5 @@ void	exec_multiple_cmds(t_shell *data, t_cmd *cmd)
 			waitpid(data->pid, &(data->status), 0);
 			get_status(data);
 		}
-	}
-	else if (cmd->operator == NODE_AND)
-	{
-		exec_node_and(data, cmd);
-	}
-	else if (cmd->operator == NODE_OR)
-	{
-		exec_node_or(data, cmd);
 	}
 }
