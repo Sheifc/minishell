@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Author: sheferna
+
 # Path to the minishell executable
 MINISHELL=./minishell
 
