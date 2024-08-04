@@ -49,6 +49,5 @@ void	executor(t_shell *data)
 		exec_one_cmd(data, current);
 	else if (data->cmd_count > 1)
 		exec_multiple_cmds(data, current);
-	free_commands(&data->cmd);
 	restart_fds(data);
 }

@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-void	free_token(t_token **token)
+/* void	free_token(t_token **token)
 {
 	if (!token)
 		return ;
@@ -25,4 +25,4 @@ void	free_token_list(t_token **token_list)
 		current = next;
 	}
 	*token_list = NULL;
-}
+} */
