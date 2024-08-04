@@ -31,7 +31,6 @@ void	init_struct(t_shell *data, char **envp);
 
 // parser_main.c
 int		only_spaces(char *prompt);
-void	clear_structs(t_token **token, t_cmd **cmd);
 void	init_struct(t_shell *data, char **envp);
 
 //*--------------------SIGNALS--------------------------------
@@ -80,13 +79,6 @@ void	get_key_value(char *str, char **key, char **value);
 char	*get_value(t_env *env, const char *key);
 char	*get_cd_value(t_env *env, const char *key);
 
-//*--------------------REDIRECTIONS---------------------------
-// file_des.c
-int		save_append(t_cmd *cmd, t_token **tok);
-int		save_infile(t_cmd *cmd, t_token **tok);
-int		save_outfile(t_cmd *cmd, t_token **tok);
-int		ft_innout(t_cmd *cmd, t_token **tok); //, t_env *env
-
 //*--------------------EXECUTOR----------------------------
 void	get_path(t_shell *data, t_cmd *cmd);
 void	set_tmp_fds(t_shell *data);
@@ -118,14 +110,10 @@ void	print_argu(char **args);
 void	free_env_list(t_env *head);
 void	free_env_node(t_env **node);
 
-void	free_token(t_token **token);
-void	free_token_list(t_token **token_list);
-
 void	free_arg(char ***matrix);
 void	free_cmd(t_cmd **cmd);
 void	free_cmd_list(t_cmd **cmd_list);
 
-void	clear_structs(t_token **token, t_cmd **cmd);
 void	free_all(t_shell *data);
 
 #endif
