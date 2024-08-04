@@ -10,8 +10,10 @@ void	get_status(t_shell *data)
 
 void	exec_one_cmd(t_shell *data, t_cmd *cmd)
 {
+	//dprintf(2, "\n***entra en exec_one_cmd***\n\n");
+	//print_commands(cmd);
 	set_fdin(data, cmd);
-	if (!execute_builtin(data, cmd))
+	if (!execute_builtin(data, cmd, cmd->arg[0]))
 	{
 		data->pid = fork();
 		if (data->pid < 0)
@@ -52,5 +54,6 @@ void	executor(t_shell *data)
 		exec_one_cmd(data, current);
 	else if (data->cmd_count > 1)
 		exec_multiple_cmds(data, current);
+	free_commands(&data->cmd);
 	restart_fds(data);
 }

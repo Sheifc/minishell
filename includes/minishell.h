@@ -36,7 +36,7 @@ void	sigint_handler(int signum);
 //*--------------------BUILTINS----------------------------
 
 // exec_builtins.c
-int		execute_builtin(t_shell *data, t_cmd *cmd);
+int		execute_builtin(t_shell *data, t_cmd *cmd, char *arg);
 void	run_single_cmd(t_shell *data, t_cmd *cmd);
 void	get_status(t_shell *data);
 // cd.c

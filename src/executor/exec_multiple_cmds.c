@@ -2,7 +2,7 @@
 
 void	run_single_cmd(t_shell *data, t_cmd *cmd)
 {
-	if (!execute_builtin(data, cmd))
+	if (!execute_builtin(data, cmd, cmd->arg[0]))
 	{
 		get_path(data, cmd);
 		if (!data->path)
@@ -18,18 +18,46 @@ void	run_single_cmd(t_shell *data, t_cmd *cmd)
 	}
 }
 
+/* void	exec_node_or(t_shell *data, t_cmd **cmd)
+{
+	exec_one_cmd(data, *cmd);
+	if ((*cmd)->next && data->status != 0 && (*cmd)->operator == NODE_OR)
+	{
+		*cmd = (*cmd)->next;
+		exec_node_or(data, cmd);
+	}
+}
+
+void	exec_node_and(t_shell *data, t_cmd **cmd)
+{
+	//print_commands(*cmd);
+	exec_one_cmd(data, *cmd);
+	if ((*cmd)->next && data->status == 0 && (*cmd)->operator == NODE_AND)
+	{
+		*cmd = (*cmd)->next;
+		exec_node_and(data, cmd);
+	}
+} */
+
 void	exec_node_or(t_shell *data, t_cmd *cmd)
 {
 	exec_one_cmd(data, cmd);
-	if (cmd->next && data->status != 0)
-		exec_node_or(data, cmd->next);
+	if (cmd->next && data->status != 0 && cmd->operator == NODE_OR)
+	{
+		cmd = cmd->next;
+		exec_node_or(data, cmd);
+	}
 }
 
 void	exec_node_and(t_shell *data, t_cmd *cmd)
 {
+	//print_commands(*cmd);
 	exec_one_cmd(data, cmd);
-	if (cmd->next)
-		exec_node_and(data, cmd->next);
+	if (cmd->next && data->status == 0 && cmd->operator == NODE_AND)
+	{
+		cmd = cmd->next;
+		exec_node_and(data, cmd);
+	}
 }
 
 void	exec_multiple_cmds(t_shell *data, t_cmd *cmd)
@@ -39,13 +67,6 @@ void	exec_multiple_cmds(t_shell *data, t_cmd *cmd)
 
 	if (!cmd)
 		return ;
-	if (cmd->fdin == -1)
-		cmd->fdin = dup(data->tmpin);
-	if (cmd->fdin == -1)
-	{
-		perror("dup failed for cmd->fdin");
-		exit(EXIT_FAILURE);
-	}
 	if (cmd->operator != NODE_AND && cmd->operator != NODE_OR)
 	{
 		if (pipe(fdpipe) < 0)
