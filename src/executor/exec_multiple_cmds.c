@@ -62,7 +62,7 @@ void	exec_multiple_cmds(t_shell *data, t_cmd *cmd)
 			}
 			if (dup2(cmd->fdin, 0) == -1)
 			{
-				perror("dup2 failed for cmd->fdin");
+				perror("dup2 failed for cmd->fdin node and");
 				exit(EXIT_FAILURE);
 			}
 			close(cmd->fdin);
@@ -71,7 +71,7 @@ void	exec_multiple_cmds(t_shell *data, t_cmd *cmd)
 		}
 		else
 		{
-			close(cmd->fdout);
+			dprintf(2, "entra en padre node and\n");
 			if (cmd->fdin != -1)
 				close(cmd->fdin);
 			if (cmd->fdout != -1)
@@ -145,25 +145,24 @@ void	exec_multiple_cmds(t_shell *data, t_cmd *cmd)
 			run_single_cmd(data, cmd);
 			exit(EXIT_SUCCESS);
 		}
-	}
-	else
-	{
-		close(fdpipe[1]);
-		close(cmd->fdout);
-		if (cmd->fdin != -1)
-			close(cmd->fdin);
-		if (cmd->fdout != -1)
-			close(cmd->fdout);
-		if (cmd->next)
-		{
-			cmd->next->fdin = fdpipe[0];
-			exec_multiple_cmds(data, cmd->next);
-		}
 		else
-			close(fdpipe[0]);
-		//waitpid(pid, &(data->status), 0);
-		//data->status = WEXITSTATUS(data->status);
-		waitpid(data->pid, &(data->status), 0);
-		get_status(data);
+		{
+			dprintf(2, "entra en padre node != and\n");
+			close(fdpipe[1]);
+			close(cmd->fdout);
+			if (cmd->fdin != -1)
+				close(cmd->fdin);
+			if (cmd->fdout != -1)
+				close(cmd->fdout);
+			if (cmd->next)
+			{
+				cmd->next->fdin = fdpipe[0];
+				exec_multiple_cmds(data, cmd->next);
+			}
+			else
+				close(fdpipe[0]);
+			waitpid(data->pid, &(data->status), 0);
+			get_status(data);
+		}
 	}
 }
