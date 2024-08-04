@@ -25,9 +25,12 @@ void	exec_one_cmd(t_shell *data, t_cmd *cmd)
 				perror("Error: command not found");
 				exit(127);
 			}
-			execve(data->path, cmd->arg, data->envp);
-			perror("Error: execve failed");
-			exit(1);
+
+			if (execve(data->path, cmd->arg, data->envp) < 0)
+			{
+				perror("Error: execve failed");
+				exit(1);
+			}
 		}
 		else
 			close(cmd->fdout);

@@ -10,21 +10,26 @@ void	run_single_cmd(t_shell *data, t_cmd *cmd)
 			perror("Error: command not found");
 			exit(127);
 		}
-/* 		if (cmd->fdout != -1)
-		{
-			if (dup2(cmd->fdout, 1) == -1)
-			{
-				perror("dup2 failed for cmd->fdout");
-				exit(EXIT_FAILURE);
-			}
-			close(cmd->fdout);
-		} */
 		if (execve(data->path, cmd->arg, data->envp) < 0)
 		{
 			perror("Error: execve failed");
 			exit(1);
 		}
 	}
+}
+
+void	exec_node_or(t_shell *data, t_cmd *cmd)
+{
+	exec_one_cmd(data, cmd);
+	if (cmd->next && data->status != 0)
+		exec_node_or(data, cmd->next);
+}
+
+void	exec_node_and(t_shell *data, t_cmd *cmd)
+{
+	exec_one_cmd(data, cmd);
+	if (cmd->next)
+		exec_node_and(data, cmd->next);
 }
 
 void	exec_multiple_cmds(t_shell *data, t_cmd *cmd)
@@ -41,50 +46,7 @@ void	exec_multiple_cmds(t_shell *data, t_cmd *cmd)
 		perror("dup failed for cmd->fdin");
 		exit(EXIT_FAILURE);
 	}
-	if (cmd->operator == NODE_AND)
-	{
-		pid = fork();
-		if (pid < 0)
-		{
-			perror("fork failed");
-			exit(EXIT_FAILURE);
-		}
-		else if (pid == 0)
-		{
-			if (cmd->fdout != -1)
-			{
-				if (dup2(cmd->fdout, STDOUT_FILENO) == -1)
-				{
-					perror("dup2 failed for cmd->fdout");
-					exit(EXIT_FAILURE);
-				}
-				close(cmd->fdout);
-			}
-			if (dup2(cmd->fdin, 0) == -1)
-			{
-				perror("dup2 failed for cmd->fdin node and");
-				exit(EXIT_FAILURE);
-			}
-			close(cmd->fdin);
-			run_single_cmd(data, cmd);
-			exit(EXIT_SUCCESS);
-		}
-		else
-		{
-			dprintf(2, "entra en padre node and\n");
-			if (cmd->fdin != -1)
-				close(cmd->fdin);
-			if (cmd->fdout != -1)
-				close(cmd->fdout);
-			if (cmd->next)
-			{
-				exec_multiple_cmds(data, cmd->next);
-			}
-			waitpid(data->pid, &(data->status), 0);
-			get_status(data);
-		}
-	}
-	else if (cmd->operator != NODE_AND)
+	if (cmd->operator != NODE_AND && cmd->operator != NODE_OR)
 	{
 		if (pipe(fdpipe) < 0)
 		{
@@ -147,7 +109,6 @@ void	exec_multiple_cmds(t_shell *data, t_cmd *cmd)
 		}
 		else
 		{
-			dprintf(2, "entra en padre node != and\n");
 			close(fdpipe[1]);
 			close(cmd->fdout);
 			if (cmd->fdin != -1)
@@ -164,5 +125,13 @@ void	exec_multiple_cmds(t_shell *data, t_cmd *cmd)
 			waitpid(data->pid, &(data->status), 0);
 			get_status(data);
 		}
+	}
+	else if (cmd->operator == NODE_AND)
+	{
+		exec_node_and(data, cmd);
+	}
+	else if (cmd->operator == NODE_OR)
+	{
+		exec_node_or(data, cmd);
 	}
 }
