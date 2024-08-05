@@ -15,7 +15,7 @@ static void	minishell(t_shell *data)
 	if (data->cmd != NULL)
 	{
 		executor(data);
-		free_cmd_list(&data->cmd);
+		free_commands(&data->cmd);
 	}
 }
 
