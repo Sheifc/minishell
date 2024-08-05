@@ -71,10 +71,8 @@ void	exec_node_or(t_shell *data, t_cmd *cmd)
 	if (cmd->next && data->status != 0 && cmd->operator == NODE_OR)
 	{
 		cmd = cmd->next;
-		if (cmd->operator == NODE_OR && data->status != 0)
-		{
-			exec_node_or(data, cmd);
-		}
+		exec_node_or(data, cmd);
+
 /* 		else
 		{
 			exec_multiple_cmds(data, cmd);
@@ -84,14 +82,14 @@ void	exec_node_or(t_shell *data, t_cmd *cmd)
 
 void	exec_node_and(t_shell *data, t_cmd *cmd)
 {
+	dprintf(2, "entra\n");
 	exec_one_cmd(data, cmd);
 	if (cmd->next && data->status == 0 && cmd->operator == NODE_AND)
 	{
+		dprintf(2, "statius: %d\n", data->status);
 		cmd = cmd->next;
-		if (cmd->operator == NODE_AND && data->status == 0)
-		{
-			exec_node_and(data, cmd);
-		}
+		exec_node_and(data, cmd);
+
 /* 		else
 		{
 			exec_multiple_cmds(data, cmd);
@@ -108,21 +106,21 @@ void	exec_multiple_cmds(t_shell *data, t_cmd *cmd)
 		return ;
   	if (cmd->fdin == -1)
 		cmd->fdin = dup(data->tmpin);
-  	if (cmd != NULL && (cmd->operator == NODE_AND || cmd->operator == NODE_OR))
-	{
+  	// if (cmd != NULL && (cmd->operator == NODE_AND || cmd->operator == NODE_OR))
+	// {
 		//dprintf(2, "data->status en exec_multiple_cmds: %d\n", data->status);
-		if (cmd->operator == NODE_AND && data->status == 0)
-		{
-			exec_node_and(data, cmd);
-		}
-		else if (cmd->operator == NODE_OR && data->status != 0)
-		{
-			exec_node_or(data, cmd);
-		}
-		else
-			exec_multiple_cmds(data, cmd->next);
+	if (cmd->operator == NODE_AND && data->status == 0)
+	{
+		exec_node_and(data, cmd);
 	}
-	else if (cmd->operator != NODE_AND && cmd->operator != NODE_OR)
+	else if (cmd->operator == NODE_OR && data->status != 0)
+	{
+		exec_node_or(data, cmd);
+	}
+		// else
+		// 	exec_multiple_cmds(data, cmd->next);
+
+	if (cmd->operator != NODE_AND && cmd->operator != NODE_OR)
 	{
 		if (pipe(fdpipe) < 0)
 		{
