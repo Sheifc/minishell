@@ -3,7 +3,7 @@
 int	execute_builtin(t_shell *data, t_cmd *cmd, char *arg)
 {
 	//dprintf(2, "\n***entra en execute_builtin***\n\n");
-	//print_commands(*cmd);
+	//dprintf(2, "cmd->arg[0]: %s\n", cmd->arg[0]);
 	if (data->cmd->n_args == 0)
 		return (0);
 	if (!ft_strncmp(arg, "echo\0", 5))

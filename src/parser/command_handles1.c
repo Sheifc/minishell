@@ -97,7 +97,7 @@ t_cmd	*handle_node_output(ASTNode *node, Fds fds, OperatorStack **ope_stack,
 	else if (ft_strncmp(node->value, ">", 1) == 0)
 		fd = open(node->right->left->value, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	push_pipe(pipe_stack, fds.in, fd);
-	printf(" \e[1;36mfile: (W)%d\e[0m\n", fd);
+	//printf(" \e[1;36mfile: (W)%d\e[0m\n", fd);
 	head = NULL;
 	tail = NULL;
 	left_cmds = traverse_ast(node->left, fds, ope_stack, pipe_stack);
