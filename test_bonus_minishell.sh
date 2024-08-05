@@ -65,15 +65,15 @@ run_test "ec hola || (echo hello && echo bye)" "Error: command not found: No suc
 hello
 bye" "Test 12: ec hola || (echo hello && echo bye)"
 run_test "(echo hola && echo hello) || (echo bye && echo adios)" "hola
-hello" "Test 13: (echo hola && echo hello) || (echo bye y echo adios)"
-run_test "(echo hola || echo hello) && (echo bye y echo adios)" "hola
+hello" "Test 13: (echo hola && echo hello) || (echo bye && echo adios)"
+run_test "(echo hola || echo hello) && (echo bye && echo adios)" "hola
 bye
-adios" "Test 14: (echo hola || echo hello) && (echo bye y echo adios)"
+adios" "Test 14: (echo hola || echo hello) && (echo bye && echo adios)"
 run_test "(ec hola && echo hello) || (ec bye y echo adios)" "Error: command not found: No such file or directory
-Error: command not found: No such file or directory" "Test 15: (ec hola && echo hello) || (ec bye y echo adios)"
-run_test "(echo hola || echo hello) && (echo bye y echo adios)" "hola
-bye" "Test 16: (echo hola || echo hello) && (echo bye y echo adios)"
-run_test "(ec hola || echo hello) && (ec bye y echo adios)" "Error: command not found: No such file or directory
+Error: command not found: No such file or directory" "Test 15: (ec hola && echo hello) || (ec bye && echo adios)"
+run_test "(echo hola || echo hello) && (echo bye && echo adios)" "hola
+bye" "Test 16: (echo hola || echo hello) && (echo bye && echo adios)"
+run_test "(ec hola || echo hello) && (ec bye && echo adios)" "Error: command not found: No such file or directory
 hello
 Error: command not found: No such file or directory
 adios" "Test 17: (ec hola || echo hello) && (ec bye y echo adios)"

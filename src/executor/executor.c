@@ -10,9 +10,8 @@ void	get_status(t_shell *data)
 
 void	exec_one_cmd(t_shell *data, t_cmd *cmd)
 {
-	//dprintf(2, "\n***entra en exec_one_cmd***\n\n");
-	//print_commands(cmd);
 	set_fdin(data, cmd);
+	set_fdout(data, cmd);
 	if (!execute_builtin(data, cmd, cmd->arg[0]))
 	{
 		data->pid = fork();
@@ -20,14 +19,12 @@ void	exec_one_cmd(t_shell *data, t_cmd *cmd)
 			perror("Error: fork failed");
 		else if (data->pid == 0)
 		{
-			set_fdout(data, cmd);
 			get_path(data, cmd);
 			if (!data->path)
 			{
 				perror("Error: command not found");
 				exit(127);
 			}
-
 			if (execve(data->path, cmd->arg, data->envp) < 0)
 			{
 				perror("Error: execve failed");
@@ -35,7 +32,10 @@ void	exec_one_cmd(t_shell *data, t_cmd *cmd)
 			}
 		}
 		else
+		{
+			close(cmd->fdin);
 			close(cmd->fdout);
+		}
 		waitpid(data->pid, &(data->status), 0);
 		get_status(data);
 	}
@@ -54,6 +54,5 @@ void	executor(t_shell *data)
 		exec_one_cmd(data, current);
 	else if (data->cmd_count > 1)
 		exec_multiple_cmds(data, current);
-	free_commands(&data->cmd);
 	restart_fds(data);
 }
