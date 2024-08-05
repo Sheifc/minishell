@@ -12,9 +12,8 @@ void	free_tokens(Token **tokens, int *num_tokens)
 		free(*tokens);
 		*tokens = NULL;
 	}
-	free(tokens);
-	*num_tokens = 0;
 	tokens = NULL;
+	*num_tokens = 0;
 }
 
 void	skip_delimiters(char **start)

@@ -37,7 +37,6 @@ int	main(int argc, char **argv, char **envp)
 			data.cmd = generate_commands(data.ast,
 					validate_and_free_tokens(data.tokens, &num_tokens, data.ast),
 					(Fds){-1, -1});
-			//print_commands(data.cmd);
 			minishell(&data);
 			free(data.prompt);
 			data.cmd_count = 0;

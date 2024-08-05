@@ -10,7 +10,6 @@ Token	**tokenize_input(const char *input, int *num_tokens)
 		tokens = tokenize(input, num_tokens);
 		// printf("\n**** Tokens: ****\n");
 		// print_tokens(tokens, *num_tokens);
-		verify_tokens(tokens, num_tokens);
 		if (verify_tokens(tokens, num_tokens) != 0)
 			free_tokens(tokens, num_tokens);
 	}
@@ -35,7 +34,7 @@ bool	validate_and_free_tokens(Token **tokens, int *num_tokens, ASTNode *ast)
 {
 	bool	is_valid;
 
-	is_valid = true;
+	is_valid = false;
 	if (tokens)
 	{
 		is_valid = validate_ast(tokens, ast);
@@ -55,12 +54,13 @@ t_cmd	*generate_commands(ASTNode *ast, bool is_valid, Fds fds)
 	cmd = NULL;
 	if (ast)
 	{
-		// printf("\n**** Generating Commands: ****\n");
 		if (is_valid)
 			cmd = traverse_ast(ast, fds, &ope_stack, &pipe_stack);
 		postprocess_cmds(cmd);
 		free_ast(&ast);
 		free(pipe_stack);
+		// printf("\n**** Generating Commands: ****\n");
+		// print_commands(cmd);
 	}
 	return (cmd);
 }

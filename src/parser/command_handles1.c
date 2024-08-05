@@ -119,6 +119,11 @@ t_cmd	*handle_node_input(ASTNode *node, Fds fds, OperatorStack **ope_stack,
 
 	push_operator(ope_stack, node->type);
 	fds.in = open(node->right->left->value, O_RDONLY);
+	if (fds.in == -1)
+	{
+		printf("\e[31m ** Error file: archivo \"%s\" no existe **\e[0m\n", node->right->left->value);
+		return (NULL);
+	}
 	head = NULL;
 	tail = NULL;
 	left_cmds = traverse_ast(node->left, fds, ope_stack, pipe_stack);

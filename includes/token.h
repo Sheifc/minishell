@@ -99,7 +99,7 @@ int				is_btw_single_quotes(const char *str, const char *pos);
 char			*replace_env_variables(const char *input);
 
 // token_handles
-void			handle_wildcards(char **start, Token **tokens, int *n_tokens);
+void			handle_wildcards(char **start, Token **tokens, int *n_tokens, TokenType type);
 void			handle_unmatched_quotes(char **start, char *end, Token **tokens,
 					int *n_tokens);
 void			handle_quotes(char **start, Token **tokens, int *n_tokens,
@@ -130,7 +130,7 @@ void			print_tokens(Token **tokens, int n_tokens);
 int				match(const char *pattern, const char *string);
 bool			is_wildcards(char **start);
 bool			search_wildcard_matches(const char *wildcard, Token **tokens,
-					int *n_tokens);
+					int *n_tokens, TokenType type);
 
 // wildcard_utils
 int				handle_question(const char *pattern, const char *string);

@@ -27,7 +27,7 @@ static int	found_match(const char *pattern, const char *string)
 
 // Function to search for matches in the current directory
 bool	search_wildcard_matches(const char *wildcard, Token **tokens,
-	int *n_tokens)
+	int *n_tokens, TokenType type)
 {
 	DIR				*dir;
 	struct dirent	*entry;
@@ -46,7 +46,7 @@ bool	search_wildcard_matches(const char *wildcard, Token **tokens,
 		if (found_match(wildcard, entry->d_name) == 0)
 		{
 			found = true;
-			tokens[*n_tokens] = create_token(T_ARG, entry->d_name, true);
+			tokens[*n_tokens] = create_token(type, entry->d_name, true);
 			(*n_tokens)++;
 		}
 		entry = readdir(dir);
