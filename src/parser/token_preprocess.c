@@ -63,7 +63,7 @@ bool	ok_count_quotes(const char *str)
 	return (false);
 }
 
-char	*preprocess_input(const char *input)
+char	*preprocess_input(const char *input, int status)
 {
 	char			*new_in;
 	t_word_features	feat;
@@ -86,7 +86,7 @@ char	*preprocess_input(const char *input)
 		handle_character(input, &new_in, &feat);
 	if (!feat.new_word)
 		process_word(input, feat.start, ft_strlen(input) - feat.start, new_in);
-	preproc_input = replace_env_variables(new_in);
+	preproc_input = replace_env_variables(new_in, status);
 	free(new_in);
 	return (preproc_input);
 }

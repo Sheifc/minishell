@@ -33,7 +33,10 @@ char	*replace_variable(const char *pos, char *result, const char *name)
 	char	*new_result;
 	size_t	new_length;
 
-	value = getenv(name);
+	if (ft_strncmp((pos + 1), "?", 1) !=0)
+		value = getenv(name);
+	else
+		value = (char *)name;
 	if (value)
 	{
 		new_length = ft_strlen(result) + ft_strlen(value) - ft_strlen(name) - 1;
@@ -87,7 +90,7 @@ int is_preceded_by_double_less(const char *str, const char *pos) {
     return 0;
 }
 
-char	*replace_env_variables(const char *input)
+char	*replace_env_variables(const char *input, int status)
 {
 	char	*result;
 	char	*pos;
@@ -102,7 +105,10 @@ char	*replace_env_variables(const char *input)
 			pos = ft_strchr(pos + 1, '$');
 			continue ;
 		}
-		var_name = extract_variable_name(pos + 1);
+		if (ft_strncmp((pos + 1), "?", 1) !=0)
+			var_name = extract_variable_name(pos + 1);
+		else
+			var_name = ft_itoa(status);
 		result = replace_variable(pos, result, var_name);
 		free(var_name);
 		pos = ft_strchr(result, '$');

@@ -4,7 +4,7 @@ Token	*create_token(TokenType type, const char *value, bool expect_arg)
 {
 	Token	*token;
 
-	token = (Token *)malloc(1* sizeof(Token));
+	token = (Token *)malloc(sizeof(Token));
 	if (!token)
 	{
 		ft_error(E_MEMORY, NULL, NULL);
@@ -62,7 +62,7 @@ Token	**tokenize(t_shell *data)
 	char	*start;
 	char	*input;
 
-	input = preprocess_input(data->prompt);
+	input = preprocess_input(data->prompt, data->status);
 	data->tokens = (Token **)malloc(MAX_TOKENS * sizeof(Token *));
 	if (!data->tokens)
 	{

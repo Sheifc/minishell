@@ -10,6 +10,8 @@ char	*str_error(int ecode)
 		return ("Memory");
     else if (ecode == E_REDIRECT)
 		return ("Redirect");
+    else if (ecode == E_COMMAND)
+		return ("Command");
 	return ("Unknown");
 }
 

@@ -8,8 +8,8 @@ t_cmd	*create_command(const char *name, Fds fds, NodeType ope)
 	cmd = (t_cmd *)malloc(sizeof(t_cmd));
 	if (!cmd)
 	{
-		perror("malloc");
-		exit(EXIT_FAILURE);
+		ft_error(E_MEMORY, NULL, NULL);
+		return (NULL);
 	}
 	cmd->name = ft_strdup(name);
 	cmd->arg = NULL;

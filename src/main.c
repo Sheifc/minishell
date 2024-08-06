@@ -48,7 +48,6 @@ int	main(int argc, char **argv, char **envp)
 			free(data.prompt);
 			data.cmd_count = 0;
 			data.prompt = NULL;
-			printf("[status: %d]\n", data.status);
 		}
 	}
 	free_all(&data);

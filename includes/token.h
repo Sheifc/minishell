@@ -29,7 +29,7 @@ int				get_operation_size(const char *str);
 void			handle_character(const char *input, char **output,
 					t_word_features *ft);
 bool			ok_count_quotes(const char *str);
-char			*preprocess_input(const char *input);
+char			*preprocess_input(const char *input, int status);
 
 // token_preprocess_utils
 char			*remove_quotes(const char *input);
@@ -45,7 +45,7 @@ char			*extract_variable_name(const char *start);
 char			*replace_variable(const char *pos, char *result,
 					const char *var_name);
 int				is_btw_single_quotes(const char *str, const char *pos);
-char			*replace_env_variables(const char *input);
+char			*replace_env_variables(const char *input, int status);
 
 // token_handles
 int				handle_wildcards(char **start, t_shell *data, TokenType type);

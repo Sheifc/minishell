@@ -8,11 +8,13 @@ void	ft_free_str(char *str)
 
 void	ft_read_stdin(int fd, char *eof)
 {
+	char	status;
 	char	*line;
 	char	*input;
 	char	*temp_input;
 	char	*replace_input;
 
+	status = 0;
 	input = ft_strdup("");
 	while (1)
 	{
@@ -30,7 +32,7 @@ void	ft_read_stdin(int fd, char *eof)
 			input = ft_strdup(line);
 		ft_free_str(line);
 	}
-	replace_input = replace_env_variables(input);
+	replace_input = replace_env_variables(input, status);
 	ft_free_str(input);
 	write(fd, replace_input, ft_strlen(replace_input));
 	ft_free_str(replace_input);
