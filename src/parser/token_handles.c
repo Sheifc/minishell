@@ -1,26 +1,31 @@
 #include "token.h"
 
 // Function to create the wildcard token
-void	handle_wildcards(char **start, Token **tokens, int *n_tokens,
+int handle_wildcards(char **start, t_shell *data,
 	TokenType type)
 {
 	char	*end;
 	char	temp;
-	bool	found;
+	int		found;
 
 	end = *start;
 	while (*end && !ft_strchr(" \r\n\t\v\f\"'()|<>;&", *end))
 		end++;
 	temp = *end;
 	*end = '\0';
-	found = search_wildcard_matches(*start, tokens, n_tokens, type);
-	if (found == false)
+	found = search_wildcard_matches(*start, data, type);
+	if (found == -1)
+		return (1);
+	if (found == 0)
 	{
-		tokens[*n_tokens] = create_token(type, *start, false);
-		(*n_tokens)++;
+		data->tokens[data->num_tokens] = create_token(type, *start, false);
+		if (!data->tokens[data->num_tokens])
+			return (1);
+		data->num_tokens++;
 	}
 	*end = temp;
 	*start = end;
+	return (0);
 }
 
 void	handle_unmatched_quotes(char **start, char *end, Token **tokens,
@@ -81,7 +86,7 @@ void	handle_quotes(char **start, Token **tokens, int *n_tokens,
 		handle_unmatched_quotes(start, end, tokens, n_tokens);
 }
 
-void	handle_redirect_arg(char **start, Token **tokens, int *n_tokens)
+int	handle_redirect_arg(char **start, t_shell *data)
 {
 	char		*end;
 	char		temp;
@@ -100,42 +105,46 @@ void	handle_redirect_arg(char **start, Token **tokens, int *n_tokens)
 		while (ft_strchr(DELIMITERS, **start))
 			(*start)++;
 		if (is_wildcards(start))
-			handle_wildcards(start, tokens, n_tokens, T_REDIRECT_ARG);
+			return (handle_wildcards(start, data, T_REDIRECT_ARG));
 		else
 		{
-			tokens[*n_tokens] = create_token(T_REDIRECT_ARG, *start, true);
-			(*n_tokens)++;
+			data->tokens[data->num_tokens] = create_token(T_REDIRECT_ARG, *start, true);
+			if (!data->tokens[data->num_tokens])
+				return (1);
+			data->num_tokens++;
 			*end = temp;
 			*start = end;
 		}
 	}
+	return (0);
 }
 
 // Main function for token matching
-void	handle_regular_tokens(char **start, Token **tokens, int *n_tokens)
+int	handle_regular_tokens(char **start, t_shell *data)
 {
 	if (ft_strncmp(*start, "&&", 2) == 0)
-		add_token(start, tokens, n_tokens, (Token){T_AND, "&&", false});
+		return (add_token(start, data, (Token){T_AND, "&&", false}));
 	else if (ft_strncmp(*start, "||", 2) == 0)
-		add_token(start, tokens, n_tokens, (Token){T_OR, "||", false});
+		return (add_token(start, data, (Token){T_OR, "||", false}));
 	else if (ft_strncmp(*start, "<<", 2) == 0)
-		handle_heredoc_token(start, tokens, n_tokens);
+		return (handle_heredoc_token(start, data));
 	else if (ft_strncmp(*start, ">>", 2) == 0)
-		handle_output_append_token(start, tokens, n_tokens);
+		return handle_output_append_token(start, data);
 	else if (**start == '|')
-		add_token(start, tokens, n_tokens, (Token){T_PIPE, "|", false});
+		return (add_token(start, data, (Token){T_PIPE, "|", false}));
 	else if (**start == '<')
-		handle_input_token(start, tokens, n_tokens);
+		return (handle_input_token(start, data));
 	else if (**start == '>')
-		handle_output_token(start, tokens, n_tokens);
+		return (handle_output_token(start, data));
 	else if (**start == ';')
-		add_token(start, tokens, n_tokens, (Token){T_SEMICOLON, ";", false});
+		return (add_token(start, data, (Token){T_SEMICOLON, ";", false}));
 	else if (**start == '(')
-		add_token(start, tokens, n_tokens, (Token){T_PAREN_OPEN, "(", false});
+		return (add_token(start, data, (Token){T_PAREN_OPEN, "(", false}));
 	else if (**start == ')')
-		add_token(start, tokens, n_tokens, (Token){T_PAREN_CLOSE, ")", false});
+		return (add_token(start, data, (Token){T_PAREN_CLOSE, ")", false}));
 	else if (is_wildcards(start))
-		handle_wildcards(start, tokens, n_tokens, T_WILDCARD);
+		return (handle_wildcards(start, data, T_WILDCARD));
 	else
-		add_cmd_arg_token(start, tokens, n_tokens);
+		return (add_cmd_arg_token(start, data));
+	return (1);
 }

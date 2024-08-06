@@ -26,28 +26,29 @@ static int	found_match(const char *pattern, const char *string)
 }
 
 // Function to search for matches in the current directory
-bool	search_wildcard_matches(const char *wildcard, Token **tokens,
-	int *n_tokens, TokenType type)
+int	search_wildcard_matches(const char *wildcard, t_shell *data, TokenType type)
 {
 	DIR				*dir;
 	struct dirent	*entry;
-	bool			found;
+	int				found;
 
 	dir = opendir(".");
 	if (dir == NULL)
 	{
-		perror("opendir");
-		return (false);
+		ft_error(E_FILE, NULL, &data->status);
+		return (-1);
 	}
-	found = false;
+	found = 0;
 	entry = readdir(dir);
 	while (entry != NULL)
 	{
 		if (found_match(wildcard, entry->d_name) == 0)
 		{
-			found = true;
-			tokens[*n_tokens] = create_token(type, entry->d_name, true);
-			(*n_tokens)++;
+			found = 1;
+			data->tokens[data->num_tokens] = create_token(type, entry->d_name, true);
+			if (!data->tokens[data->num_tokens])
+				return (-1);
+			data->num_tokens++;
 		}
 		entry = readdir(dir);
 	}

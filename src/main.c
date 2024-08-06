@@ -21,26 +21,27 @@ static void	minishell(t_shell *data)
 
 int	main(int argc, char **argv, char **envp)
 {
-	t_shell		data;
-	int			num_tokens;
+	t_shell	data;
+
 	init(&data, envp);
 	while (1)
 	{
-		data.prompt = readline("minishell$ ");
+		data.prompt = readline(M "mini" W "shell" G "$ " RST);
 		if (!data.prompt)
 			break ;
 		add_history(data.prompt);
 		if (handle_empty_or_whitespace_commands(&data.prompt))
 		{
-			data.tokens = tokenize_input(data.prompt, &num_tokens);
-			data.ast = create_ast(data.tokens, num_tokens);
+			data.tokens = tokenize_input(&data);
+			data.ast = create_ast(&data);
 			data.cmd = generate_commands(data.ast,
-					validate_and_free_tokens(data.tokens, &num_tokens, data.ast),
-					(Fds){-1, -1});
+					validate_and_free_tokens(data.tokens, &data.num_tokens,
+						data.ast), (Fds){-1, -1});
 			minishell(&data);
 			free(data.prompt);
 			data.cmd_count = 0;
 			data.prompt = NULL;
+			printf("[status: %d]\n", data.status);
 		}
 	}
 	free_all(&data);

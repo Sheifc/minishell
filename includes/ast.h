@@ -2,6 +2,7 @@
 # define AST_H
 
 # include "token.h"
+# include "structures.h"
 # include <stdbool.h>
 # include <stdio.h>
 # include <stdlib.h>
@@ -38,33 +39,6 @@
 # define OK 0
 # define NOT_FOUND -1
 # define ERROR -2
-
-typedef enum _NodeType
-{
-	NODE_COMMAND,
-	NODE_ARGUMENT,
-	NODE_PIPE,
-	NODE_AND,
-	NODE_OR,
-	NODE_PARENTHESIS,
-	NODE_INPUT,
-	NODE_HEREDOC,
-	NODE_OUTPUT,
-	NODE_OUTPUT_APPEND,
-	NODE_SEMICOLON,
-	NODE_UNKNOWN,
-	NODE_END,
-	NODE_UNDEFINED
-}					NodeType;
-
-typedef struct _ASTNode
-{
-	int				level;
-	NodeType		type;
-	char			*value;
-	struct _ASTNode	*left;
-	struct _ASTNode	*right;
-}					ASTNode;
 
 // AST
 ASTNode				*create_node(NodeType type, char *value, int level);

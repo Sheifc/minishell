@@ -66,7 +66,7 @@ ASTNode	*handle_operators(Token **tokens, int num_tokens, int level, int *pos)
 	*pos = find_operator(tokens, num_tokens);
 	if (*pos == ERROR)
 	{
-		printf("\e[31m ** Error parentesis: no se ha abierto **\e[0m\n");
+		ft_error(E_SYNTAX, "A parenthesis has not been opened/closed", NULL);
 		return (NULL);
 	}
 	if (*pos != NOT_FOUND)
@@ -91,7 +91,7 @@ ASTNode	*handle_parentheses(Token **tokens, int num_tokens, int level)
 	close_pos = find_matching_paren(tokens, 0, num_tokens);
 	if (close_pos == NOT_FOUND)
 	{
-		printf("\e[31m ** Error parentesis: no se ha cerrado **\e[0m\n");
+		ft_error(E_SYNTAX, "A parenthesis has not been closed", NULL);
 		return (NULL);
 	}
 	root = create_node(NODE_PARENTHESIS, "()", level);

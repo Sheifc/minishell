@@ -12,34 +12,32 @@ typedef struct _test_case {
 	int			num_tokens;
 }				t_test_case;
 
-Token	**tokenize_and_count(const char *input, int *num_tokens)
+Token	**tokenize_and_count(t_shell *data)
 {
-	Token	**tokens;
-
-	tokens = tokenize(input, num_tokens);
-	printf("Input: %s\n", input);
-	return (tokens);
+	data->tokens = tokenize(data);
+	printf("Input: %s\n", data->prompt);
+	return (data->tokens);
 }
 
-bool	compare_tokens(Token **t, int num_tokens, const t_test_case *c)
+bool	compare_tokens(t_shell *data, const t_test_case *c)
 {
 	bool	error;
 	int		i;
 
 	error = false;
-	if (num_tokens != c->num_tokens)
+	if (data->num_tokens != c->num_tokens)
 	{
 		error = true;
-		printf("\e[31m -> Num tokens %d!=%d\n\e[0m", num_tokens, c->num_tokens);
+		printf("\e[31m -> Num tokens %d!=%d\n\e[0m", data->num_tokens, c->num_tokens);
 	}
 	printf("#\tResult\t\t\tExpected\n");
 	i = -1;
-	while (++i < num_tokens)
+	while (++i < data->num_tokens)
 	{
-		printf("%d\t[%d] %10s\t", i, t[i]->type, t[i]->value);
+		printf("%d\t[%d] %10s\t", i, data->tokens[i]->type, data->tokens[i]->value);
 		if (i < c->num_tokens)
 			printf("\t[%d] %10s", c->tokens[i].type, c->tokens[i].value);
-		if (t[i]->type != c->tokens[i].type || strcmp(t[i]->value,
+		if (data->tokens[i]->type != c->tokens[i].type || strcmp(data->tokens[i]->value,
 				c->tokens[i].value) != 0)
 		{
 			error = true;
@@ -50,27 +48,27 @@ bool	compare_tokens(Token **t, int num_tokens, const t_test_case *c)
 	return (error);
 }
 
-void	free_tokens_and_print_result(Token **tokens, int *n_tokens, bool error)
+void	free_tokens_and_print_result(t_shell *data, bool error)
 {
-	free_tokens(tokens, n_tokens);
 	if (!error)
 		printf("\e[32mTest case: ok\n\e[0m");
 	else
 		printf("\e[31mTest case: error\n\e[0m");
 	printf("\n");
+	free_tokens(data->tokens, &data->num_tokens);
 }
 
 int	run_test_case(const t_test_case *c)
 {
-	Token	**tokens;
-	int		num_tokens;
+	t_shell	data;
 	bool	error;
 
-	tokens = tokenize_and_count(c->input, &num_tokens);
-	if (tokens == NULL)
+	data.prompt = (char *)c->input;
+	data.tokens = tokenize_and_count(&data);
+	if (data.tokens == NULL)
 		return (1);
-	error = compare_tokens(tokens, num_tokens, c);
-	free_tokens_and_print_result(tokens, &num_tokens, error);
+	error = compare_tokens(&data, c);
+	free_tokens_and_print_result(&data, error);
 	if (error)
 		return (1);
 	return (0);

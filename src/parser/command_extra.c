@@ -1,29 +1,27 @@
 #include "command.h"
 
-Token	**tokenize_input(const char *input, int *num_tokens)
+Token	**tokenize_input(t_shell *data)
 {
-	Token	**tokens;
-
-	tokens = NULL;
-	if (input && ft_strlen(input) > 0)
+	data->tokens = NULL;
+	if (data->prompt && ft_strlen(data->prompt) > 0)
 	{
-		tokens = tokenize(input, num_tokens);
+		data->tokens = tokenize(data);
 		// printf("\n**** Tokens: ****\n");
-		// print_tokens(tokens, *num_tokens);
-		if (verify_tokens(tokens, num_tokens) != 0)
-			free_tokens(tokens, num_tokens);
+		// print_tokens(data->tokens, data->num_tokens);
+		if (verify_tokens(data) != 0)
+			free_tokens(data->tokens, &data->num_tokens);
 	}
-	return (tokens);
+	return (data->tokens);
 }
 
-ASTNode	*create_ast(Token **tokens, int num_tokens)
+ASTNode	*create_ast(t_shell *data)
 {
 	ASTNode	*ast;
 
 	ast = NULL;
-	if (tokens)
+	if (data->tokens)
 	{
-		ast = build_ast(tokens, num_tokens, 0);
+		ast = build_ast(data->tokens, data->num_tokens, 0);
 		// printf("\n**** AST: ****\n");
 		// print_ast(ast);
 	}

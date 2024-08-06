@@ -6,26 +6,30 @@ bool	is_operator(const char *str)
 			"|") == 0 || strcmp(str, ";") == 0);
 }
 
-void	handle_heredoc_token(char **start, Token **tokens, int *n_tokens)
+int	handle_heredoc_token(char **start, t_shell *data)
 {
-	add_token(start, tokens, n_tokens, (Token){T_HEREDOC, "<<", true});
-	handle_redirect_arg(start, tokens, n_tokens);
+	if (add_token(start, data, (Token){T_HEREDOC, "<<", true}) != 0)
+		return (1);
+	return (handle_redirect_arg(start, data));
 }
 
-void	handle_output_append_token(char **start, Token **tokens, int *n_tokens)
+int	handle_output_append_token(char **start, t_shell *data)
 {
-	add_token(start, tokens, n_tokens, (Token){T_OUTPUT_APPEND, ">>", true});
-	handle_redirect_arg(start, tokens, n_tokens);
+	if (add_token(start, data, (Token){T_OUTPUT_APPEND, ">>", true}) != 0)
+		return (1);
+	return (handle_redirect_arg(start, data));
 }
 
-void	handle_input_token(char **start, Token **tokens, int *n_tokens)
+int	handle_input_token(char **start, t_shell *data)
 {
-	add_token(start, tokens, n_tokens, (Token){T_INPUT, "<", true});
-	handle_redirect_arg(start, tokens, n_tokens);
+	if (add_token(start, data, (Token){T_INPUT, "<", true}) != 0)
+		return (1);
+	return (handle_redirect_arg(start, data));
 }
 
-void	handle_output_token(char **start, Token **tokens, int *n_tokens)
+int	handle_output_token(char **start, t_shell *data)
 {
-	add_token(start, tokens, n_tokens, (Token){T_OUTPUT, ">", true});
-	handle_redirect_arg(start, tokens, n_tokens);
+	if (add_token(start, data, (Token){T_OUTPUT, ">", true}) != 0)
+		return (1);
+	return (handle_redirect_arg(start, data));
 }

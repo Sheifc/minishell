@@ -27,6 +27,7 @@ FILES_PARSER	=	parser_utils.c										\
 					token_handles.c token_handles_utils.c				\
 					token_preprocess.c token_preprocess_utils.c 		\
 					token_env.c											\
+					error.c											\
 					wildcard.c wildcard_utils.c
 
 FILES_EXEC      = init.c		   \
@@ -103,6 +104,7 @@ TOKEN_FILES		=	test_token.c token.c token_utils.c			\
 					token_handles.c token_handles_utils.c		\
 					token_preprocess.c token_preprocess_utils.c \
 					token_env.c									\
+					error.c										\
 					wildcard.c wildcard_utils.c
 TOKEN_DIR		=	$(SRC_DIR)parser/
 TOKEN_OBJ_DIR	=	$(OBJ_DIR)parser/
@@ -122,6 +124,7 @@ AST_FILES	= 	test_ast.c ast.c ast_utils.c ast_handles.c 	\
 				token_handles.c token_handles_utils.c		\
 				token_preprocess.c token_preprocess_utils.c \
 				token_env.c									\
+				error.c										\
 				wildcard.c wildcard_utils.c
 AST_DIR		=	$(SRC_DIR)parser/
 AST_OBJ_DIR	=	$(OBJ_DIR)parser/
@@ -144,6 +147,7 @@ CMD_FILES	= 	test_command.c command.c command_utils.c command_handles1.c	\
 				token_handles.c token_handles_utils.c		\
 				token_preprocess.c token_preprocess_utils.c \
 				token_env.c									\
+				error.c										\
 				wildcard.c wildcard_utils.c
 CMD_DIR		=	$(SRC_DIR)parser/
 CMD_OBJ_DIR	=	$(OBJ_DIR)parser/

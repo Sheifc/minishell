@@ -35,24 +35,26 @@ static void	print_result(bool expected, bool result)
 
 void	process_test_case(const t_test_ast *test_value, int index)
 {
-	Token	**tokens;
 	ASTNode	*ast;
+	t_shell data;
+	
 	bool	is_valid;
-	int		num_tokens;
 	int		balance;
 
 	printf("\e[35m\n------------------- %d -------------------\n\e[0m", index);
-	printf("input:\n%s\n\n", test_value->inputs);
-	tokens = tokenize(test_value->inputs, &num_tokens);
-	print_tokens(tokens, num_tokens);
-	balance = verify_tokens(tokens, &num_tokens);
-	ast = build_ast(tokens, num_tokens, 0);
+	data.prompt = ft_strdup(test_value->inputs);
+	printf("input:\n%s\n\n", data.prompt);
+	data.tokens = tokenize(&data);
+	print_tokens(data.tokens, data.num_tokens);
+	balance = verify_tokens(&data);
+	ast = build_ast(data.tokens, data.num_tokens, 0);
 	printf("AST:\n");
 	print_ast(ast);
-	is_valid = validate_ast(tokens, ast);
+	is_valid = validate_ast(data.tokens, ast);
 	print_result(test_value->is_valid, is_valid && balance == 0);
-	free_tokens(tokens, &num_tokens);
+	free_tokens(data.tokens, &data.num_tokens);
 	free_ast(&ast);
+	free(data.prompt);
 	printf("\n");
 }
 

@@ -8,7 +8,7 @@ void	free_tokens(Token **tokens, int *num_tokens)
 	{
 		i = -1;
 		while (++i < *num_tokens)
-			free_token2(&tokens[i]);
+			free_token(&tokens[i]);
 		free(*tokens);
 		*tokens = NULL;
 	}
@@ -22,14 +22,17 @@ void	skip_delimiters(char **start)
 		(*start)++;
 }
 
-void	add_token(char **start, Token **tokens, int *n_tokens, Token t)
+int	add_token(char **start, t_shell *data, Token t)
 {
-	tokens[*n_tokens] = create_token(t.type, t.value, t.expect_arg);
-	(*n_tokens)++;
+	data->tokens[data->num_tokens] = create_token(t.type, t.value, t.expect_arg);
+	if (!data->tokens[data->num_tokens])
+		return (1);
+	data->num_tokens++;
 	*start += strlen(t.value);
+	return (0);
 }
 
-void	add_cmd_arg_token(char **start, Token **tokens, int *n_tokens)
+int	add_cmd_arg_token(char **start, t_shell *data)
 {
 	char		*end;
 	char		temp;
@@ -44,14 +47,17 @@ void	add_cmd_arg_token(char **start, Token **tokens, int *n_tokens)
 		end++;
 	temp = *end;
 	*end = '\0';
-	if (*n_tokens > 0 && tokens[*n_tokens - 1]->expect_arg)
+	if (data->num_tokens > 0 && data->tokens[data->num_tokens - 1]->expect_arg)
 		type = T_ARG;
 	else
 		type = T_COMMAND;
-	tokens[*n_tokens] = create_token(type, *start, true);
-	(*n_tokens)++;
+	data->tokens[data->num_tokens] = create_token(type, *start, true);
+	if (!data->tokens[data->num_tokens])
+		return (1);
+	data->num_tokens++;
 	*end = temp;
 	*start = end;
+	return (0);
 }
 
 void	print_tokens(Token **tokens, int n_tokens)

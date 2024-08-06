@@ -168,20 +168,21 @@ void	execute_commands(t_cmd *commands)
 
 int	main(void)
 {
-	Token		**tokens;
 	ASTNode		*ast;
 	int			num_tokens;
 	t_cmd		*cmd;
+	t_shell		data;
 	const char	*input = "(ls file*.txt | wc | wc && ls arch*.txt) > out1.txt "
 		">> out2.txt";
 
 	printf("\e[35m\n------------------- * -------------------\n\e[0m");
 	printf("input:\n%s\n", input);
-	tokens = tokenize_input(input, &num_tokens);
-	ast = create_ast(tokens, num_tokens);
-	cmd = generate_commands(ast, validate_and_free_tokens(tokens, &num_tokens,
+	data.prompt = (char *)input;
+	data.tokens = tokenize_input(&data);
+	ast = create_ast(&data);
+	cmd = generate_commands(ast, validate_and_free_tokens(data.tokens, &num_tokens,
 				ast), (Fds){STDIN_FILENO, STDOUT_FILENO});
-	print_commands(cmd);
+	// print_commands(cmd);
 	printf("\n**** Ejecutando: ****\n");
 	execute_commands(cmd);
 	free_commands(&cmd);
