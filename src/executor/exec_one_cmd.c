@@ -1,0 +1,48 @@
+#include "minishell.h"
+
+void	get_status(t_shell *data)
+{
+	if (WIFEXITED(data->status))
+		data->status = WEXITSTATUS(data->status);
+	else if (WIFSIGNALED(data->status))
+		data->status = WTERMSIG(data->status);
+}
+
+void	wait_process(t_shell *data)
+{
+	waitpid(data->pid, &(data->status), 0);
+	get_status(data);
+}
+
+void	set_up_fds(t_shell *data, t_cmd *cmd)
+{
+	set_fdin(data, cmd);
+	set_fdout(data, cmd);
+}
+
+void	exec_one_cmd(t_shell *data, t_cmd *cmd)
+{
+	set_up_fds(data, cmd);
+	if (!execute_builtin(data, cmd, cmd->arg[0]))
+	{
+		data->pid = fork();
+		if (data->pid < 0)
+			perror("Error: fork failed");
+		else if (data->pid == 0)
+		{
+			get_path(data, cmd);
+			if (!data->path)
+			{
+				perror("Error: command not found");
+				exit(127);
+			}
+			if (execve(data->path, cmd->arg, data->envp) < 0)
+			{
+				perror("Error: execve failed");
+				exit(1);
+			}
+		}
+		else
+			wait_process(data);
+	}
+}

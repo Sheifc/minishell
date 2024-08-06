@@ -51,3 +51,34 @@ void	print_argu(char **args)
 		i++;
 	}
 }
+
+void	print_cmd(t_cmd *cmd)
+{
+	int	i;
+
+	printf(" Command: %s\n", cmd->name);
+	i = -1;
+	while (++i < cmd->n_args)
+		printf("    Arg[%d]: %s\n", i, cmd->arg[i]);
+	printf("fd_in: %d fd_out: %d\n", cmd->fdin,
+		cmd->fdout);
+	printf("  next_operator: %s [%d]\n", node_type_to_symbol(cmd->operator),
+		cmd->operator);
+}
+
+void	print_cmds(t_cmd *cmd)
+{
+	t_cmd	*current;
+
+	current = NULL;
+	if (cmd)
+	{
+		printf("\n**** List of Commands: ****\n");
+		current = cmd;
+		while (current)
+		{
+			print_cmd(current);
+			current = current->next;
+		}
+	}
+}
