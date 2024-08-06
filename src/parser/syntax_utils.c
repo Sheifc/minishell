@@ -1,6 +1,6 @@
 #include "syntax.h"
 
-bool	is_command_with_args(ASTNode *node)
+bool	is_command_with_args(ASTNode *node, int *status)
 {
 	ASTNode	*child;
 
@@ -8,8 +8,7 @@ bool	is_command_with_args(ASTNode *node)
 		return (false);
 	if (node->type != NODE_COMMAND)
 	{
-		printf("\e[31m ** Error comando: (%d) %s[%d]: no es un comando\e[0m\n",
-			node->level, node->value, node->type);
+		ft_error_ope(E_SYNTAX, node->value, "no es un comando", status);
 		return (false);
 	}
 	child = node->left;
@@ -17,8 +16,8 @@ bool	is_command_with_args(ASTNode *node)
 	{
 		if (child->type != NODE_ARGUMENT)
 		{
-			printf("\e[31m ** Error comando: (%d) %s[%d]: no posee argumento "
-				"valido\e[0m\n", node->level, node->value, node->type);
+			ft_error_ope(E_SYNTAX, node->value, "no posee argumento valido",
+				status);
 			return (false);
 		}
 		child = child->left;
@@ -37,45 +36,44 @@ static bool	are_all_child_args(ASTNode *child)
 	return (true);
 }
 
-bool	is_command_with_args_mandatory(ASTNode *node)
+bool	is_command_with_args_mandatory(ASTNode *node, int *status)
 {
 	if (node == NULL)
 		return (false);
 	if (node->type != NODE_COMMAND)
 	{
-		printf("\e[31m ** Error comando: (%d) %s[%d]: no es un comando\e[0m\n",
-			node->level, node->value, node->type);
+		ft_error_ope(E_SYNTAX, node->value, "no es un comando", status);
 		return (false);
 	}
 	if (node->left == NULL)
 	{
-		printf("\e[31m ** Error comando: (%d) %s[%d]: requiere argumento "
-			"obligatorio\e[0m\n", node->level, node->value, node->type);
+		ft_error_ope(E_SYNTAX, node->value, "requiere argumento obligatorio",
+			status);
 		return (false);
 	}
 	if (!are_all_child_args(node->left))
 	{
-		printf("\e[31m ** Error comando: (%d) %s[%d]: posee argumento "
-			"invalido\e[0m\n", node->level, node->value, node->type);
+		ft_error_ope(E_SYNTAX, node->value, "posee argumento invalido", status);
 		return (false);
 	}
 	return (true);
 }
 
-bool	is_binary_operator_valid(ASTNode *node)
+bool	is_binary_operator_valid(ASTNode *node, int *status)
 {
 	if (node == NULL)
 		return (false);
 	if (node->left == NULL || node->right == NULL)
 	{
-		printf("\e[31m ** Error operador: (%d) %s[%d]: requiere dos operandos "
-			"validos\e[0m\n", node->level, node->value, node->type);
+		ft_error_ope(E_SYNTAX, node->value, "requiere dos operandos validos",
+			status);
 		return (false);
 	}
-	return (is_ast_valid(node->left) && is_ast_valid(node->right));
+	return (is_ast_valid(node->left, status) && is_ast_valid(node->right,
+			status));
 }
 
-bool	is_redirection_valid(ASTNode *node)
+bool	is_redirection_valid(ASTNode *node, int *status)
 {
 	ASTNode	*child;
 
@@ -83,15 +81,15 @@ bool	is_redirection_valid(ASTNode *node)
 		return (false);
 	if (node->left == NULL || node->right == NULL)
 	{
-		printf("\e[31m ** Error redireccion: (%d) %s[%d]: requiere dos "
-			"operandos validos\e[0m\n", node->level, node->value, node->type);
+		ft_error_ope(E_REDIRECT, node->value, "requiere dos operandos validos",
+			status);
 		return (false);
 	}
 	child = node->right;
 	if (!child || (child->type != NODE_COMMAND))
 	{
-		printf("\e[31m ** Error comando: (%d) %s[%d]: no posee argumento "
-			"valido\e[0m\n", node->level, node->value, node->type);
+		ft_error_ope(E_REDIRECT, node->value, "no posee argumento valido",
+			status);
 		return (false);
 	}
 	return (true);

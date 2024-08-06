@@ -28,15 +28,15 @@ ASTNode	*create_ast(t_shell *data)
 	return (ast);
 }
 
-bool	validate_and_free_tokens(Token **tokens, int *num_tokens, ASTNode *ast)
+bool	validate_and_free_tokens(t_shell *data)
 {
 	bool	is_valid;
 
 	is_valid = false;
-	if (tokens)
+	if (data->tokens)
 	{
-		is_valid = validate_ast(tokens, ast);
-		free_tokens(tokens, num_tokens);
+		is_valid = validate_ast(data->tokens, data->ast, &data->status);
+		free_tokens(data->tokens, &data->num_tokens);
 	}
 	return (is_valid);
 }

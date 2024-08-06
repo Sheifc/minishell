@@ -22,11 +22,13 @@ typedef enum s_error_type
 	E_FILE,
 	E_FDS = 9,
 	E_SYNTAX = 10,
+	E_REDIRECT = 11,
 	E_MEMORY = 12,
 	E_UNKNOWN
 }		t_error_type;
 
 // Error
 void	ft_error(const int error_code, const char *message, int *status);
+void	ft_error_ope(const int error_code, char *ope, const char *message, int *status);
 
 #endif

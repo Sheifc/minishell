@@ -19,6 +19,17 @@ static void	minishell(t_shell *data)
 	}
 }
 
+void load_data(t_shell *data)
+{
+	bool	ast_status;
+
+	ast_status = false;
+	data->tokens = tokenize_input(data);
+	data->ast = create_ast(data);
+	ast_status = validate_and_free_tokens(data);
+	data->cmd = generate_commands(data->ast, ast_status, (Fds){-1, -1});
+}
+
 int	main(int argc, char **argv, char **envp)
 {
 	t_shell	data;
@@ -32,11 +43,7 @@ int	main(int argc, char **argv, char **envp)
 		add_history(data.prompt);
 		if (handle_empty_or_whitespace_commands(&data.prompt))
 		{
-			data.tokens = tokenize_input(&data);
-			data.ast = create_ast(&data);
-			data.cmd = generate_commands(data.ast,
-					validate_and_free_tokens(data.tokens, &data.num_tokens,
-						data.ast), (Fds){-1, -1});
+			load_data(&data);
 			minishell(&data);
 			free(data.prompt);
 			data.cmd_count = 0;

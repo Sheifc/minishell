@@ -79,8 +79,7 @@ void			setup_redirections(int input_fd, int output_fd,
 // Command extra
 Token			**tokenize_input(t_shell *data);
 ASTNode			*create_ast(t_shell *data);
-bool			validate_and_free_tokens(Token **tokens, int *num_tokens,
-					ASTNode *ast);
+bool			validate_and_free_tokens(t_shell *data);
 t_cmd			*generate_commands(ASTNode *ast, bool is_valid, Fds fds);
 void			print_commands(t_cmd *cmd);
 
