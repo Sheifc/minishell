@@ -101,4 +101,5 @@ void	ft_export(t_shell *data, t_cmd *cmd)
 		sort_export(data);
 		print_export(data);
 	}
+	data->status = 0;
 }

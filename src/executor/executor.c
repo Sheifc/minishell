@@ -34,6 +34,8 @@ void	exec_one_cmd(t_shell *data, t_cmd *cmd)
 		waitpid(data->pid, &(data->status), 0);
 		get_status(data);
 	}
+	close(cmd->fdin);
+	close(cmd->fdout);
 }
 
 void	executor(t_shell *data)
@@ -44,6 +46,7 @@ void	executor(t_shell *data)
 	current = data->cmd;
 	if (!current)
 		return ;
+	//print_commands(current);
 	set_tmp_fds(data);
 	if (data->cmd_count == 1)
 		exec_one_cmd(data, current);

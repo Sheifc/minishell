@@ -13,4 +13,5 @@ void	ft_unset(t_shell *data)
 		pop(&data->export, str);
 		i++;
 	}
+	data->status = 0;
 }

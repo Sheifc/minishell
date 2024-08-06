@@ -18,82 +18,30 @@ void	run_single_cmd(t_shell *data, t_cmd *cmd)
 	}
 }
 
-/* void	execute(t_shell *data, t_cmd *cmd)
+void	exec_node_or(t_shell *data, t_cmd **cmd)
 {
-	dprintf(2, "cmd->arg[0] en execute: %s\n", cmd->arg[0]);
-	if (cmd->fdin != -1)
+	//dprintf(2, "\n****entra en node or\n");
+	//dprintf(2, "\ncmd->arg[0]: %s\n", (*cmd)->arg[0]);
+	exec_one_cmd(data, *cmd);
+	//dprintf(2, "status: %d\n", data->status);
+	if ((*cmd)->next && data->status != 0 && (*cmd)->operator == NODE_OR)
 	{
-		if (dup2(cmd->fdin, STDIN_FILENO) == -1)
-		{
-			perror("dup2 failed for cmd->fdin");
-			exit(EXIT_FAILURE);
-		}
-		close(cmd->fdin);
-	}
-	if (!execute_builtin(data, cmd, cmd->arg[0]))
-	{
-		data->pid = fork();
-		if (data->pid < 0)
-			perror("Error: fork failed");
-		else if (data->pid == 0)
-		{
-			if (cmd->fdout != -1)
-			{
-				if (dup2(cmd->fdout, STDOUT_FILENO) == -1)
-				{
-					perror("dup2 failed for cmd->fdout");
-					exit(EXIT_FAILURE);
-				}
-				close(cmd->fdout);
-			}
-			get_path(data, cmd);
-			if (!data->path)
-			{
-				perror("Error: command not found");
-				exit(127);
-			}
-			if (execve(data->path, cmd->arg, data->envp) < 0)
-			{
-				perror("Error: execve failed");
-				exit(1);
-			}
-		}
-		else
-			close(cmd->fdout);
-		waitpid(data->pid, &(data->status), 0);
-		get_status(data);
-	}
-} */
-
-void	exec_node_or(t_shell *data, t_cmd *cmd)
-{
-	exec_one_cmd(data, cmd);
-	if (cmd->next && data->status != 0 && cmd->operator == NODE_OR)
-	{
-		cmd = cmd->next;
+		*cmd = (*cmd)->next;
 		exec_node_or(data, cmd);
-
-/* 		else
-		{
-			exec_multiple_cmds(data, cmd);
-		} */
 	}
 }
 
-void	exec_node_and(t_shell *data, t_cmd *cmd)
+void	exec_node_and(t_shell *data, t_cmd **cmd)
 {
-	dprintf(2, "entra\n");
-	exec_one_cmd(data, cmd);
-	if (cmd->next && data->status == 0 && cmd->operator == NODE_AND)
+	//dprintf(2, "\n*****entra en node and\n");
+	//dprintf(2, "\ncmd->arg[0]: %s\n", (*cmd)->arg[0]);
+	exec_one_cmd(data, *cmd);
+	//dprintf(2, "status tras primera ejecucion: %d\n", data->status);
+	if ((*cmd)->next && data->status == 0 && (*cmd)->operator == NODE_AND)
 	{
-		dprintf(2, "statius: %d\n", data->status);
-		cmd = cmd->next;
+		*cmd = (*cmd)->next;
 		exec_node_and(data, cmd);
-
-/* 		else
-		{
-			exec_multiple_cmds(data, cmd);
-		} */
+		//dprintf(2, "status tras segunda ejecucion: %d\n", data->status);
 	}
 }
 
@@ -104,23 +52,16 @@ void	exec_multiple_cmds(t_shell *data, t_cmd *cmd)
 
 	if (!cmd)
 		return ;
-  	if (cmd->fdin == -1)
-		cmd->fdin = dup(data->tmpin);
-  	// if (cmd != NULL && (cmd->operator == NODE_AND || cmd->operator == NODE_OR))
-	// {
-		//dprintf(2, "data->status en exec_multiple_cmds: %d\n", data->status);
-	if (cmd->operator == NODE_AND && data->status == 0)
+	if (cmd != NULL && (cmd->operator == NODE_AND || cmd->operator == NODE_OR))
 	{
-		exec_node_and(data, cmd);
+		if (cmd->operator == NODE_AND)
+			exec_node_and(data, &cmd);
+		else if (cmd->operator == NODE_OR)
+			exec_node_or(data, &cmd);
+		else
+			exec_multiple_cmds(data, cmd->next);
 	}
-	else if (cmd->operator == NODE_OR && data->status != 0)
-	{
-		exec_node_or(data, cmd);
-	}
-		// else
-		// 	exec_multiple_cmds(data, cmd->next);
-
-	if (cmd->operator != NODE_AND && cmd->operator != NODE_OR)
+	else if (cmd->operator != NODE_AND && cmd->operator != NODE_OR)
 	{
 		if (pipe(fdpipe) < 0)
 		{

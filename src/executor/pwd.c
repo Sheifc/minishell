@@ -10,11 +10,12 @@ char	*get_current_directory(void)
 	return (path);
 }
 
-void	ft_pwd(void)
+void	ft_pwd(t_shell *data)
 {
 	char	*path;
 
 	path = get_current_directory();
 	printf("%s\n", path);
 	free(path);
+	data->status = 0;
 }
