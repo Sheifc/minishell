@@ -94,4 +94,5 @@ void	ft_cd(t_shell *data, t_cmd *cmd)
 	update_variables(new_pwd, old_pwd, data);
 	free(old_pwd);
 	free(new_pwd);
+	data->status = 0;
 }

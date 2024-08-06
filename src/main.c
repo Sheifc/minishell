@@ -15,7 +15,7 @@ static void	minishell(t_shell *data)
 	if (data->cmd != NULL)
 	{
 		executor(data);
-		free_cmd_list(&data->cmd);
+		free_commands(&data->cmd);
 	}
 }
 
@@ -26,7 +26,7 @@ int	main(int argc, char **argv, char **envp)
 	init(&data, envp);
 	while (1)
 	{
-		data.prompt = readline(M "Mini" W "shell" G "--> " RST);
+		data.prompt = readline("minishell$ ");
 		if (!data.prompt)
 			break ;
 		add_history(data.prompt);

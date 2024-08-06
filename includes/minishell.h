@@ -43,9 +43,9 @@ void	get_status(t_shell *data);
 t_env	*env_lst_search(t_env *env, const char *key);
 void	ft_cd(t_shell *data, t_cmd *cmd);
 // echo.c
-void	ft_echo(t_cmd *cmd);
+void	ft_echo(t_shell *data, t_cmd *cmd);
 // env.c
-void	ft_env(t_env *env);
+void	ft_env(t_shell *data, t_env *env);
 // export.c
 int		is_valid(t_shell *data);
 t_env	*new_node(int i);
@@ -57,7 +57,7 @@ void	ft_export(t_shell *data, t_cmd *cmd);
 void	ft_exit(t_cmd *cmd);
 // pwd.c
 char	*get_current_directory(void);
-void	ft_pwd(void);
+void	ft_pwd(t_shell *data);
 // unset.c
 void	ft_unset(t_shell *data);
 
@@ -87,6 +87,9 @@ void	exec_one_cmd(t_shell *data, t_cmd *cmd);
 void	wait_process(t_shell *data);
 void	wait_processess(t_shell *data);
 void	executor(t_shell *data);
+
+void	exec_node_or(t_shell *data, t_cmd **cmd);
+void	exec_node_and(t_shell *data, t_cmd **cmd);
 
 //*--------------------UTILS-------------------------------
 // exec_utils.c

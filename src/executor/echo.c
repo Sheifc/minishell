@@ -13,7 +13,7 @@ static void	print_cmd(t_cmd *cmd, int i, int newline)
 		printf("\n");
 }
 
-void	ft_echo(t_cmd *cmd)
+void	ft_echo(t_shell *data, t_cmd *cmd)
 {
 	int	i;
 	int	j;
@@ -38,4 +38,5 @@ void	ft_echo(t_cmd *cmd)
 		}
 	}
 	print_cmd(cmd, i, newline);
+	data->status = 0;
 }

@@ -36,8 +36,9 @@ void	print_env(t_env *env)
 	}
 }
 
-void	ft_env(t_env *env)
+void	ft_env(t_shell *data, t_env *env)
 {
 	print_list(env);
+	data->status = 0;
 	return ;
 }

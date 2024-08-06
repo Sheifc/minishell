@@ -32,7 +32,7 @@ void	set_fdin(t_shell *data, t_cmd *cmd)
 		close(cmd->fdin);
 		return ;
 	}
-	close(cmd->fdin);
+	//close(cmd->fdin);
 }
 
 void	set_fdout(t_shell *data, t_cmd *cmd)
@@ -50,7 +50,7 @@ void	set_fdout(t_shell *data, t_cmd *cmd)
 		close(cmd->fdout);
 		return ;
 	}
-	close(cmd->fdout);
+	//close(cmd->fdout);
 }
 
 void	restart_fds(t_shell *data)
