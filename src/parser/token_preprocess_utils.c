@@ -9,6 +9,11 @@ char	*remove_quotes(const char *input)
 
 	len = ft_strlen(input);
 	output = (char *)malloc((len + 1) * sizeof(char));
+	if (!output)
+	{
+		ft_error(E_MEMORY, NULL, NULL);
+		return (NULL);
+	}
 	j = 0;
 	i = -1;
 	while (++i < len)
@@ -31,6 +36,11 @@ char	*add_quotes(const char *converted_word, char *quote)
 
 	new_length = strlen(converted_word) + 3;
 	modified_word = (char *)malloc(new_length * sizeof(char));
+	if (!modified_word)
+	{
+		ft_error(E_MEMORY, NULL, NULL);
+		return (NULL);
+	}
 	ft_strlcpy(modified_word, quote, 2);
 	ft_strcat(modified_word, converted_word);
 	ft_strcat(modified_word, quote);

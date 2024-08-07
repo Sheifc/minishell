@@ -27,7 +27,10 @@ void	add_argument(t_cmd *cmd, const char *arg)
 
 	new_args = (char **)malloc((cmd->n_args + 2) * sizeof(char *));
 	if (!new_args)
+	{
+		ft_error(E_MEMORY, NULL, NULL);
 		return ;
+	}
 	i = -1;
 	while (++i < cmd->n_args)
 		new_args[i] = cmd->arg[i];
@@ -45,6 +48,11 @@ char	**build_cmd_args(t_cmd *cmd)
 	char	**args;
 
 	args = (char **)malloc((cmd->n_args + 2) * sizeof(char *));
+	if (!args)
+	{
+		ft_error(E_MEMORY, NULL, NULL);
+		return (NULL);
+	}
 	args[0] = cmd->name;
 	i = -1;
 	while (++i < cmd->n_args)

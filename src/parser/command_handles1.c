@@ -93,13 +93,16 @@ t_cmd	*handle_node_output(ASTNode *node, Fds fds, OperatorStack **ope_stack,
 
 	push_operator(ope_stack, node->type);
 	fd = fds.out;
-	if (ft_strncmp(node->value, ">>", 2) == 0)
-		fd = open(node->right->left->value, O_WRONLY | O_CREAT | O_APPEND,
-				0644);
-	else if (ft_strncmp(node->value, ">", 1) == 0)
-		fd = open(node->right->left->value, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	push_pipe(pipe_stack, fds.in, fd);
-	//printf(" \e[1;36mfile: (W)%d\e[0m\n", fd);
+	if (node->right && node->right->left)
+	{
+		if (ft_strncmp(node->value, ">>", 2) == 0)
+			fd = open(node->right->left->value, O_WRONLY | O_CREAT | O_APPEND,
+					0644);
+		else if (ft_strncmp(node->value, ">", 1) == 0)
+			fd = open(node->right->left->value, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		push_pipe(pipe_stack, fds.in, fd);
+		// printf(" \e[1;36mfile: (W)%d\e[0m\n", fd);
+	}
 	head = NULL;
 	tail = NULL;
 	left_cmds = traverse_ast(node->left, fds, ope_stack, pipe_stack);
@@ -120,11 +123,14 @@ t_cmd	*handle_node_input(ASTNode *node, Fds fds, OperatorStack **ope_stack,
 	t_cmd	*right_cmds;
 
 	push_operator(ope_stack, node->type);
-	fds.in = open(node->right->left->value, O_RDONLY);
-	if (fds.in == -1)
+	if (node->right && node->right->left)
 	{
-		printf("\e[31m ** Error file: archivo \"%s\" no existe **\e[0m\n", node->right->left->value);
-		return (NULL);
+		fds.in = open(node->right->left->value, O_RDONLY);
+		if (fds.in == -1)
+		{
+			printf("\e[31m ** Error file: archivo \"%s\" no existe **\e[0m\n", node->right->left->value);
+			return (NULL);
+		}
 	}
 	head = NULL;
 	tail = NULL;

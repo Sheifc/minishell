@@ -7,7 +7,10 @@ ASTNode	*create_node(NodeType type, char *value, int level)
 
 	node = (ASTNode *)malloc(sizeof(ASTNode));
 	if (!node)
+	{
+		ft_error(E_MEMORY, NULL, NULL);
 		return (NULL);
+	}
 	node->level = level;
 	node->type = type;
 	node->value = ft_strdup(value);

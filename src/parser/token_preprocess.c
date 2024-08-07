@@ -79,7 +79,10 @@ char	*preprocess_input(const char *input, int status)
 	feat.start = 0;
 	new_in = (char *)malloc(MAX_LENGTH * sizeof(char));
 	if (!new_in)
+	{
+		ft_error(E_MEMORY, NULL, NULL);
 		return (NULL);
+	}
 	new_in[0] = '\0';
 	feat.pos = -1;
 	while (++feat.pos <= (int)ft_strlen(input))

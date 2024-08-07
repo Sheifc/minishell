@@ -23,6 +23,11 @@ char	*extract_variable_name(const char *start)
 	}
 	var_name[var_length] = '\0';
 	var_name_dynamic = (char *)malloc((var_length + 1) * sizeof(char));
+	if (!var_name_dynamic)
+	{
+		ft_error(E_MEMORY, NULL, NULL);
+		return (NULL);
+	}
 	ft_strcpy(var_name_dynamic, var_name);
 	return (var_name_dynamic);
 }
@@ -41,6 +46,11 @@ char	*replace_variable(const char *pos, char *result, const char *name)
 	{
 		new_length = ft_strlen(result) + ft_strlen(value) - ft_strlen(name) - 1;
 		new_result = (char *)malloc((new_length + 1) * sizeof(char));
+		if (!new_result)
+		{
+			ft_error(E_MEMORY, NULL, NULL);
+			return (NULL);
+		}
 		strncpy(new_result, result, pos - result);
 		ft_strcpy(new_result + (pos - result), value);
 		ft_strcpy(new_result + (pos - result) + ft_strlen(value), pos
@@ -52,6 +62,11 @@ char	*replace_variable(const char *pos, char *result, const char *name)
 	{
 		new_length = ft_strlen(result) - ft_strlen(name) - 1;
 		new_result = (char *)malloc((new_length + 1) * sizeof(char));
+		if (!new_result)
+		{
+			ft_error(E_MEMORY, NULL, NULL);
+			return (NULL);
+		}
 		strncpy(new_result, result, pos - result);
 		ft_strcpy(new_result + (pos - result), pos + ft_strlen(name) + 1);
 		free(result);

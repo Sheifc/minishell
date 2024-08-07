@@ -18,6 +18,11 @@ void	push_operator(OperatorStack **stack, NodeType type)
 	OperatorStack	*new_node;
 
 	new_node = (OperatorStack *)malloc(sizeof(OperatorStack));
+	if (!new_node)
+	{
+		ft_error(E_MEMORY, NULL, NULL);
+		return ;
+	}
 	new_node->type = type;
 	new_node->next = *stack;
 	*stack = new_node;
