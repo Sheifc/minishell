@@ -18,6 +18,7 @@ t_cmd	*create_command(const char *name, Fds fds, NodeType ope)
 	cmd->fdout = fds.out;
 	cmd->operator = ope;
 	cmd->next = NULL;
+	cmd->redirect = R_NONE;
 	add_argument(cmd, name);
 	return (cmd);
 }

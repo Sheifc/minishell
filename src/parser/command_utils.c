@@ -103,4 +103,5 @@ void	print_command(t_cmd *cmd)
 		cmd->fdout);
 	printf("  next_operator: %s [%d]\n", node_type_to_symbol(cmd->operator),
 		cmd->operator);
+	printf("  \e[36mredirect: %d\e[0m\n", cmd->redirect);
 }

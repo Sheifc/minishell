@@ -14,6 +14,10 @@ void	postprocess_cmds(t_cmd *cmd)
 			cmd->next->fdin = STDIN_FILENO;
 		}
 	}
+	if (cmd->fdin != -1)
+		cmd->redirect = R_INFILE;
+	else if (cmd->fdout != -1)
+		cmd->redirect = R_OUTFILE;
 	cmd = cmd->next;
 	postprocess_cmds(cmd);
 }

@@ -74,22 +74,30 @@ typedef enum _TokenType
 	T_WILDCARD,
 	T_REDIRECT_ARG,
 	T_UNKNOWN
-}				TokenType;
+}					TokenType;
 
 typedef struct _Token
 {
-	TokenType	type;
-	char		*value;
-	bool		expect_arg;
-}				Token;
+	TokenType		type;
+	char			*value;
+	bool			expect_arg;
+}					Token;
 
 typedef struct _word_features
 {
-	int			start;
-	int			pos;
-	bool		btw_quotes;
-	bool		new_word;
-}				t_word_features;
+	int				start;
+	int				pos;
+	bool			btw_quotes;
+	bool			new_word;
+}					t_word_features;
+
+typedef enum s_redirect
+{
+	R_NONE,
+	R_INFILE,
+	R_OUTFILE
+}					t_redirect;
+
 typedef struct s_cmd
 {
 	char			*name;
@@ -97,6 +105,7 @@ typedef struct s_cmd
 	int				n_args;
 	int				fdin;
 	int				fdout;
+	t_redirect		redirect;
 	struct s_cmd	*next;
 	NodeType		operator;
 }					t_cmd;
