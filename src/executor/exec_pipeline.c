@@ -36,15 +36,25 @@ void	child_process(t_shell *data, t_cmd *cmd, int fdpipe[2])
 	if (cmd->operator == NODE_PIPE)
 	{
 		close(fdpipe[0]);
-		if (dup2(fdpipe[1], STDOUT_FILENO) == -1)
+		if (dup2(fdpipe[1], 1) == -1)
 		{
 			perror("Error: dup2 failed for fdpipe[1]");
-			exit(EXIT_FAILURE);
+			exit(1);
 		}
 		close(fdpipe[1]);
 	}
+	else if (cmd->operator == NODE_END)
+	{
+		close(fdpipe[1]);
+		if (dup2(fdpipe[0], 0) == -1)
+		{
+			perror("Error: dup2 failed for fdpipe[1]");
+			exit(1);
+		}
+		close(fdpipe[0]);
+	}
 	run_cmd(data, cmd);
-	exit(EXIT_SUCCESS);
+	exit(0);
 }
 
 void	exec_pipe(t_shell *data, t_cmd *cmd)
@@ -54,29 +64,34 @@ void	exec_pipe(t_shell *data, t_cmd *cmd)
 	if (pipe(fdpipe) < 0)
 	{
 		perror("Error: pipe failed");
-		exit(EXIT_FAILURE);
+		exit(1);
 	}
 	if (save_fork() == 0)
 		child_process(data, cmd, fdpipe);
 	else
 	{
-		close(fdpipe[1]);
 		if (cmd->next)
 		{
+			close(fdpipe[1]);
 			cmd->next->fdin = fdpipe[0];
 			exec_pipe(data, cmd->next);
 		}
 		else
+		{
 			close(fdpipe[0]);
+			close(fdpipe[1]);
+		}
 		wait_process(data);
 	}
 }
 
 void	exec_redir(t_shell *data, t_cmd *cmd)
 {
-	(void)data;
-	(void)cmd;
-	return ;
+	if (cmd->redirect == R_INFILE)
+		redir_to_infile_if_needed(cmd);
+	else if (cmd->redirect == R_OUTFILE)
+		redir_to_outfile_if_needed(cmd);
+	exec_pipe(data, cmd);
 }
 
 void	close_fds(t_cmd *cmd)

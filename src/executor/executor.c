@@ -8,7 +8,7 @@ void	executor(t_shell *data)
 	current = data->cmd;
 	if (!current)
 		return ;
-	//print_commands(current);
+	print_commands(current);
 	set_tmp_fds(data);
 	if (data->cmd_count == 1)
 		exec_one_cmd(data, current);
