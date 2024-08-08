@@ -33,26 +33,50 @@ pid_t	save_fork(void)
 
 void	child_process(t_shell *data, t_cmd *cmd, int fdpipe[2])
 {
-	redir_to_infile_if_needed(cmd);
 	if (cmd->operator == NODE_PIPE)
 	{
 		close(fdpipe[0]);
-		if (cmd->fdout != -1)
-			redir_to_outfile_if_needed(cmd);
-		else
+		if (dup2(fdpipe[1], STDOUT_FILENO) == -1)
 		{
-			if (dup2(fdpipe[1], STDOUT_FILENO) == -1)
-			{
-				perror("Error: dup2 failed for fdpipe[1]");
-				exit(EXIT_FAILURE);
-			}
-			close(fdpipe[1]);
+			perror("Error: dup2 failed for fdpipe[1]");
+			exit(EXIT_FAILURE);
 		}
+		close(fdpipe[1]);
 	}
-	else
-		redir_to_outfile_if_needed(cmd);
 	run_cmd(data, cmd);
 	exit(EXIT_SUCCESS);
+}
+
+void	exec_pipe(t_shell *data, t_cmd *cmd)
+{
+	int		fdpipe[2];
+
+	if (pipe(fdpipe) < 0)
+	{
+		perror("Error: pipe failed");
+		exit(EXIT_FAILURE);
+	}
+	if (save_fork() == 0)
+		child_process(data, cmd, fdpipe);
+	else
+	{
+		close(fdpipe[1]);
+		if (cmd->next)
+		{
+			cmd->next->fdin = fdpipe[0];
+			exec_pipe(data, cmd->next);
+		}
+		else
+			close(fdpipe[0]);
+		wait_process(data);
+	}
+}
+
+void	exec_redir(t_shell *data, t_cmd *cmd)
+{
+	(void)data;
+	(void)cmd;
+	return ;
 }
 
 void	close_fds(t_cmd *cmd)
@@ -61,35 +85,4 @@ void	close_fds(t_cmd *cmd)
 		close(cmd->fdin);
 	if (cmd->fdout != -1 && cmd->fdout != 1)
 		close(cmd->fdout);
-}
-
-void	exec_multiple_cmds(t_shell *data, t_cmd *cmd)
-{
-	int		fdpipe[2];
-
-	if (!cmd)
-		return ;
-	if (cmd->operator == NODE_PIPE)
-	{
-		if (pipe(fdpipe) < 0)
-		{
-			perror("Error: pipe failed");
-			exit(EXIT_FAILURE);
-		}
-	}
-	if (save_fork() == 0)
-		child_process(data, cmd, fdpipe);
-	else
-	{
-		close(fdpipe[1]);
-		close_fds(cmd);
-		if (cmd->next)
-		{
-			cmd->next->fdin = fdpipe[0];
-			exec_multiple_cmds(data, cmd->next);
-		}
-		else
-			close(fdpipe[0]);
-		wait_process(data);
-	}
 }

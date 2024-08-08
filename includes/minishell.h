@@ -90,6 +90,8 @@ void		get_status(t_shell *data);
 void		run_cmd(t_shell *data, t_cmd *cmd);
 void		exec_multiple_cmds(t_shell *data, t_cmd *cmd);
 void		exec_one_cmd(t_shell *data, t_cmd *cmd);
+void		exec_redir(t_shell *data, t_cmd *cmd);
+void		exec_pipe(t_shell *data, t_cmd *cmd);
 void		executor(t_shell *data);
 
 void		redir_to_infile_if_needed(t_cmd *cmd);

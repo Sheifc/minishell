@@ -8,6 +8,7 @@ void	executor(t_shell *data)
 	current = data->cmd;
 	if (!current)
 		return ;
+	//print_commands(current);
 	set_tmp_fds(data);
 	if (data->cmd_count == 1)
 		exec_one_cmd(data, current);
@@ -15,8 +16,10 @@ void	executor(t_shell *data)
 	{
 		if (current->operator == NODE_OR || current->operator == NODE_AND)
 			exec_bonus(data, &current);
-		else
-			exec_multiple_cmds(data, current);
+		else if (current->redirect == 1)
+			exec_redir(data, current);
+		else if (current->operator == NODE_PIPE)
+			exec_pipe(data, current);
 	}
 	restart_fds(data);
 }
