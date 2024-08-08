@@ -37,7 +37,7 @@ int	main(int argc, char **argv, char **envp)
 	init(&data, envp);
 	while (1)
 	{
-		data.prompt = readline(M "mini" W "shell" G "$ " RST);
+		data.prompt = readline("minishell$ ");
 		if (!data.prompt)
 			break ;
 		add_history(data.prompt);
