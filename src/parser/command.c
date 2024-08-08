@@ -10,14 +10,28 @@ void	postprocess_cmds(t_cmd *cmd)
 		cmd->fdout = STDOUT_FILENO;
 		if (cmd->operator == NODE_PIPE)
 		{
-			close(cmd->next->fdin);
-			cmd->next->fdin = STDIN_FILENO;
+			if (cmd->next)
+			{
+				close(cmd->next->fdin);
+				cmd->next->fdin = STDIN_FILENO;
+			}
 		}
 	}
 	if (cmd->fdin != -1)
 		cmd->redirect = R_INFILE;
 	else if (cmd->fdout != -1)
 		cmd->redirect = R_OUTFILE;
+	while (cmd->next)
+	{
+		if (ft_strcmp(cmd->next->name, "save_outfile") != 0 && ft_strcmp(cmd->next->name,
+				"read_infile") != 0 && ft_strcmp(cmd->next->name, "save_append") != 0
+				&& ft_strcmp(cmd->next->name, "heredoc") != 0)
+		break;
+		cmd->operator = cmd->next->operator;
+		if (cmd->fdout == -1)
+			cmd->fdout = cmd->next->fdout;
+		delete_command(&cmd->next);
+	}
 	cmd = cmd->next;
 	postprocess_cmds(cmd);
 }

@@ -70,30 +70,52 @@ void	free_commands(t_cmd **head)
 	if (*head == NULL)
 		return ;
 	next_node = (*head)->next;
-	if (*head)
+	if ((*head)->name)
+		free((*head)->name);
+	if ((*head)->arg)
 	{
-		if ((*head)->name)
-			free((*head)->name);
-		if ((*head)->arg)
+		i = -1;
+		while (++i < (*head)->n_args)
 		{
-			i = -1;
-			while (++i < (*head)->n_args)
-			{
-				if ((*head)->arg[i])
-					free((*head)->arg[i]);
-			}
-			free((*head)->arg);
+			if ((*head)->arg[i])
+				free((*head)->arg[i]);
 		}
-		free((*head));
+		free((*head)->arg);
 	}
+	free((*head));
 	*head = NULL;
 	free_commands(&next_node);
+}
+
+void	delete_command(t_cmd **node)
+{
+	int		i;
+	t_cmd	*next_node;
+
+	if (*node == NULL)
+		return ;
+	next_node = (*node)->next;
+	if ((*node)->name)
+		free((*node)->name);
+	if ((*node)->arg)
+	{
+		i = -1;
+		while (++i < (*node)->n_args)
+		{
+			if ((*node)->arg[i])
+				free((*node)->arg[i]);
+		}
+		free((*node)->arg);
+	}
+	free((*node));
+	*node = next_node;
 }
 
 // Función para imprimir un nodo de comando (para debug)
 void	print_command(t_cmd *cmd)
 {
 	int	i;
+	const char	*symbol[] = {"None", "Infile", "Outfile"};
 
 	printf(" Command: \e[33m%s\e[0m\n", cmd->name);
 	i = -1;
@@ -103,5 +125,5 @@ void	print_command(t_cmd *cmd)
 		cmd->fdout);
 	printf("  next_operator: %s [%d]\n", node_type_to_symbol(cmd->operator),
 		cmd->operator);
-	printf("  \e[36mredirect: %d\e[0m\n", cmd->redirect);
+	printf("  \e[36mredirect: %s [%d]\e[0m\n", symbol[cmd->redirect], cmd->redirect);
 }

@@ -44,6 +44,7 @@ void			print_fd_contents(int fd);
 void			add_argument(t_cmd *cmd, const char *arg);
 char			**build_cmd_args(t_cmd *cmd);
 void			free_commands(t_cmd **head);
+void			delete_command(t_cmd **node);
 void			print_command(t_cmd *cmd);
 
 // Command handles1
