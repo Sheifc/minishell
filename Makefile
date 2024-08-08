@@ -30,28 +30,31 @@ FILES_PARSER	=	parser_utils.c										\
 					error.c											\
 					wildcard.c wildcard_utils.c
 
-FILES_EXEC      = init.c		   \
-				  signals.c   	   \
-				  exec_builtins.c  \
-                  exec_utils.c     \
-				  free_env.c 	   \
-				  free_token.c	   \
-				  free_cmd.c	   \
-                  free.c           \
-                  list_utils.c     \
-                  key_value.c      \
-                  echo.c           \
-                  pwd.c            \
-                  cd.c             \
-                  env.c            \
-                  exit.c           \
-                  export.c         \
-				  export_utils.c   \
-                  unset.c          \
-				  set_fds.c		   \
-				  exec_multiple_cmds.c \
-                  executor.c       \
-                  path.c           \
+FILES_EXEC      = init.c				\
+				  signals.c				\
+				  exec_builtins.c		\
+				  free_env.c			\
+				  free_token.c			\
+				  free_cmd.c			\
+                  free.c				\
+                  list_utils.c			\
+                  key_value.c			\
+                  echo.c				\
+                  pwd.c					\
+                  cd.c					\
+                  env.c					\
+                  exit.c				\
+                  export.c				\
+				  export_utils.c		\
+                  unset.c				\
+				  path.c				\
+				  set_fds.c				\
+                  executor.c			\
+				  exec_utils.c			\
+                  exec_one_cmd.c		\
+				  exec_pipeline.c		\
+				  file_redirection.c	\
+				  exec_bonus.c			\
                   printing.c
 
 SRC_MAIN        = $(addprefix $(SRC_DIR),$(FILES_SRC))
@@ -64,19 +67,34 @@ OBJ_PARSER      = $(SRC_PARSER:$(PARSER_DIR)%.c=$(OBJ_PARSER_DIR)%.o)
 OBJ_EXEC        = $(SRC_EXEC:$(EXEC_DIR)%.c=$(OBJ_EXEC_DIR)%.o)
 OBJ_SRC         = $(OBJ_MAIN) $(OBJ_EXEC) $(OBJ_PARSER)
 
-vpath %.c $(SRC_DIR) $(PARSER_DIR) $(EXEC_DIR) 
+vpath %.c $(SRC_DIR) $(PARSER_DIR) $(EXEC_DIR)
+
+# Determine OS and architecture
+OS := $(shell uname)
+
+# Check the includes and libs on macOS
+ifeq ($(OS), Darwin)
+INCLUDES += -I/usr/local/opt/readline/include
+LIBS += -L/usr/local/opt/readline/lib
+endif
+
+# Check the includes and libs on Linux
+ifeq ($(OS), Linux)
+INCLUDES += -I/usr/include/readline
+LIBS += -L/usr/lib
+endif
 
 $(OBJ_PARSER_DIR)%.o: $(PARSER_DIR)%.c
 	@mkdir -p $(OBJ_PARSER_DIR)
-	@$(CC) $(CFLAGS) -c $< -o $@
+	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 $(OBJ_EXEC_DIR)%.o: $(EXEC_DIR)%.c
 	@mkdir -p $(OBJ_EXEC_DIR)
-	@$(CC) $(CFLAGS) -c $< -o $@
+	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 $(OBJ_DIR)%.o: $(SRC_DIR)%.c
 	@mkdir -p $(OBJ_DIR)
-	@$(CC) $(CFLAGS) -c $< -o $@
+	@$(CC) $(CFLAGS)$(INCLUDES)  -c $< -o $@
 
 all: $(NAME)
 
