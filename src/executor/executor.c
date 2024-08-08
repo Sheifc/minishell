@@ -16,7 +16,7 @@ void	executor(t_shell *data)
 	{
 		if (current->operator == NODE_OR || current->operator == NODE_AND)
 			exec_bonus(data, &current);
-		else if (current->redirect == 1)
+		else if (current->redirect == R_INFILE || current->redirect == R_OUTFILE)
 			exec_redir(data, current);
 		else if (current->operator == NODE_PIPE)
 			exec_pipe(data, current);
