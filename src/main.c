@@ -27,7 +27,7 @@ void load_data(t_shell *data)
 	data->tokens = tokenize_input(data);
 	data->ast = create_ast(data);
 	ast_status = validate_and_free_tokens(data);
-	data->cmd = generate_commands(data->ast, ast_status, (Fds){-1, -1});
+	data->cmd = generate_commands(data, ast_status, (Fds){-1, -1});
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -48,6 +48,7 @@ int	main(int argc, char **argv, char **envp)
 			free(data.prompt);
 			data.cmd_count = 0;
 			data.prompt = NULL;
+			// printf("[status: %d]\n", data.status);
 		}
 	}
 	free_all(&data);

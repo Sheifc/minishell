@@ -179,7 +179,7 @@ int	main(void)
 	data.tokens = tokenize_input(&data);
 	data.ast = create_ast(&data);
 	is_valid = validate_and_free_tokens(&data);
-	data.cmd = generate_commands(data.ast, is_valid, (Fds){-1, -1});
+	data.cmd = generate_commands(&data, is_valid, (Fds){-1, -1});
 	// printf("\n**** Ejecutando: ****\n");
 	// execute_commands(data.cmd);
 	free_commands(&data.cmd);

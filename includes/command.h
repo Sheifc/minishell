@@ -34,10 +34,17 @@ typedef struct _Fds
 	NodeType	operator;
 }				t_cmd; */
 
+typedef struct s_cmd_arg
+{
+	ASTNode *node;
+	Fds fds;
+	OperatorStack **ope_stack;
+	PipeStack **pipe_stack;
+}				t_cmd_arg;
+
 // Command
 void			postprocess_cmds(t_cmd *cmd);
-t_cmd			*traverse_ast(ASTNode *node, Fds fds, OperatorStack **ope_stack,
-					PipeStack **pipe_stack);
+t_cmd			*traverse_ast(t_cmd_arg *arg, int *status);
 
 // Command utils
 void			print_fd_contents(int fd);
@@ -48,25 +55,18 @@ void			delete_command(t_cmd **node);
 void			print_command(t_cmd *cmd);
 
 // Command handles1
-t_cmd			*handle_node_command(ASTNode *node, Fds fds,
-					OperatorStack **ope_stack);
-t_cmd			*handle_node_pipe(ASTNode *node, Fds fds,
-					OperatorStack **ope_stack, PipeStack **pipe_stack);
-t_cmd			*handle_node_output(ASTNode *node, Fds fds,
-					OperatorStack **ope_stack, PipeStack **pipe_stack);
-t_cmd			*handle_node_input(ASTNode *node, Fds fds,
-					OperatorStack **ope_stack, PipeStack **pipe_stack);
-t_cmd			*handle_node_heredoc(ASTNode *node, Fds fds,
-					OperatorStack **ope_stack, PipeStack **pipe_stack);
+t_cmd			*handle_node_command(t_cmd_arg *arg, int *status);
+t_cmd			*handle_node_pipe(t_cmd_arg *arg, int *status);
+t_cmd			*handle_node_output(t_cmd_arg *arg, int *status);
+t_cmd			*handle_node_input(t_cmd_arg *arg, int *status);
+t_cmd			*handle_node_heredoc(t_cmd_arg *arg, int *status);
 
 // Command handles2
-t_cmd			*create_command(const char *name, Fds fds, NodeType ope);
-t_cmd			*create_command_from_ast(ASTNode *node, Fds fds, NodeType ope);
+t_cmd			*create_command(const char *name, Fds fds, NodeType ope, int *status);
+t_cmd			*create_command_from_ast(t_cmd_arg *arg, int *status, NodeType ope);
 void			append_commands(t_cmd **head, t_cmd **tail, t_cmd *new_cmds);
-t_cmd			*handle_node_and_or_semicolon(ASTNode *node, Fds fds,
-					OperatorStack **ope_stack, PipeStack **pipe_stack);
-t_cmd			*handle_node_parenthesis(ASTNode *node, Fds fds,
-					OperatorStack **ope_stack, PipeStack **pipe_stack);
+t_cmd			*handle_node_and_or_semicolon(t_cmd_arg *arg, int *status);
+t_cmd			*handle_node_parenthesis(t_cmd_arg *arg, int *status);
 
 // Command exe
 int				execute_command(t_cmd *cmd, int input_fd, int output_fd);
@@ -81,7 +81,7 @@ void			setup_redirections(int input_fd, int output_fd,
 Token			**tokenize_input(t_shell *data);
 ASTNode			*create_ast(t_shell *data);
 bool			validate_and_free_tokens(t_shell *data);
-t_cmd			*generate_commands(ASTNode *ast, bool is_valid, Fds fds);
+t_cmd			*generate_commands(t_shell *data, bool is_valid, Fds fds);
 void			print_commands(t_cmd *cmd);
 
 #endif

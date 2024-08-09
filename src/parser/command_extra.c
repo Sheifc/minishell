@@ -43,26 +43,32 @@ bool	validate_and_free_tokens(t_shell *data)
 	return (is_valid);
 }
 
-t_cmd	*generate_commands(ASTNode *ast, bool is_valid, Fds fds)
+t_cmd	*generate_commands(t_shell *data, bool is_valid, Fds fds)
 {
 	OperatorStack	*ope_stack;
 	PipeStack		*pipe_stack;
-	t_cmd			*cmd;
+	t_cmd_arg		arg;
 
-	ope_stack = NULL;
-	pipe_stack = NULL;
-	cmd = NULL;
-	if (ast)
+	data->cmd = NULL;
+	if (data->ast && is_valid)
 	{
+		ope_stack = NULL;
+		pipe_stack = NULL;
+		arg.node = data->ast;
+		arg.fds = fds;
+		arg.ope_stack = &ope_stack;
+		arg.pipe_stack = &pipe_stack;
 		// printf("\n**** Generating Commands: ****\n");
-		if (is_valid)
-			cmd = traverse_ast(ast, fds, &ope_stack, &pipe_stack);
-		postprocess_cmds(cmd);
-		// print_commands(cmd);
-		free_ast(&ast);
-		free(pipe_stack);
+		data->cmd = traverse_ast(&arg, &data->status);
+		postprocess_cmds(data->cmd);
+		print_commands(data->cmd);
+		free_ast(&data->ast);
+		if (pipe_stack != NULL)
+			free(pipe_stack);
+		if (ope_stack != NULL)
+			free(ope_stack);
 	}
-	return (cmd);
+	return (data->cmd);
 }
 
 void	print_commands(t_cmd *cmd)

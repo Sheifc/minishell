@@ -38,14 +38,14 @@ void	ft_error(const int error_code, const char *message, int *status)
 void	ft_error_ope(const int error_code, char *ope, const char *message, int *status)
 {
 	if ((message == NULL || ft_strlen(message) == 0) && error_code <= 0)
-		fprintf(stderr, "\e[31m Minishell error(%d): %s\e[0m\n",
-			errno, strerror(errno));
+		fprintf(stderr, "\e[31m Minishell error(%d): \'%s\' %s\e[0m\n",
+			errno, ope, strerror(errno));
 	else if (error_code <= 0)
-		fprintf(stderr, "\e[31m Minishell error(%d): %s\e[0m\n",
-			errno, message);
+		fprintf(stderr, "\e[31m Minishell error(%d): \'%s\' %s\e[0m\n",
+			errno, ope, message);
 	else if (message == NULL || ft_strlen(message) == 0)
-		fprintf(stderr, "\e[31m %s error(%d): %s\e[0m\n",
-			str_error(error_code), error_code, strerror(errno));
+		fprintf(stderr, "\e[31m %s error(%d): \'%s\' %s\e[0m\n",
+			str_error(error_code), error_code, ope, strerror(errno));
 	else
 		fprintf(stderr, "\e[31m %s error(%d): \'%s\' %s\e[0m\n",
 			str_error(error_code), error_code, ope, message);
