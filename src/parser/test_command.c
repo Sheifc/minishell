@@ -180,6 +180,7 @@ int	main(void)
 	data.ast = create_ast(&data);
 	is_valid = validate_and_free_tokens(&data);
 	data.cmd = generate_commands(&data, is_valid, (Fds){-1, -1});
+	print_commands(data.cmd);
 	// printf("\n**** Ejecutando: ****\n");
 	// execute_commands(data.cmd);
 	free_commands(&data.cmd);

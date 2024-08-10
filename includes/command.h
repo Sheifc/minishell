@@ -32,7 +32,7 @@ typedef struct s_cmd_arg
 
 // Command
 void				postprocess_cmds(t_cmd *cmd);
-t_cmd				*traverse_ast(t_cmd_arg *arg, int *status);
+t_cmd				*traverse_ast(t_cmd_arg *arg, t_shell *data);
 
 // Command utils
 void				print_fd_contents(int fd);
@@ -43,11 +43,11 @@ void				delete_command(t_cmd **node);
 void				print_command(t_cmd *cmd);
 
 // Command handles1
-t_cmd				*handle_node_command(t_cmd_arg *arg, int *status);
-t_cmd				*handle_node_pipe(t_cmd_arg *arg, int *status);
-t_cmd				*handle_node_output(t_cmd_arg *arg, int *status);
-t_cmd				*handle_node_input(t_cmd_arg *arg, int *status);
-t_cmd				*handle_node_heredoc(t_cmd_arg *arg, int *status);
+t_cmd				*handle_node_command(t_cmd_arg *arg, t_shell *data);
+t_cmd				*handle_node_pipe(t_cmd_arg *arg, t_shell *data);
+t_cmd				*handle_node_output(t_cmd_arg *arg, t_shell *data);
+t_cmd				*handle_node_input(t_cmd_arg *arg, t_shell *data);
+t_cmd				*handle_node_heredoc(t_cmd_arg *arg, t_shell *data);
 
 // Command handles2
 t_cmd				*create_command(const char *name, Fds fds, NodeType ope,
@@ -56,15 +56,15 @@ t_cmd				*create_command_from_ast(t_cmd_arg *arg, int *status,
 						NodeType ope);
 void				append_commands(t_cmd **head, t_cmd **tail,
 						t_cmd *new_cmds);
-t_cmd				*handle_node_and_or_semicolon(t_cmd_arg *arg, int *status);
-t_cmd				*handle_node_parenthesis(t_cmd_arg *arg, int *status);
+t_cmd				*handle_node_and_or_semicolon(t_cmd_arg *arg, t_shell *data);
+t_cmd				*handle_node_parenthesis(t_cmd_arg *arg, t_shell *data);
 
 // Command handles utils
 void				delete_command(t_cmd **node);
 void				ft_free_str(char *str);
 char				*read_until_eof(char *eof);
-void				ft_read_stdin(int fd, char *eof, int *status);
-t_cmd				*process_node_commands(t_cmd_arg *arg, int *status, int fd,
+void				ft_read_stdin(int fd, char *eof, t_shell *data);
+t_cmd				*process_node_commands(t_cmd_arg *arg, t_shell *data, int fd,
 						t_redirect dir);
 
 // Command exe

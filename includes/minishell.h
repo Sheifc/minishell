@@ -70,6 +70,8 @@ void		ft_unset(t_shell *data);
 // env.c
 void		fill_env_list(t_env **head, char **envp, int *i);
 void		init_env(t_shell *data, char **envp);
+void		print_env(t_env *env);
+
 // list_utils.c
 void		add(t_env **head, char *key, char *value);
 void		pop(t_env **head, char *key);

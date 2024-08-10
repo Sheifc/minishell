@@ -16,13 +16,16 @@ void	get_key_value(char *str, char **key, char **value)
 
 char	*get_value(t_env *env, const char *key)
 {
+	t_env *current;
+
 	if (env == NULL || key == NULL)
 		perror("Error: null arguments");
-	while (env != NULL && env->next != NULL)
+	current = env;
+	while (current != NULL && current->next != NULL)
 	{
-		if (!ft_strncmp(env->key, key, ft_strlen(key) + 1))
-			return (env->value);
-		env = env->next;
+		if (!ft_strncmp(current->key, key, ft_strlen(key) + 1))
+			return (current->value);
+		current = current->next;
 	}
 	return (NULL);
 }

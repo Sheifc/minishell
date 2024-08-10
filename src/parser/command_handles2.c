@@ -60,7 +60,7 @@ void	append_commands(t_cmd **head, t_cmd **tail, t_cmd *new_cmds)
 	}
 }
 
-t_cmd	*handle_node_and_or_semicolon(t_cmd_arg *arg, int *status)
+t_cmd	*handle_node_and_or_semicolon(t_cmd_arg *arg, t_shell *data)
 {
 	t_cmd	*head;
 	t_cmd	*tail;
@@ -73,16 +73,16 @@ t_cmd	*handle_node_and_or_semicolon(t_cmd_arg *arg, int *status)
 	head = NULL;
 	tail = NULL;
 	arg->node = node->left;
-	left_cmds = traverse_ast(arg, status);
+	left_cmds = traverse_ast(arg, data);
 	arg->node = node->right;
-	right_cmds = traverse_ast(arg, status);
+	right_cmds = traverse_ast(arg, data);
 	arg->node = node;
 	append_commands(&head, &tail, left_cmds);
 	append_commands(&head, &tail, right_cmds);
 	return (head);
 }
 
-t_cmd	*handle_node_parenthesis(t_cmd_arg *arg, int *status)
+t_cmd	*handle_node_parenthesis(t_cmd_arg *arg, t_shell *data)
 {
 	NodeType	parent_ope;
 	t_cmd		*head;
@@ -101,7 +101,7 @@ t_cmd	*handle_node_parenthesis(t_cmd_arg *arg, int *status)
 	tail = NULL;
 	node = arg->node;
 	arg->node = node->left;
-	left_cmds = traverse_ast(arg, status);
+	left_cmds = traverse_ast(arg, data);
 	arg->node = node;
 	append_commands(&head, &tail, left_cmds);
 	return (head);

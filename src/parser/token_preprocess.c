@@ -63,10 +63,9 @@ bool	ok_count_quotes(const char *str)
 	return (false);
 }
 
-char	*preprocess_input(const char *input, int status)
+char	*preprocess_input(const char *input, t_word_features feat, t_shell *data)
 {
 	char			*new_in;
-	t_word_features	feat;
 	char			*preproc_input;
 
 	if (ok_count_quotes(input) == false)
@@ -74,22 +73,18 @@ char	*preprocess_input(const char *input, int status)
 		preproc_input = ft_strdup(input);
 		return (preproc_input);
 	}
-	feat.btw_quotes = false;
-	feat.new_word = true;
-	feat.start = 0;
 	new_in = (char *)malloc(MAX_LENGTH * sizeof(char));
 	if (!new_in)
 	{
-		ft_error(E_MEMORY, NULL, NULL);
+		ft_error(E_MEMORY, NULL, &data->status);
 		return (NULL);
 	}
 	new_in[0] = '\0';
-	feat.pos = -1;
 	while (++feat.pos <= (int)ft_strlen(input))
 		handle_character(input, &new_in, &feat);
 	if (!feat.new_word)
 		process_word(input, feat.start, ft_strlen(input) - feat.start, new_in);
-	preproc_input = replace_env_variables(new_in, status);
+	preproc_input = replace_env_variables(new_in, data);
 	free(new_in);
 	return (preproc_input);
 }

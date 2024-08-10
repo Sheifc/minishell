@@ -76,10 +76,15 @@ Token	**process_tokens(t_shell *data, char *input_copy)
 
 Token	**tokenize(t_shell *data)
 {
-	char	*input_copy;
-	char	*input;
+	char			*input_copy;
+	char			*input;
+	t_word_features	feat;
 
-	input = preprocess_input(data->prompt, data->status);
+	feat.start = 0;
+	feat.pos = -1;
+	feat.btw_quotes = false;
+	feat.new_word = true;
+	input = preprocess_input(data->prompt, feat, data);
 	data->tokens = (Token **)malloc(MAX_TOKENS * sizeof(Token *));
 	if (!data->tokens)
 	{

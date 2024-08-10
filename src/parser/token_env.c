@@ -1,3 +1,4 @@
+#include "minishell.h"
 #include "token.h"
 
 char	*initialize_result(const char *input)
@@ -32,14 +33,15 @@ char	*extract_variable_name(const char *start)
 	return (var_name_dynamic);
 }
 
-char	*replace_variable(const char *pos, char *result, const char *name)
+char	*replace_variable(const char *pos, char *result, const char *name,
+		t_shell *data)
 {
 	char	*value;
 	char	*new_result;
 	size_t	new_length;
 
-	if (ft_strncmp((pos + 1), "?", 1) !=0)
-		value = getenv(name);
+	if (ft_strncmp((pos + 1), "?", 1) != 0)
+		value = get_value(data->env, name);
 	else
 		value = (char *)name;
 	if (value)
@@ -90,22 +92,23 @@ int	is_btw_single_quotes(const char *str, const char *pos)
 	return (in_single_quotes);
 }
 
-int is_preceded_by_double_less(const char *str, const char *pos) {
-    const char *p;
+int	is_preceded_by_double_less(const char *str, const char *pos)
+{
+	const char	*p;
 
 	p = pos - 1;
-    while (p > str && ft_strchr(DELIMITERS, *p))
-        p--;
-    if (p > str && *p == '<')
+	while (p > str && ft_strchr(DELIMITERS, *p))
+		p--;
+	if (p > str && *p == '<')
 	{
-        p--;
-        if (p > str && *p == '<')
-            return 1;
-    }
-    return 0;
+		p--;
+		if (p > str && *p == '<')
+			return (1);
+	}
+	return (0);
 }
 
-char	*replace_env_variables(const char *input, int status)
+char	*replace_env_variables(const char *input, t_shell *data)
 {
 	char	*result;
 	char	*pos;
@@ -115,16 +118,17 @@ char	*replace_env_variables(const char *input, int status)
 	pos = ft_strchr(result, '$');
 	while (pos)
 	{
-		if (is_btw_single_quotes(result, pos) || is_preceded_by_double_less(result, pos))
+		if (is_btw_single_quotes(result, pos)
+			|| is_preceded_by_double_less(result, pos))
 		{
 			pos = ft_strchr(pos + 1, '$');
 			continue ;
 		}
-		if (ft_strncmp((pos + 1), "?", 1) !=0)
+		if (ft_strncmp((pos + 1), "?", 1) != 0)
 			var_name = extract_variable_name(pos + 1);
 		else
-			var_name = ft_itoa(status);
-		result = replace_variable(pos, result, var_name);
+			var_name = ft_itoa(data->status);
+		result = replace_variable(pos, result, var_name, data);
 		free(var_name);
 		pos = ft_strchr(result, '$');
 	}

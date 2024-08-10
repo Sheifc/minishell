@@ -56,19 +56,19 @@ char	*read_until_eof(char *eof)
 	return (input);
 }
 
-void	ft_read_stdin(int fd, char *eof, int *status)
+void	ft_read_stdin(int fd, char *eof, t_shell *data)
 {
 	char	*replace_input;
 	char	*input;
 
 	input = read_until_eof(eof);
-	replace_input = replace_env_variables(input, *status);
+	replace_input = replace_env_variables(input, data);
 	ft_free_str(input);
 	write(fd, replace_input, ft_strlen(replace_input));
 	ft_free_str(replace_input);
 }
 
-t_cmd	*process_node_commands(t_cmd_arg *arg, int *status, int fd,
+t_cmd	*process_node_commands(t_cmd_arg *arg, t_shell *data, int fd,
 		t_redirect dir)
 {
 	t_cmd	*head;
@@ -81,9 +81,9 @@ t_cmd	*process_node_commands(t_cmd_arg *arg, int *status, int fd,
 	tail = NULL;
 	node = arg->node;
 	arg->node = node->left;
-	left_cmds = traverse_ast(arg, status);
+	left_cmds = traverse_ast(arg, data);
 	arg->node = node->right;
-	right_cmds = traverse_ast(arg, status);
+	right_cmds = traverse_ast(arg, data);
 	arg->node = node;
 	append_commands(&head, &tail, left_cmds);
 	if (left_cmds)

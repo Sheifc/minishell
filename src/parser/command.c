@@ -42,7 +42,7 @@ void	postprocess_cmds(t_cmd *cmd)
 	postprocess_cmds(cmd);
 }
 
-t_cmd	*traverse_ast(t_cmd_arg *arg, int *status)
+t_cmd	*traverse_ast(t_cmd_arg *arg, t_shell *data)
 {
 	ASTNode	*node;
 
@@ -50,20 +50,20 @@ t_cmd	*traverse_ast(t_cmd_arg *arg, int *status)
 	if (arg == NULL || arg->node == NULL)
 		return (NULL);
 	if (node->type == NODE_COMMAND)
-		return (handle_node_command(arg, status));
+		return (handle_node_command(arg, data));
 	else if (node->type == NODE_PIPE)
-		return (handle_node_pipe(arg, status));
+		return (handle_node_pipe(arg, data));
 	else if (node->type == NODE_OUTPUT || node->type == NODE_OUTPUT_APPEND)
-		return (handle_node_output(arg, status));
+		return (handle_node_output(arg, data));
 	else if (node->type == NODE_INPUT)
-		return (handle_node_input(arg, status));
+		return (handle_node_input(arg, data));
 	else if (node->type == NODE_HEREDOC)
-		return (handle_node_heredoc(arg, status));
+		return (handle_node_heredoc(arg, data));
 	else if (node->type == NODE_AND || node->type == NODE_OR
 		|| node->type == NODE_SEMICOLON)
-		return (handle_node_and_or_semicolon(arg, status));
+		return (handle_node_and_or_semicolon(arg, data));
 	else if (node->type == NODE_PARENTHESIS)
-		return (handle_node_parenthesis(arg, status));
+		return (handle_node_parenthesis(arg, data));
 	else
 		return (NULL);
 }
