@@ -66,7 +66,7 @@ t_cmd	*handle_node_and_or_semicolon(t_cmd_arg *arg, int *status)
 	t_cmd	*tail;
 	t_cmd	*left_cmds;
 	t_cmd	*right_cmds;
-	ASTNode *node;
+	ASTNode	*node;
 
 	node = arg->node;
 	push_operator(arg->ope_stack, arg->node->type);

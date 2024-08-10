@@ -19,7 +19,8 @@ FILES_SRC       = main.c
 
 FILES_PARSER	=	parser_utils.c										\
 					command.c command_utils.c command_handles1.c		\
-					command_handles2.c command_exe.c command_extra.c	\
+					command_handles2.c command_handles_utils.c			\
+					command_exe.c command_extra.c						\
 					stack_operations.c stack_pipes.c					\
 					ast.c ast_utils.c ast_handles.c 					\
 					syntax.c syntax_utils.c								\
@@ -157,7 +158,8 @@ test_ast: $(AST_OBJ)
 	$(CC) $(AST_OBJ) -L $(LIBFT_DIR) $(LIBS) $(LDFLAGS) -o $@
 
 CMD_FILES	= 	test_command.c command.c command_utils.c command_handles1.c	\
-				command_handles2.c command_exe.c command_extra.c \
+				command_handles2.c command_handles_utils.c	\
+				command_exe.c command_extra.c				\
 				stack_operations.c stack_pipes.c			\
 				ast.c ast_utils.c ast_handles.c 			\
 				syntax.c syntax_utils.c						\

@@ -87,30 +87,6 @@ void	free_commands(t_cmd **head)
 	free_commands(&next_node);
 }
 
-void	delete_command(t_cmd **node)
-{
-	int		i;
-	t_cmd	*next_node;
-
-	if (*node == NULL)
-		return ;
-	next_node = (*node)->next;
-	if ((*node)->name)
-		free((*node)->name);
-	if ((*node)->arg)
-	{
-		i = -1;
-		while (++i < (*node)->n_args)
-		{
-			if ((*node)->arg[i])
-				free((*node)->arg[i]);
-		}
-		free((*node)->arg);
-	}
-	free((*node));
-	*node = next_node;
-}
-
 // Función para imprimir un nodo de comando (para debug)
 void	print_command(t_cmd *cmd)
 {

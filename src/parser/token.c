@@ -56,10 +56,27 @@ int	verify_tokens(t_shell *data)
 	return (balance_parentheses | balance_quotes % 2);
 }
 
+Token	**process_tokens(t_shell *data, char *input_copy)
+{
+	char	*start;
+
+	start = input_copy;
+	while (*start)
+	{
+		skip_delimiters(&start);
+		if (!*start)
+			break ;
+		if (*start == '"' || *start == '\'')
+			handle_quotes(&start, data->tokens, &data->num_tokens, *start);
+		else if (handle_regular_tokens(&start, data) != 0)
+			return (NULL);
+	}
+	return (data->tokens);
+}
+
 Token	**tokenize(t_shell *data)
 {
 	char	*input_copy;
-	char	*start;
 	char	*input;
 
 	input = preprocess_input(data->prompt, data->status);
@@ -71,19 +88,12 @@ Token	**tokenize(t_shell *data)
 	}
 	data->num_tokens = 0;
 	input_copy = ft_strdup(input);
-	start = input_copy;
-	while (*start)
+	free(input);
+	if (process_tokens(data, input_copy) == NULL)
 	{
-		skip_delimiters(&start);
-		if (!*start)
-			break ;
-		if (*start == '"' || *start == '\'')
-			handle_quotes(&start, data->tokens, &data->num_tokens, *start);
-		else
-			if (handle_regular_tokens(&start, data) != 0)
-				return (NULL);
+		free(input_copy);
+		return (NULL);
 	}
 	free(input_copy);
-	free(input);
 	return (data->tokens);
 }
