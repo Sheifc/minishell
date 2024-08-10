@@ -2,7 +2,7 @@
 
 void	run_cmd(t_shell *data, t_cmd *cmd)
 {
-	dprintf(2, "entra en run_cmd\n");
+	//dprintf(2, "entra en run_cmd\n");
 	if (!execute_builtin(data, cmd, cmd->arg[0]))
 	{
 		get_path(data, cmd);
@@ -92,7 +92,7 @@ void	exec_pipe(t_shell *data, t_cmd *cmd)
 		child_process(data, cmd, fdpipe);
 	else
 	{
-		close_fds(cmd);
+		//close_fds(cmd);
 		if (cmd->next)
 		{
 			close(fdpipe[1]);
@@ -110,7 +110,7 @@ void	exec_pipe(t_shell *data, t_cmd *cmd)
 
 void	exec_redir(t_shell *data, t_cmd *cmd)
 {
-	dprintf(2, "entra en redir\n");
+	//dprintf(2, "entra en redir\n");
 	if (save_fork() == 0)
 	{
 		redir_from_infile_if_needed(cmd);
@@ -129,7 +129,7 @@ void	exec_redir(t_shell *data, t_cmd *cmd)
 
 void exec_multiple_cmds(t_shell *data, t_cmd *cmd)
 {
-	dprintf(2, "entra en multiple cmds\n");
+	//dprintf(2, "entra en multiple cmds\n");
 	if (cmd->operator == NODE_OR || cmd->operator == NODE_AND)
 		exec_bonus(data, &cmd);
   	else if (cmd->redirect == R_OUTFILE)
