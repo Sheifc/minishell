@@ -26,7 +26,7 @@ pid_t	save_fork(void)
 	if (pid == -1)
 	{
 		perror("Error: fork failed");
-		exit(EXIT_FAILURE);
+		exit(1);
 	}
 	return (pid);
 }

@@ -18,7 +18,7 @@ void	executor(t_shell *data)
 			exec_bonus(data, &current);
 		else if (current->redirect == R_INFILE || current->redirect == R_OUTFILE)
 			exec_redir(data, current);
-		else if (current->operator == NODE_PIPE)
+		else if (current->operator == NODE_PIPE || current->operator == NODE_END)
 			exec_pipe(data, current);
 	}
 	restart_fds(data);
