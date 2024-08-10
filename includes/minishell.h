@@ -94,7 +94,7 @@ void		exec_redir(t_shell *data, t_cmd *cmd);
 void		exec_pipe(t_shell *data, t_cmd *cmd);
 void		executor(t_shell *data);
 
-void		redir_to_infile_if_needed(t_cmd *cmd);
+void		redir_from_infile_if_needed(t_cmd *cmd);
 void		redir_to_outfile_if_needed(t_cmd *cmd);
 
 //*--------------------EXECUTOR BONUS----------------------

@@ -61,7 +61,7 @@ t_cmd	*generate_commands(t_shell *data, bool is_valid, Fds fds)
 		// printf("\n**** Generating Commands: ****\n");
 		data->cmd = traverse_ast(&arg, &data->status);
 		postprocess_cmds(data->cmd);
-		print_commands(data->cmd);
+		//print_commands(data->cmd);
 		free_ast(&data->ast);
 		if (pipe_stack != NULL)
 			free(pipe_stack);
