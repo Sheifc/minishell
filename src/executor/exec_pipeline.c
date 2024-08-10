@@ -19,17 +19,15 @@ void	run_cmd(t_shell *data, t_cmd *cmd)
 	}
 }
 
-pid_t	save_fork(void)
+pid_t	save_fork(t_shell *data)
 {
-	pid_t	pid;
-
-	pid = fork();
-	if (pid == -1)
+	data->pid = fork();
+	if (data->pid == -1)
 	{
 		perror("Error: fork failed");
 		exit(1);
 	}
-	return (pid);
+	return (data->pid);
 }
 
 void	last_cmd(t_cmd *cmd, int fdpipe[2])
@@ -63,6 +61,7 @@ void	child_process(t_shell *data, t_cmd *cmd, int fdpipe[2])
 			perror("Error: dup2 failed for fdpipe[1]");
 			exit(1);
 		}
+		//dprintf(2, "cmd %s\n", cmd->arg[0]);
 		close(fdpipe[1]);
 	}
  	else if (cmd->operator == NODE_END)
@@ -88,16 +87,17 @@ void	exec_pipe(t_shell *data, t_cmd *cmd)
 		perror("Error: pipe failed");
 		exit(1);
 	}
-	if (save_fork() == 0)
+	if (save_fork(data) == 0)
 		child_process(data, cmd, fdpipe);
 	else
 	{
-		//close_fds(cmd);
+		close_fds(cmd);
 		if (cmd->next)
 		{
 			close(fdpipe[1]);
 			cmd->next->fdin = fdpipe[0];
 			exec_pipe(data, cmd->next);
+			//wait_process(data);
 		}
 		else
 		{
@@ -111,7 +111,7 @@ void	exec_pipe(t_shell *data, t_cmd *cmd)
 void	exec_redir(t_shell *data, t_cmd *cmd)
 {
 	//dprintf(2, "entra en redir\n");
-	if (save_fork() == 0)
+	if (save_fork(data) == 0)
 	{
 		redir_from_infile_if_needed(cmd);
 		redir_to_outfile_if_needed(cmd);
@@ -124,8 +124,6 @@ void	exec_redir(t_shell *data, t_cmd *cmd)
 	if (cmd->next)
 		exec_multiple_cmds(data, cmd->next);
 }
-
-
 
 void exec_multiple_cmds(t_shell *data, t_cmd *cmd)
 {
