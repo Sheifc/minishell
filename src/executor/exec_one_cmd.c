@@ -16,8 +16,11 @@ void	wait_process(t_shell *data)
 
 void	set_up_fds(t_shell *data, t_cmd *cmd)
 {
-	set_fdin(data, cmd);
-	set_fdout(data, cmd);
+	//set_fdin(data, cmd);
+	//set_fdout(data, cmd);
+	(void)data;
+	redir_from_infile_if_needed(cmd);
+	redir_to_outfile_if_needed(cmd);
 }
 
 void	exec_one_cmd(t_shell *data, t_cmd *cmd)
