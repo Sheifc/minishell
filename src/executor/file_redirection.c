@@ -12,7 +12,7 @@ void	redir_from_infile_if_needed(t_cmd *cmd)
 			perror("Error: dup2 failed for cmd->fdin");
 			exit(EXIT_FAILURE);
 		}
-		close(cmd->fdin);
+		//close(cmd->fdin);
 	}
 }
 
@@ -26,6 +26,6 @@ void	redir_to_outfile_if_needed(t_cmd *cmd)
 			perror("Error: dup2 failed for cmd->fdout");
 			exit(EXIT_FAILURE);
 		}
-		close(cmd->fdout);
+		//close(cmd->fdout);
 	}
 }

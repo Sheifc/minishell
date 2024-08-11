@@ -89,7 +89,7 @@ void		set_fdout(t_shell *data, t_cmd *cmd);
 void		restart_fds(t_shell *data);
 void		get_status(t_shell *data);
 
-void		run_cmd(t_shell *data, t_cmd *cmd);
+int			run_cmd(t_shell *data, t_cmd *cmd);
 void		exec_multiple_cmds(t_shell *data, t_cmd *cmd);
 void		exec_one_cmd(t_shell *data, t_cmd *cmd);
 void		exec_redir(t_shell *data, t_cmd *cmd);
@@ -100,9 +100,9 @@ void		redir_from_infile_if_needed(t_cmd *cmd);
 void		redir_to_outfile_if_needed(t_cmd *cmd);
 
 //*--------------------EXECUTOR BONUS----------------------
-void		exec_node_or(t_shell *data, t_cmd **cmd, int *execution);
-void		exec_node_and(t_shell *data, t_cmd **cmd, int *execution);
-void		exec_bonus(t_shell *data, t_cmd **cmd);
+void		exec_node_or(t_shell *data, t_cmd *cmd, int *execution);
+void		exec_node_and(t_shell *data, t_cmd *cmd, int *execution);
+void		exec_bonus(t_shell *data, t_cmd *cmd);
 
 //*--------------------UTILS-------------------------------
 // exec_utils.c

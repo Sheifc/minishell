@@ -7,24 +7,10 @@ void	sigint_handler(int signum)
 {
 	if (signum == SIGINT)
 	{
-		if (g_sig == 1)
-		{
-			write(1, "\033[K\n", 5);
-			rl_on_new_line();
-			rl_replace_line("", 0);
-			rl_replace_line("", 0);
-			rl_redisplay();
-		}
-		else if (g_sig == 0)
-		{
-			rl_on_new_line();
-			rl_replace_line("", 0);
-			rl_redisplay();
-			write(1, "\033[K\n", 5);
-			rl_on_new_line();
-			rl_replace_line("", 0);
-			rl_redisplay();
-		}
+		write(1, "\033[K\n", 5); // Limpia la línea y mueve el cursor
+		rl_on_new_line();
+		rl_replace_line("", 0);
+		rl_redisplay();
 	}
 }
 
