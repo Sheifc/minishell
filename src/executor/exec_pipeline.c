@@ -24,7 +24,6 @@ static void	iterate_to_close(t_cmd *current, t_cmd *next, t_cmd *commands)
 	}
 }
 
-
 void	close_pipes(t_shell *data, t_cmd *cmd)
 {
 	t_cmd	*current;
@@ -145,7 +144,6 @@ int execaux(t_cmd *cmd, t_shell *data)
 		perror("Error: command not found");
 		return 127;  // Comando no encontrado
 	}
-
 	// Intentar ejecutar el comando
 	if (execve(data->path, cmd->arg, data->envp) < 0)
 	{
