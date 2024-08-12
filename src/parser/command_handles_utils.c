@@ -39,6 +39,7 @@ char	*read_until_eof(char *eof)
 	input = ft_strdup("");
 	while (1)
 	{
+		write(1, "> ", 2);
 		line = get_next_line(STDIN_FILENO);
 		if (line && ft_strcmp(line, eof) == OK)
 			break ;

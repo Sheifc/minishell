@@ -21,7 +21,7 @@ char	*get_value(t_env *env, const char *key)
 	if (env == NULL || key == NULL)
 		perror("Error: null arguments");
 	current = env;
-	while (current != NULL && current->next != NULL)
+	while (current != NULL)
 	{
 		if (!ft_strncmp(current->key, key, ft_strlen(key) + 1))
 			return (current->value);

@@ -1,4 +1,5 @@
 #include "command.h"
+#include "minishell.h"
 
 t_cmd	*handle_node_command(t_cmd_arg *arg, t_shell *data)
 {
@@ -76,13 +77,29 @@ t_cmd	*handle_node_input(t_cmd_arg *arg, t_shell *data)
 
 t_cmd	*handle_node_heredoc(t_cmd_arg *arg, t_shell *data)
 {
-	int	fd;
+	pid_t	pid;
+	int		fd;
 
-	fd = open(".heredoc_temp", O_WRONLY | O_CREAT | O_APPEND, 0644);
-	if (arg->node->right && arg->node->right->left)
-		ft_read_stdin(fd, arg->node->right->left->value, data);
-	close(fd);
+	pid = fork();
+	if (pid == -1)
+	{
+		ft_error(E_AUTO, "heredoc fork failed", &data->status);
+		return (NULL);
+	}
+	if (pid == 0)
+	{
+		signal(SIGINT, heredoc_handler);
+		fd = open(".heredoc_temp", O_WRONLY | O_CREAT | O_APPEND, 0644);
+		if (arg->node->right && arg->node->right->left)
+			ft_read_stdin(fd, arg->node->right->left->value, data);
+		close(fd);
+		exit(EXIT_SUCCESS);
+	}
+	signal(SIGINT, SIG_IGN);
+	waitpid(pid, NULL, 0);
 	fd = open(".heredoc_temp", O_RDONLY);
 	push_operator(arg->ope_stack, NODE_HEREDOC);
+	signal(SIGINT, sigint_handler);
+	unlink(".heredoc_temp");
 	return (process_node_commands(arg, data, fd, R_INFILE));
 }

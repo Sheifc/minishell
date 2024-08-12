@@ -90,7 +90,7 @@ void	free_commands(t_cmd **head)
 // Función para imprimir un nodo de comando (para debug)
 void	print_command(t_cmd *cmd)
 {
-	int	i;
+	int			i;
 	const char	*symbol[] = {"None", "Infile", "Outfile"};
 
 	printf(" Command: \e[33m%s\e[0m\n", cmd->name);
@@ -101,5 +101,6 @@ void	print_command(t_cmd *cmd)
 		cmd->fdout);
 	printf("  next_operator: %s [%d]\n", node_type_to_symbol(cmd->operator),
 		cmd->operator);
-	printf("  \e[36mredirect: %s [%d]\e[0m\n", symbol[cmd->redirect], cmd->redirect);
+	printf("  \e[36mredirect: %s [%d]\e[0m\n", symbol[cmd->redirect],
+		cmd->redirect);
 }

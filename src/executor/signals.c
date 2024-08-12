@@ -3,6 +3,13 @@
 
 int g_sig = 0;
 
+void	heredoc_handler(int signum)
+{
+	(void)signum;
+	printf("\n");
+	exit(130);
+}
+
 void	sigint_handler(int signum)
 {
 	if (signum == SIGINT)

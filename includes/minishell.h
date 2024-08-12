@@ -32,6 +32,7 @@ void		init_shell(t_shell *data, char **envp);
 //*--------------------SIGNALS---------------------------------------
 extern int	g_sig;
 
+void		heredoc_handler(int signum);
 void		sigint_handler(int signum);
 void		signal_quit(int signal);
 void		sigchld_handler(int signum);
