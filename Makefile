@@ -28,12 +28,13 @@ FILES_PARSER	=	parser_utils.c										\
 					token_handles.c token_handles_utils.c				\
 					token_preprocess.c token_preprocess_utils.c 		\
 					token_env.c											\
-					error.c											\
+					error.c												\
 					wildcard.c wildcard_utils.c
 
 FILES_EXEC      = init.c				\
 				  signals.c				\
 				  exec_builtins.c		\
+				  builtin_utils.c		\
 				  free_env.c			\
 				  free_token.c			\
 				  free_cmd.c			\
@@ -50,13 +51,15 @@ FILES_EXEC      = init.c				\
                   unset.c				\
 				  path.c				\
 				  set_fds.c				\
+				  set_tmp_fds.c			\
                   executor.c			\
 				  exec_utils.c			\
                   exec_one_cmd.c		\
 				  exec_pipeline.c		\
-				  file_redirection.c	\
 				  exec_bonus.c			\
+				  exec_redir.c			\
                   printing.c
+
 
 SRC_MAIN        = $(addprefix $(SRC_DIR),$(FILES_SRC))
 SRC_PARSER      = $(addprefix $(PARSER_DIR),$(FILES_PARSER))

@@ -14,18 +14,17 @@ void	wait_process(t_shell *data)
 	get_status(data);
 }
 
-void	set_up_fds(t_shell *data, t_cmd *cmd)
+void	set_up_fds(t_cmd *cmd)
 {
-	//set_fdin(data, cmd);
-	//set_fdout(data, cmd);
-	(void)data;
-	redir_from_infile_if_needed(cmd);
-	redir_to_outfile_if_needed(cmd);
+	fdin(cmd);
+	fdout(cmd);
 }
 
 void	exec_one_cmd(t_shell *data, t_cmd *cmd)
 {
-	set_up_fds(data, cmd);
+	set_up_fds(cmd);
+	//set_fdin(data, cmd);
+	//set_fdout(data, cmd);
 	if (!execute_builtin(data, cmd, cmd->arg[0]))
 	{
 		data->pid = fork();

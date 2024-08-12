@@ -1,292 +1,107 @@
-
 #include "minishell.h"
 
-static void	close_fd(int fd)
+void	run_single_cmd(t_shell *data, t_cmd *cmd)
 {
-	if (fd > 0)
-		close(fd);
-}
-
-static void	iterate_to_close(t_cmd *current, t_cmd *next, t_cmd *commands)
-{
-	while (commands)
+	if (!execute_builtin(data, cmd, cmd->arg[0]))
 	{
-		if (commands == current)
-			close_fd(commands->fdin);
-		else if (next && commands == next)
-			close_fd(commands->fdout);
-		else
+		get_path(data, cmd);
+		if (!data->path)
 		{
-			close_fd(commands->fdin);
-			close_fd(commands->fdout);
+			perror("Error: command not found");
+			exit(127);
 		}
-		commands = commands->next;
-	}
-}
-
-void	close_pipes(t_shell *data, t_cmd *cmd)
-{
-	t_cmd	*current;
-	t_cmd	*next;
-	t_cmd	*commands;
-
-	commands = data->cmd;
-	next = NULL;
-	current = NULL;
-	if (cmd)
-		current = cmd;
-	if (cmd && cmd->next)
-		next = cmd->next;
-	iterate_to_close(current, next, commands);
-}
-
-int	is_builtin(char *command)
-{
-	return (ft_strncmp(command, "cd", 3) == 0
-		|| ft_strncmp(command, "env", 4) == 0
-		|| ft_strncmp(command, "export", 7) == 0
-		|| ft_strncmp(command, "unset", 6) == 0
-		|| ft_strncmp(command, "exit", 5) == 0
-		|| ft_strncmp(command, "echo", 5) == 0);
-}
-
-int	execute_builtins(t_shell *data, t_cmd *command)
-{
-	if (ft_strncmp(command->arg[0], "cd\0", 3) == 0)
-		ft_cd(data, command);
-	else if (ft_strncmp(command->arg[0], "env\0", 4) == 0)
-		ft_env(data, data->env);
-	else if (ft_strncmp(command->arg[0], "export\0", 7) == 0)
-		ft_export(data, command);
-	else if (ft_strncmp(command->arg[0], "unset\0", 6) == 0)
-		ft_unset(data);
-	else if (ft_strncmp(command->arg[0], "exit\0", 5) == 0)
-		ft_exit(command);
-	else if (ft_strncmp(command->arg[0], "echo\0", 5) == 0)
-		ft_echo(data, command);
-	return (data->status);
-}
-
-int decode_error(int status, t_shell *data)
-{
-    int result = 1;
-
-    if (WIFEXITED(status))  // Verifica si el proceso terminó normalmente
-    {
-        result = WEXITSTATUS(status);  // Obtén el código de salida del proceso
-    }
-    else if (WIFSIGNALED(status))  // Verifica si el proceso fue terminado por una señal
-    {
-        result = 128 + WTERMSIG(status);  // Retorna 128 + número de señal para los procesos terminados por una señal
-    }
-	data->status = result;
-    return result;
-}
-
-void	free_ptr(void *ptr)
-{
-	if (ptr)
-		free(ptr);
-}
-
-char	*join_strs(char *str, char *add)
-{
-	char	*tmp;
-
-	if (!add)
-		return (str);
-	if (!str)
-		return (ft_strdup(add));
-	tmp = str;
-	str = ft_strjoin(tmp, add);
-	free_ptr(tmp);
-	return (str);
-}
-
-static int	add_detail_quotes(char *command)
-{
-	return (ft_strncmp(command, "export", 7) == 0
-		|| ft_strncmp(command, "unset", 6) == 0);
-}
-
-int	print_error(char *command, char *detail, char *error_message, int err)
-{
-	char	*msg;
-	int		detail_quotes;
-
-	detail_quotes = add_detail_quotes(command);
-	msg = ft_strdup("minishell: ");
-	if (command != NULL)
-	{
-		msg = join_strs(msg, command);
-		msg = join_strs(msg, ": ");
-	}
-	if (detail != NULL)
-	{
-		if (detail_quotes)
-			msg = join_strs(msg, "`");
-		msg = join_strs(msg, detail);
-		if (detail_quotes)
-			msg = join_strs(msg, "'");
-		msg = join_strs(msg, ": ");
-	}
-	msg = join_strs(msg, error_message);
-	ft_putendl_fd(msg, STDERR_FILENO);
-	free_ptr(msg);
-	return (err);
-}
-
-int execaux(t_cmd *cmd, t_shell *data)
-{
-	get_path(data, cmd);
-	if (!data->path)
-	{
-		perror("Error: command not found");
-		return 127;  // Comando no encontrado
-	}
-	// Intentar ejecutar el comando
-	if (execve(data->path, cmd->arg, data->envp) < 0)
-	{
-		perror("Error: execve failed");
-		return errno;  // Fallo en execve
-	}
-
-	return 0;  // Éxito (aunque este punto no se alcanzará si execve es exitoso)
-}
-
-int execute_generic(t_cmd *cmd, t_shell *data)
-{
-    int result_code = 0;
-
-    data->pid = fork();  // Crear un proceso hijo y guardar su PID en data->pid
-    if (data->pid < 0)
-    {
-        perror("Error: fork failed");
-        return data->pid;  // Retornar el código de error si fork falla
-    }
-
-    if (data->pid == 0)  // Proceso hijo
-    {
-        result_code = execaux(cmd, data);  // Ejecutar el comando en el proceso hijo
-        exit(result_code);  // Salir con el código de retorno de execaux
-    }
-
-    // Proceso padre espera al proceso hijo
-    waitpid(data->pid, &result_code, 0);  
-    result_code = decode_error(result_code, data);  // Decodificar el estado de salida
-    // Manejo del caso en que el comando no se encuentra
-    if (result_code == 127)
-    {
-        print_error(cmd->arg[0], 0, "command not found", result_code);
-    }
-    return result_code;  // Retornar el código de resultado
-}
-
-
-int execute(t_cmd **cmds, t_shell *data)
-{
-    int status;
-    t_cmd *command;
-
-    command = *cmds;  // Apuntamos al primer comando en la lista
-    if (!command->arg || !command->arg[0])
-        return (0);
-    
-    // Redirigir la entrada y salida si están configurados
-    if (command->fdin > 0)
-        dup2(command->fdin, STDIN_FILENO);
-    if (command->fdout > 0)
-        dup2(command->fdout, STDOUT_FILENO);
-    
-    close_pipes(data, command);  // Cerrar pipes innecesarios
-    
-    // Ejecutar el comando
-    if (is_builtin(command->arg[0]))
-        status = execute_builtins(data, command);
-    else
-        status = execute_generic(command, data);
-    
-    // Cerrar descriptores de archivo después de la ejecución
-	/*if (command->fdin > 0) // este no estaba
-		close(command->fdin);*/
-    if (command->fdout > 0)
-        close(command->fdout);
-    if (command->next)
-        close(command->next->fdin);
-	if (command->fdin > 0)
-        dup2(data->tmpin, STDIN_FILENO);
-    if (command->fdout > 0)
-        dup2(data->tmpout, STDOUT_FILENO);
-    return (status);
-}
-
-void set_pipes(t_shell *data)
-{
-	t_cmd *cmd;
-	t_cmd *next;
-	int pipes[2];
-
-	t_cmd *instr = data->cmd;
-
-	while (instr)
-	{
-		cmd = instr;
-		if (instr->next)
+		if (cmd->fdout != -1 && cmd->fdout != 0)
 		{
-			next = instr->next;
-			if (pipe(pipes) < 0)
-			{
-				perror("Error: pipe failed");
+			if (dup2(cmd->fdout, 1) == -1)
+			{ 
+				perror("dup2 failed for cmd->fdout");
 				exit(EXIT_FAILURE);
 			}
-			if (cmd->fdout == -1)  // Si fdout no está configurado, asignar extremo de escritura del pipe
-				ft_memcpy(&(cmd->fdout), pipes + 1, sizeof(int));
-			else
-				close(pipes[1]);  // Si fdout ya está configurado, cerrar extremo de escritura
-
-			if (next->fdin == -1)  // Si fdin no está configurado, asignar extremo de lectura del pipe
-				ft_memcpy(&(next->fdin), pipes + 0, sizeof(int));
-			else
-				close(pipes[0]);  // Si fdin ya está configurado, cerrar extremo de lectura
+			close(cmd->fdout);
 		}
-		instr = instr->next;
+		if (execve(data->path, cmd->arg, data->envp) < 0)
+		{
+			perror("Error: execve failed");
+			exit(1);
+		}
 	}
 }
 
-int	execute_pipex(t_shell *data)
+void	dup_fdpipe(int *fdpipe)
 {
-	int		status;
-	int		last_pid;
-	int		last_status;
-	t_cmd	*commands;
-
-	set_pipes(data);
-	commands = data->cmd;
-	while (commands)
+	close(fdpipe[0]);
+	if (dup2(fdpipe[1], 1) == -1)
 	{
-		last_pid = fork();
-		if (last_pid < 0)
-			return (last_pid);
-		if (last_pid == 0)
-			exit(execute(&commands, data));
-		commands = commands->next;
+		perror("dup2 failed for fdpipe[1]");
+		exit(EXIT_FAILURE);
 	}
-	commands = data->cmd;
-	close_pipes(data, 0);
-	commands = data->cmd;
-	while (commands)
-	{
-		if (last_pid == waitpid(-1, &status, 0))
-			last_status = decode_error(status, data);
-		commands = commands->next;
-	}
-	return (last_status);
+	close(fdpipe[1]);
 }
 
-void exec_multiple_cmds(t_shell *data, t_cmd *cmd)
+void	exec_fork(t_shell *data, t_cmd *cmd, int *fdpipe)
 {
+	if (cmd->next)
+		dup_fdpipe(fdpipe);
+	else
+	{
+		close(fdpipe[0]);
+		close(fdpipe[1]);
+		if (cmd->fdout != -1)
+		{
+			if (dup2(cmd->fdout, 1) == -1)
+			{
+				perror("dup2 failed for cmd->fdout");
+				exit(EXIT_FAILURE);
+			}
+			close(cmd->fdout);
+		}
+	}
+ 	if (dup2(cmd->fdin, 0) == -1)
+	{
+		perror("dup2 failed for cmd->fdin");
+		exit(EXIT_FAILURE);
+	}
+	close(cmd->fdin);
+	run_single_cmd(data, cmd);
+	exit(EXIT_SUCCESS);
+}
+
+void	exec_pipe(t_shell *data, t_cmd *cmd)
+{
+	pid_t		pid;
+	int		fdpipe[2];
+
+	if (!cmd)
+		return ;
+	dup_fdin_tmp(data, cmd);
+	save_pipe(fdpipe);
+	pid = saved_fork();
+	if (pid == 0)
+		exec_fork(data, cmd, fdpipe);
+	else
+	{
+		close(fdpipe[1]);
+		if (cmd->fdin != -1)
+			close(cmd->fdin);
+		if (cmd->next)
+		{
+			cmd->next->fdin = fdpipe[0];
+			exec_multiple_cmds(data, cmd->next);
+		}
+		else
+			close(fdpipe[0]);
+		wait_pid(pid, data);
+	}
+}
+
+void	exec_multiple_cmds(t_shell *data, t_cmd *cmd)
+{
+	if (!cmd)
+		return ;
 	if (cmd->operator == NODE_OR || cmd->operator == NODE_AND)
 		exec_bonus(data, cmd);
+    else if (cmd->redirect == R_OUTFILE)
+		exec_redir(data, cmd);
 	else if (cmd->operator == NODE_PIPE || cmd->operator == NODE_END)
-		execute_pipex(data);
+		exec_pipe(data, cmd);
 }
