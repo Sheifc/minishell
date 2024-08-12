@@ -111,9 +111,9 @@ clean:
 
 fclean: clean
 	@$(RM) $(NAME)
-	@$(RM) test_token
-	@$(RM) test_ast
-	@$(RM) test_cmd
+	@$(RM) token
+	@$(RM) ast
+	@$(RM) cmd
 	@$(MAKE) -C $(LIBFT_DIR) fclean
 
 re: fclean all
@@ -122,67 +122,47 @@ re: fclean all
 #             Test compilation process             |
 # --------------------------------------------------
 
-TOKEN_FILES		=	test_token.c token.c token_utils.c			\
-					token_handles.c token_handles_utils.c		\
-					token_preprocess.c token_preprocess_utils.c \
-					token_env.c									\
-					error.c										\
-					wildcard.c wildcard_utils.c
-TOKEN_DIR		=	$(SRC_DIR)parser/
-TOKEN_OBJ_DIR	=	$(OBJ_DIR)parser/
-TOKEN_SRC		=	$(addprefix $(TOKEN_DIR),$(TOKEN_FILES))
-TOKEN_OBJ		=	$(TOKEN_SRC:$(TOKEN_DIR)%.c=$(TOKEN_OBJ_DIR)%.o)
+# ***** Test token *****
+FILES_SRC_TOKEN	=	test_token.c
+SRC_MAIN_TOKEN	=	$(addprefix $(PARSER_DIR),$(FILES_SRC_TOKEN))
+SRC_TOKEN		=	$(SRC_MAIN_TOKEN) $(SRC_EXEC) $(SRC_PARSER)
+OBJ_MAIN_TOKEN	=	$(SRC_MAIN_TOKEN:$(PARSER_DIR)%.c=$(OBJ_PARSER_DIR)%.o)
+OBJ_SRC_TOKEN	=	$(OBJ_MAIN_TOKEN) $(OBJ_EXEC) $(OBJ_PARSER)
 
-$(TOKEN_OBJ_DIR)%.o: $(TOKEN_DIR)%.c | directories
+$(OBJ_MAIN_TOKEN)%.o: $(PARSER_DIR)%.c | directories
 	@$(CC) $(CFLAGS) -c $< -o $@
 
-test_token: $(TOKEN_OBJ)
+token: $(OBJ_SRC_TOKEN)
 	@$(MAKE) -s all bonus printf gnl -C $(LIBFT_DIR)
-	$(CC) $(TOKEN_OBJ) -L $(LIBFT_DIR) $(LIBS) $(LDFLAGS) -o $@
+	$(CC) $(OBJ_SRC_TOKEN) -L $(LIBFT_DIR) $(LIBS) $(LDFLAGS) -o $@
 
-AST_FILES	= 	test_ast.c ast.c ast_utils.c ast_handles.c 	\
-				syntax.c syntax_utils.c						\
-				token.c token_utils.c						\
-				token_handles.c token_handles_utils.c		\
-				token_preprocess.c token_preprocess_utils.c \
-				token_env.c									\
-				error.c										\
-				wildcard.c wildcard_utils.c
-AST_DIR		=	$(SRC_DIR)parser/
-AST_OBJ_DIR	=	$(OBJ_DIR)parser/
-AST_SRC		=	$(addprefix $(AST_DIR),$(AST_FILES))
-AST_OBJ		=	$(AST_SRC:$(AST_DIR)%.c=$(AST_OBJ_DIR)%.o)
+# ***** Test ast *****
+FILES_SRC_AST	=	test_ast.c
+SRC_MAIN_AST	=	$(addprefix $(PARSER_DIR),$(FILES_SRC_AST))
+SRC_AST			=	$(SRC_MAIN_AST) $(SRC_EXEC) $(SRC_PARSER)
+OBJ_MAIN_AST	=	$(SRC_MAIN_AST:$(PARSER_DIR)%.c=$(OBJ_PARSER_DIR)%.o)
+OBJ_SRC_AST		=	$(OBJ_MAIN_AST) $(OBJ_EXEC) $(OBJ_PARSER)
 
-$(AST_OBJ_DIR)%.o: $(AST_DIR)%.c | directories
+$(OBJ_MAIN_AST)%.o: $(PARSER_DIR)%.c | directories
 	@$(CC) $(CFLAGS) -c $< -o $@
 
-test_ast: $(AST_OBJ)
+ast: $(OBJ_SRC_AST)
 	@$(MAKE) -s all bonus printf gnl -C $(LIBFT_DIR)
-	$(CC) $(AST_OBJ) -L $(LIBFT_DIR) $(LIBS) $(LDFLAGS) -o $@
+	$(CC) $(OBJ_SRC_AST) -L $(LIBFT_DIR) $(LIBS) $(LDFLAGS) -o $@
 
-CMD_FILES	= 	test_command.c command.c command_utils.c command_handles1.c	\
-				command_handles2.c command_handles_utils.c	\
-				command_exe.c command_extra.c				\
-				stack_operations.c stack_pipes.c			\
-				ast.c ast_utils.c ast_handles.c 			\
-				syntax.c syntax_utils.c						\
-				token.c token_utils.c						\
-				token_handles.c token_handles_utils.c		\
-				token_preprocess.c token_preprocess_utils.c \
-				token_env.c									\
-				error.c										\
-				wildcard.c wildcard_utils.c
-CMD_DIR		=	$(SRC_DIR)parser/
-CMD_OBJ_DIR	=	$(OBJ_DIR)parser/
-CMD_SRC		=	$(addprefix $(CMD_DIR),$(CMD_FILES))
-CMD_OBJ		=	$(CMD_SRC:$(CMD_DIR)%.c=$(CMD_OBJ_DIR)%.o)
+# ***** Test command *****
+FILES_SRC_CMD	=	test_command.c
+SRC_MAIN_CMD	=	$(addprefix $(PARSER_DIR),$(FILES_SRC_CMD))
+SRC_CMD			=	$(SRC_MAIN_CMD) $(SRC_EXEC) $(SRC_PARSER)
+OBJ_MAIN_CMD	=	$(SRC_MAIN_CMD:$(PARSER_DIR)%.c=$(OBJ_PARSER_DIR)%.o)
+OBJ_SRC_CMD		=	$(OBJ_MAIN_CMD) $(OBJ_EXEC) $(OBJ_PARSER)
 
-$(CMD_OBJ_DIR)%.o: $(CMD_DIR)%.c | directories
+$(OBJ_MAIN_CMD)%.o: $(PARSER_DIR)%.c | directories
 	@$(CC) $(CFLAGS) -c $< -o $@
 
-test_cmd: $(CMD_OBJ)
+cmd: $(OBJ_SRC_CMD)
 	@$(MAKE) -s all bonus printf gnl -C $(LIBFT_DIR)
-	$(CC) $(CMD_OBJ) -L $(LIBFT_DIR) $(LIBS) $(LDFLAGS) -o $@
+	$(CC) $(OBJ_SRC_CMD) -L $(LIBFT_DIR) $(LIBS) $(LDFLAGS) -o $@
 
 directories:
 	mkdir -p $(AST_OBJ_DIR) $(TOKEN_OBJ_DIR) $(CMD_OBJ_DIR)
@@ -192,6 +172,8 @@ directories:
 # norminette src/parser/ast*
 # norminette src/parser/syntax*
 # norminette src/parser/command*
+# norminette src/parser/error*
+# norminette src/parser/stack*
 # norminette src/parser/test_*
 # norminette includes/token.h includes/ast.h includes/syntax.h includes/command.h includes/stacks.h
 
