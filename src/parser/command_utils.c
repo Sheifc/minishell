@@ -99,6 +99,7 @@ void	print_command(t_cmd *cmd)
 		printf("    Arg[%d]: %s\n", i, cmd->arg[i]);
 	printf("  \e[34mfd_in: %d\e[0m, \e[35mfd_out: %d\e[0m\n", cmd->fdin,
 		cmd->fdout);
+	printf("  parenthesis: %d\n", cmd->parenthesis);
 	printf("  next_operator: %s [%d]\n", node_type_to_symbol(cmd->operator),
 		cmd->operator);
 	printf("  \e[36mredirect: %s [%d]\e[0m\n", symbol[cmd->redirect],

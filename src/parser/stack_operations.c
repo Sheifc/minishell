@@ -48,3 +48,19 @@ NodeType	peek_operator(OperatorStack *stack)
 		return (NODE_END);
 	return (stack->type);
 }
+
+NodeType	count_operator(OperatorStack *head, NodeType type)
+{
+	int				count;
+	OperatorStack	*current;
+
+	count = 0;
+	current = head;
+	while (current)
+	{
+		if (current->type == type)
+			count++;
+		current = current->next;
+	}
+	return (count);
+}

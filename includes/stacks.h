@@ -21,6 +21,7 @@ void						print_ope_stack(OperatorStack *head);
 void						push_operator(OperatorStack **stack, NodeType type);
 NodeType					pop_operator(OperatorStack **stack);
 NodeType					peek_operator(OperatorStack *stack);
+NodeType					count_operator(OperatorStack *head, NodeType type);
 
 // Stack_pipe
 void						print_pipe_stack(PipeStack *head);

@@ -7,13 +7,14 @@ t_cmd	*handle_node_command(t_cmd_arg *arg, t_shell *data)
 	t_cmd		*cmd;
 
 	cmd = NULL;
+	data->paranthesis = count_operator(*arg->ope_stack, NODE_PARENTHESIS);
 	parent_ope = peek_operator(*arg->ope_stack);
 	if (parent_ope == NODE_PARENTHESIS)
 	{
 		pop_operator(arg->ope_stack);
 		parent_ope = peek_operator(*arg->ope_stack);
 	}
-	cmd = create_command_from_ast(arg, &data->status, parent_ope);
+	cmd = create_command_from_ast(arg, data, parent_ope);
 	pop_operator(arg->ope_stack);
 	return (cmd);
 }

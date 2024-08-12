@@ -51,8 +51,8 @@ t_cmd				*handle_node_heredoc(t_cmd_arg *arg, t_shell *data);
 
 // Command handles2
 t_cmd				*create_command(const char *name, Fds fds, NodeType ope,
-						int *status);
-t_cmd				*create_command_from_ast(t_cmd_arg *arg, int *status,
+						t_shell *data);
+t_cmd				*create_command_from_ast(t_cmd_arg *arg, t_shell *data,
 						NodeType ope);
 void				append_commands(t_cmd **head, t_cmd **tail,
 						t_cmd *new_cmds);

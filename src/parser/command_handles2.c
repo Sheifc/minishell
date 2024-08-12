@@ -1,14 +1,14 @@
 #include "command.h"
 
 // Función para crear un nodo de comando
-t_cmd	*create_command(const char *name, Fds fds, NodeType ope, int *status)
+t_cmd	*create_command(const char *name, Fds fds, NodeType ope, t_shell *data)
 {
 	t_cmd	*cmd;
 
 	cmd = (t_cmd *)malloc(sizeof(t_cmd));
 	if (!cmd)
 	{
-		ft_error(E_MEMORY, NULL, status);
+		ft_error(E_MEMORY, NULL, &data->status);
 		return (NULL);
 	}
 	cmd->name = ft_strdup(name);
@@ -16,6 +16,7 @@ t_cmd	*create_command(const char *name, Fds fds, NodeType ope, int *status)
 	cmd->n_args = 0;
 	cmd->fdin = fds.in;
 	cmd->fdout = fds.out;
+	cmd->parenthesis = data->paranthesis;
 	cmd->operator = ope;
 	cmd->next = NULL;
 	cmd->redirect = R_NONE;
@@ -23,12 +24,12 @@ t_cmd	*create_command(const char *name, Fds fds, NodeType ope, int *status)
 	return (cmd);
 }
 
-t_cmd	*create_command_from_ast(t_cmd_arg *arg, int *status, NodeType ope)
+t_cmd	*create_command_from_ast(t_cmd_arg *arg, t_shell *data, NodeType ope)
 {
 	t_cmd	*cmd;
 	ASTNode	*arg_node;
 
-	cmd = create_command(arg->node->value, arg->fds, ope, status);
+	cmd = create_command(arg->node->value, arg->fds, ope, data);
 	arg_node = arg->node->left;
 	while (arg_node)
 	{

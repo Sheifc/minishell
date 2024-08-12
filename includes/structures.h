@@ -105,6 +105,7 @@ typedef struct s_cmd
 	int				n_args;
 	int				fdin;
 	int				fdout;
+	int				parenthesis;
 	t_redirect		redirect;
 	struct s_cmd	*next;
 	NodeType		operator;
@@ -122,6 +123,7 @@ typedef struct s_shell
 	char			*path;
 	int				status;
 	int				num_tokens;
+	int				paranthesis;
 	int				tmpin;
 	int				tmpout;
 	pid_t			pid;
