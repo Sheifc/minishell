@@ -87,7 +87,7 @@ void	ft_cd(t_shell *data, t_cmd *cmd)
 	pwd = get_pwd(data, cmd, pwd, old_pwd);
 	if (chdir(pwd) < 0)
 	{
-		free(old_pwd);
+		//free(old_pwd);
 		perror("Error: chdir failed");
 	}
 	new_pwd = get_current_directory();

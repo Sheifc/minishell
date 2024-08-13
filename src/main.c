@@ -32,6 +32,7 @@ void load_data(t_shell *data)
 	data->ast = create_ast(data);
 	ast_status = validate_and_free_tokens(data);
 	data->cmd = generate_commands(data, ast_status, (Fds){-1, -1});
+	free(data->tokens);
 }
 
 int	main(int argc, char **argv, char **envp)
