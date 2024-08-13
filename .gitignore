@@ -1,3 +1,12 @@
 .vscode
 .DS_Store
 *.o
+
+# libraries
+libft/libft.a
+
+# executables
+minishell
+cmd
+ast
+token

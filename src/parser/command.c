@@ -10,7 +10,7 @@ void	clean_commands(t_cmd *cmd)
 			&& ft_strcmp(cmd->next->name, "heredoc") != 0)
 			break ;
 		cmd->operator = cmd->next->operator;
-		if (cmd->fdout == -1)
+		if (cmd->next->fdout != -1)
 			cmd->fdout = cmd->next->fdout;
 		delete_command(&cmd->next);
 	}
@@ -45,6 +45,7 @@ void	postprocess_cmds(t_cmd *cmd)
 t_cmd	*traverse_ast(t_cmd_arg *arg, t_shell *data)
 {
 	ASTNode	*node;
+
 	node = arg->node;
 	if (arg == NULL || arg->node == NULL)
 		return (NULL);
