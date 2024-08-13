@@ -62,7 +62,7 @@ t_cmd				*handle_node_parenthesis(t_cmd_arg *arg, t_shell *data);
 // Command handles utils
 void				delete_command(t_cmd **node);
 void				ft_free_str(char *str);
-char				*read_until_eof(char *eof);
+char				*read_until_eof(char *line, char *eof);
 void				ft_read_stdin(int fd, char *eof, t_shell *data);
 t_cmd				*process_node_commands(t_cmd_arg *arg, t_shell *data, int fd,
 						t_redirect dir);

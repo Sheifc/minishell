@@ -28,30 +28,33 @@ void	ft_free_str(char *str)
 {
 	if (!str)
 		free(str);
+	str = NULL;
 }
 
-char	*read_until_eof(char *eof)
+char	*read_until_eof(char *line, char *eof)
 {
-	char	*line;
-	char	*input;
-	char	*temp_input;
+	char			*input;
+	char			*temp_input;
+	unsigned long	i;
 
+	i = 0;
 	input = ft_strdup("");
-	while (1)
+	while (++i)
 	{
 		write(1, "> ", 2);
 		line = get_next_line(STDIN_FILENO);
 		if (line && ft_strcmp(line, eof) == OK)
 			break ;
-		if (line)
+		if (line == NULL)
 		{
-			temp_input = ft_strdup(input);
-			ft_free_str(input);
-			input = ft_strjoin(temp_input, line);
-			ft_free_str(temp_input);
+			printf("bash: warning: here-document at line %ld delimited by "
+				"(wanted «%s»)\n", i, eof);
+			break;
 		}
-		else if (!line)
-			input = ft_strdup(line);
+		temp_input = ft_strdup(input);
+		ft_free_str(input);
+		input = ft_strjoin(temp_input, line);
+		ft_free_str(temp_input);
 		ft_free_str(line);
 	}
 	return (input);
@@ -60,9 +63,12 @@ char	*read_until_eof(char *eof)
 void	ft_read_stdin(int fd, char *eof, t_shell *data)
 {
 	char	*replace_input;
+	char	*line;
 	char	*input;
 
-	input = read_until_eof(eof);
+	line = NULL;
+	input = read_until_eof(line, eof);
+	ft_free_str(line);
 	replace_input = replace_env_variables(input, data);
 	ft_free_str(input);
 	write(fd, replace_input, ft_strlen(replace_input));

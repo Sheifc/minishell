@@ -66,6 +66,6 @@ void	print_tokens(Token **tokens, int n_tokens)
 
 	i = -1;
 	while (tokens && ++i < n_tokens)
-		printf("Token %d: Type = %d, Value = %s\n", i, tokens[i]->type,
-			tokens[i]->value);
+		printf("Token %d: Type = %d, Value = %s (%lu)\n", i, tokens[i]->type,
+			tokens[i]->value, ft_strlen(tokens[i]->value));
 }
