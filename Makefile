@@ -34,9 +34,7 @@ FILES_PARSER	=	parser_utils.c										\
 FILES_EXEC      = init.c				\
 				  signals.c				\
 				  exec_builtins.c		\
-				  builtin_utils.c		\
 				  free_env.c			\
-				  free_token.c			\
 				  free_cmd.c			\
                   free.c				\
                   list_utils.c			\

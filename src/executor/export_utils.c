@@ -68,3 +68,12 @@ void	addback_node(t_env **export, t_env *aux)
 		actual->next = aux;
 	}
 }
+
+void	ft_swap(char **a, char **b)
+{
+	char	*aux;
+
+	aux = *a;
+	*a = *b;
+	*b = aux;
+}

@@ -59,7 +59,7 @@ void		print_export(t_shell *data);
 t_env		*new_node(int i);
 void		ft_export(t_shell *data, t_cmd *cmd);
 // exit.c
-void		ft_exit(t_cmd *cmd);
+void		ft_exit(t_shell *data, t_cmd *cmd);
 // pwd.c
 char		*get_current_directory(void);
 void		ft_pwd(t_shell *data);

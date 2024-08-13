@@ -32,7 +32,17 @@ static int	check_too_many_arguments(t_cmd *cmd)
 	return (0);
 }
 
-void	ft_exit(t_cmd *cmd)
+void	check_nums(t_shell *data, t_cmd *cmd)
+{
+	if (isnum(cmd->arg[1]) == 0)
+	{
+		print_numeric_error(cmd->arg[1]);
+		free_all(data);
+		exit(255);
+	}
+}
+
+void	ft_exit(t_shell *data, t_cmd *cmd)
 {
 	int		exit_code;
 	long	num;
@@ -43,19 +53,17 @@ void	ft_exit(t_cmd *cmd)
 		return ;
 	else if (cmd->n_args == 2)
 	{
-		if (isnum(cmd->arg[1]) == 0)
-		{
-			print_numeric_error(cmd->arg[1]);
-			exit(255);
-		}
+		check_nums(data, cmd);
 		errno = 0;
 		num = ft_atol(cmd->arg[1]);
 		if (errno == ERANGE || num > LONG_MAX || num < LONG_MIN)
 		{
 			print_numeric_error(cmd->arg[1]);
+			free_all(data);
 			exit(255);
 		}
 		exit_code = (int)(num % 256);
 	}
+	free_all(data);
 	exit(exit_code);
 }
