@@ -17,7 +17,7 @@ int	execute_builtin(t_shell *data, t_cmd *cmd, char *arg)
 	else if (!ft_strncmp(arg, "env\0", 4))
 		return (ft_env(data, data->env), 1);
 	else if (!ft_strncmp(arg, "exit\0", 5))
-		return (ft_exit(cmd), 1);
+		return (ft_exit(data, cmd), 1);
 	else
 		return (0);
 }

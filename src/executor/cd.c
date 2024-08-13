@@ -32,10 +32,7 @@ static char	*get_pwd(t_shell *data, t_cmd *cmd, char *path, char *old_pwd)
 	{
 		path = get_cd_value(data->env, "HOME");
 		if (!path)
-		{
-			free(old_pwd);
 			perror("Error: HOME not found");
-		}
 	}
 	else if (!ft_strncmp(cmd->arg[1], "-", 1))
 	{
@@ -85,11 +82,14 @@ void	ft_cd(t_shell *data, t_cmd *cmd)
 	if (!old_pwd)
 		perror("Error: getting pwd");
 	pwd = get_pwd(data, cmd, pwd, old_pwd);
-	if (chdir(pwd) < 0)
+	if (!pwd)
 	{
-		//free(old_pwd);
-		perror("Error: chdir failed");
+		free(old_pwd);
+		data->status = 1;
+		return ;
 	}
+	if (chdir(pwd) < 0)
+		perror("Error: chdir failed");
 	new_pwd = get_current_directory();
 	update_variables(new_pwd, old_pwd, data);
 	free(old_pwd);
