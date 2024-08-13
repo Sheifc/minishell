@@ -1,5 +1,7 @@
 #include "minishell.h"
 
+extern int g_sig;
+
 int	handle_empty_or_whitespace_commands(char **prompt)
 {
 	if (!ft_strlen(*prompt) || only_spaces(*prompt) == 1)
@@ -14,6 +16,8 @@ static void	minishell(t_shell *data)
 {
 	if (data->cmd != NULL)
 	{
+		g_sig = 1;
+		init_signals();
 		executor(data);
 		free_commands(&data->cmd);
 	}
@@ -39,7 +43,7 @@ int	main(int argc, char **argv, char **envp)
 	{
 		data.prompt = readline("minishell$ ");
 		if (!data.prompt)
-			break ;
+			signal_d(&data);
 		add_history(data.prompt);
 		if (handle_empty_or_whitespace_commands(&data.prompt))
 		{
@@ -48,6 +52,8 @@ int	main(int argc, char **argv, char **envp)
 			free(data.prompt);
 			data.cmd_count = 0;
 			data.prompt = NULL;
+			g_sig = 0;
+			init_signals();
 			// printf("[status: %d]\n", data.status);
 		}
 	}

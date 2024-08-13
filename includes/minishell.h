@@ -34,6 +34,7 @@ extern int	g_sig;
 
 void		heredoc_handler(int signum);
 void		sigint_handler(int signum);
+void		signal_d(t_shell *data);
 void		signal_quit(int signal);
 void		sigchld_handler(int signum);
 void		init_signals(void);

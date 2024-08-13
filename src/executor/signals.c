@@ -10,15 +10,32 @@ void	heredoc_handler(int signum)
 	exit(130);
 }
 
-void	sigint_handler(int signum)
+void	sigint_handler(int signal)
 {
-	if (signum == SIGINT)
+	(void)signal;
+	if (g_sig == 1)
 	{
-		write(1, "\033[K\n", 5); // Limpia la línea y mueve el cursor
+		write(1, "\033[K\n", 5);
+		rl_replace_line("", 0);
+		rl_redisplay();
+	}
+	else if (g_sig == 0)
+	{
+		rl_on_new_line();
+		rl_replace_line("", 0);
+		rl_redisplay();
+		write(1, "\033[K\n", 5);
 		rl_on_new_line();
 		rl_replace_line("", 0);
 		rl_redisplay();
 	}
+}
+
+void	signal_d(t_shell *data)
+{
+	free_all(data);
+	printf("exit\n");
+	exit(data->status);
 }
 
 void	signal_quit(int signal)
