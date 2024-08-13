@@ -1,7 +1,8 @@
 #include "command.h"
 
 // Función para crear un nodo de comando
-t_cmd	*create_command(const char *name, Fds fds, NodeType ope, t_shell *data)
+t_cmd	*create_command(const char *name, t_fds fds, t_node_type ope,
+		t_shell *data)
 {
 	t_cmd	*cmd;
 
@@ -24,10 +25,10 @@ t_cmd	*create_command(const char *name, Fds fds, NodeType ope, t_shell *data)
 	return (cmd);
 }
 
-t_cmd	*create_command_from_ast(t_cmd_arg *arg, t_shell *data, NodeType ope)
+t_cmd	*create_command_from_ast(t_cmd_arg *arg, t_shell *data, t_node_type ope)
 {
-	t_cmd	*cmd;
-	ASTNode	*arg_node;
+	t_cmd		*cmd;
+	t_ast_node	*arg_node;
 
 	cmd = create_command(arg->node->value, arg->fds, ope, data);
 	arg_node = arg->node->left;
@@ -52,7 +53,7 @@ void	append_commands(t_cmd **head, t_cmd **tail, t_cmd *new_cmds)
 		else
 		{
 			(*tail)->next = new_cmds;
-			//new_cmds->prev = *tail;
+			// new_cmds->prev = *tail;
 		}
 		while ((*tail)->next)
 		{
@@ -63,11 +64,11 @@ void	append_commands(t_cmd **head, t_cmd **tail, t_cmd *new_cmds)
 
 t_cmd	*handle_node_and_or_semicolon(t_cmd_arg *arg, t_shell *data)
 {
-	t_cmd	*head;
-	t_cmd	*tail;
-	t_cmd	*left_cmds;
-	t_cmd	*right_cmds;
-	ASTNode	*node;
+	t_cmd		*head;
+	t_cmd		*tail;
+	t_cmd		*left_cmds;
+	t_cmd		*right_cmds;
+	t_ast_node	*node;
 
 	node = arg->node;
 	push_operator(arg->ope_stack, arg->node->type);
@@ -85,11 +86,11 @@ t_cmd	*handle_node_and_or_semicolon(t_cmd_arg *arg, t_shell *data)
 
 t_cmd	*handle_node_parenthesis(t_cmd_arg *arg, t_shell *data)
 {
-	NodeType	parent_ope;
+	t_node_type	parent_ope;
 	t_cmd		*head;
 	t_cmd		*tail;
 	t_cmd		*left_cmds;
-	ASTNode		*node;
+	t_ast_node	*node;
 
 	parent_ope = peek_operator(*arg->ope_stack);
 	if (parent_ope == NODE_OUTPUT || parent_ope == NODE_OUTPUT_APPEND)

@@ -49,7 +49,7 @@ char	*read_until_eof(char *line, char *eof)
 		{
 			printf("bash: warning: here-document at line %ld delimited by "
 				"(wanted «%s»)\n", i, eof);
-			break;
+			break ;
 		}
 		temp_input = ft_strdup(input);
 		ft_free_str(input);
@@ -78,11 +78,11 @@ void	ft_read_stdin(int fd, char *eof, t_shell *data)
 t_cmd	*process_node_commands(t_cmd_arg *arg, t_shell *data, int fd,
 		t_redirect dir)
 {
-	t_cmd	*head;
-	t_cmd	*tail;
-	t_cmd	*left_cmds;
-	t_cmd	*right_cmds;
-	ASTNode	*node;
+	t_cmd		*head;
+	t_cmd		*tail;
+	t_cmd		*left_cmds;
+	t_cmd		*right_cmds;
+	t_ast_node	*node;
 
 	head = NULL;
 	tail = NULL;

@@ -3,7 +3,7 @@
 
 t_cmd	*handle_node_command(t_cmd_arg *arg, t_shell *data)
 {
-	NodeType	parent_ope;
+	t_node_type	parent_ope;
 	t_cmd		*cmd;
 
 	cmd = NULL;
@@ -21,10 +21,6 @@ t_cmd	*handle_node_command(t_cmd_arg *arg, t_shell *data)
 
 t_cmd	*handle_node_pipe(t_cmd_arg *arg, t_shell *data)
 {
-	// int		pipe_fds[2];
-	// pipe(pipe_fds);
-	// printf(" \e[1;36mpipes: (W)%d => (R)%d\e[0m\n", pipe_fds[WRITE],
-	// 	pipe_fds[READ]);
 	push_operator(arg->ope_stack, arg->node->type);
 	return (process_node_commands(arg, data, 0, R_NONE));
 }

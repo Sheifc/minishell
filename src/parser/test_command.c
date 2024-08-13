@@ -170,7 +170,7 @@ int	main(void)
 {
 	t_shell		data;
 	bool		is_valid;
-	const char	*input = "echo hi > out1 | pwd > out2 | cat < infile | echo hola";
+	const char	*input = "echo hi > out1 | pwd > out2 | cat < infile";
 
 	printf("\e[35m\n------------------- * -------------------\n\e[0m");
 	printf("input:\n%s\n", input);
@@ -179,7 +179,7 @@ int	main(void)
 	data.tokens = tokenize_input(&data);
 	data.ast = create_ast(&data);
 	is_valid = validate_and_free_tokens(&data);
-	data.cmd = generate_commands(&data, is_valid, (Fds){-1, -1});
+	data.cmd = generate_commands(&data, is_valid, (t_fds){-1, -1});
 	print_commands(data.cmd);
 	// printf("\n**** Ejecutando: ****\n");
 	// execute_commands(data.cmd);

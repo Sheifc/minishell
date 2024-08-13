@@ -35,11 +35,10 @@ static void	print_result(bool expected, bool result)
 
 void	process_test_case(const t_test_ast *test_value, int index)
 {
-	ASTNode	*ast;
-	t_shell data;
-	
-	bool	is_valid;
-	int		balance;
+	t_ast_node	*ast;
+	t_shell		data;
+	bool		is_valid;
+	int			balance;
 
 	printf("\e[35m\n------------------- %d -------------------\n\e[0m", index);
 	data.prompt = ft_strdup(test_value->inputs);

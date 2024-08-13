@@ -1,8 +1,8 @@
 #include "stacks.h"
 
-void	print_ope_stack(OperatorStack *head)
+void	print_ope_stack(t_operator_stack *head)
 {
-	OperatorStack	*current;
+	t_operator_stack	*current;
 
 	current = head;
 	printf("Operation stack:\n");
@@ -13,11 +13,11 @@ void	print_ope_stack(OperatorStack *head)
 	}
 }
 
-void	push_operator(OperatorStack **stack, NodeType type)
+void	push_operator(t_operator_stack **stack, t_node_type type)
 {
-	OperatorStack	*new_node;
+	t_operator_stack	*new_node;
 
-	new_node = (OperatorStack *)malloc(sizeof(OperatorStack));
+	new_node = (t_operator_stack *)malloc(sizeof(t_operator_stack));
 	if (!new_node)
 	{
 		ft_error(E_MEMORY, NULL, NULL);
@@ -28,10 +28,10 @@ void	push_operator(OperatorStack **stack, NodeType type)
 	*stack = new_node;
 }
 
-NodeType	pop_operator(OperatorStack **stack)
+t_node_type	pop_operator(t_operator_stack **stack)
 {
-	OperatorStack	*top;
-	NodeType		type;
+	t_operator_stack	*top;
+	t_node_type			type;
 
 	if (*stack == NULL)
 		return (NODE_END);
@@ -42,17 +42,17 @@ NodeType	pop_operator(OperatorStack **stack)
 	return (type);
 }
 
-NodeType	peek_operator(OperatorStack *stack)
+t_node_type	peek_operator(t_operator_stack *stack)
 {
 	if (stack == NULL)
 		return (NODE_END);
 	return (stack->type);
 }
 
-NodeType	count_operator(OperatorStack *head, NodeType type)
+t_node_type	count_operator(t_operator_stack *head, t_node_type type)
 {
-	int				count;
-	OperatorStack	*current;
+	int					count;
+	t_operator_stack	*current;
 
 	count = 0;
 	current = head;

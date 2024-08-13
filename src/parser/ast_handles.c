@@ -1,25 +1,11 @@
 #include "ast.h"
 
-// // Function to create the corresponding redirect operator node
-// ASTNode	*build_redirect_node(Token *token, int level)
-// {
-// 	if (token->type == T_OUTPUT)
-// 		return (create_node(NODE_OUTPUT, ">", level));
-// 	if (token->type == T_OUTPUT_APPEND)
-// 		return (create_node(NODE_OUTPUT_APPEND, ">>", level));
-// 	if (token->type == T_INPUT)
-// 		return (create_node(NODE_INPUT, "<", level));
-// 	if (token->type == T_HEREDOC)
-// 		return (create_node(NODE_HEREDOC, "<<", level));
-// 	return (create_node(NODE_UNKNOWN, "-", level));
-// }
-
 // Function to build the command node and its arguments
-ASTNode	*build_command_node(Token **tokens, int num_tokens, int level)
+t_ast_node	*build_command_node(t_token **tokens, int num_tokens, int level)
 {
-	int		i;
-	ASTNode	*root;
-	ASTNode	*current;
+	int			i;
+	t_ast_node	*root;
+	t_ast_node	*current;
 
 	root = NULL;
 	if (num_tokens > 0)
@@ -43,10 +29,10 @@ ASTNode	*build_command_node(Token **tokens, int num_tokens, int level)
 	return (root);
 }
 
-ASTNode	*build_redirect_node(Token **tokens, char *name, int num_tokens,
+t_ast_node	*build_redirect_node(t_token **tokens, char *name, int num_tokens,
 		int level)
 {
-	ASTNode	*root;
+	t_ast_node	*root;
 
 	root = NULL;
 	if (num_tokens > 0)
@@ -58,10 +44,11 @@ ASTNode	*build_redirect_node(Token **tokens, char *name, int num_tokens,
 }
 
 // Function to handle redirects
-ASTNode	*handle_operators(Token **tokens, int num_tokens, int level, int *pos)
+t_ast_node	*handle_operators(t_token **tokens, int num_tokens, int level,
+		int *pos)
 {
-	TokenType	op_type;
-	ASTNode		*root;
+	t_token_type	op_type;
+	t_ast_node		*root;
 
 	*pos = find_operator(tokens, num_tokens);
 	if (*pos == ERROR)
@@ -83,10 +70,10 @@ ASTNode	*handle_operators(Token **tokens, int num_tokens, int level, int *pos)
 }
 
 // Function to handle parentheses
-ASTNode	*handle_parentheses(Token **tokens, int num_tokens, int level)
+t_ast_node	*handle_parentheses(t_token **tokens, int num_tokens, int level)
 {
-	ASTNode	*root;
-	int		close_pos;
+	t_ast_node	*root;
+	int			close_pos;
 
 	close_pos = find_matching_paren(tokens, 0, num_tokens);
 	if (close_pos == NOT_FOUND)
@@ -101,9 +88,11 @@ ASTNode	*handle_parentheses(Token **tokens, int num_tokens, int level)
 }
 
 // Function to handle redirects
-ASTNode	*handle_redirection(Token **tokens, int num_tokens, int level)
+t_ast_node	*handle_redirection(t_token **tokens, int num_tokens, int level)
 {
-	int i = -1;
+	int	i;
+
+	i = -1;
 	if (num_tokens > 0)
 	{
 		while (++i < num_tokens && tokens[i]->type == T_QUOTE)
@@ -111,14 +100,14 @@ ASTNode	*handle_redirection(Token **tokens, int num_tokens, int level)
 		if (tokens[i]->type == T_REDIRECT_ARG)
 		{
 			if ((tokens - 1)[0]->type == T_OUTPUT)
-				return (build_redirect_node(&tokens[i], "save_outfile", num_tokens,
-						level));
+				return (build_redirect_node(&tokens[i], "save_outfile",
+						num_tokens, level));
 			if ((tokens - 1)[0]->type == T_OUTPUT_APPEND)
-				return (build_redirect_node(&tokens[i], "save_append", num_tokens,
-						level));
+				return (build_redirect_node(&tokens[i], "save_append",
+						num_tokens, level));
 			if ((tokens - 1)[0]->type == T_INPUT)
-				return (build_redirect_node(&tokens[i], "read_infile", num_tokens,
-						level));
+				return (build_redirect_node(&tokens[i], "read_infile",
+						num_tokens, level));
 			if ((tokens - 1)[0]->type == T_HEREDOC)
 				return (build_redirect_node(&tokens[i], "heredoc", num_tokens,
 						level));

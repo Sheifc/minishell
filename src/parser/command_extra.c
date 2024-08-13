@@ -1,6 +1,6 @@
 #include "command.h"
 
-Token	**tokenize_input(t_shell *data)
+t_token	**tokenize_input(t_shell *data)
 {
 	data->tokens = NULL;
 	if (data->prompt && ft_strlen(data->prompt) > 0)
@@ -14,9 +14,9 @@ Token	**tokenize_input(t_shell *data)
 	return (data->tokens);
 }
 
-ASTNode	*create_ast(t_shell *data)
+t_ast_node	*create_ast(t_shell *data)
 {
-	ASTNode	*ast;
+	t_ast_node	*ast;
 
 	ast = NULL;
 	if (data->tokens)
@@ -43,11 +43,11 @@ bool	validate_and_free_tokens(t_shell *data)
 	return (is_valid);
 }
 
-t_cmd	*generate_commands(t_shell *data, bool is_valid, Fds fds)
+t_cmd	*generate_commands(t_shell *data, bool is_valid, t_fds fds)
 {
-	OperatorStack	*ope_stack;
-	PipeStack		*pipe_stack;
-	t_cmd_arg		arg;
+	t_operator_stack	*ope_stack;
+	t_pipe_stack		*pipe_stack;
+	t_cmd_arg			arg;
 
 	data->cmd = NULL;
 	if (data->ast && is_valid)
@@ -61,7 +61,7 @@ t_cmd	*generate_commands(t_shell *data, bool is_valid, Fds fds)
 		// printf("\n**** Generating Commands: ****\n");
 		data->cmd = traverse_ast(&arg, data);
 		postprocess_cmds(data->cmd);
-		//print_commands(data->cmd);
+		// print_commands(data->cmd);
 		free_ast(&data->ast);
 		if (pipe_stack != NULL)
 			free(pipe_stack);

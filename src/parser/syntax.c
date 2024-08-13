@@ -1,19 +1,19 @@
 #include "syntax.h"
 
-bool	is_parenthesis_valid(ASTNode *node, int *status)
+bool	is_parenthesis_valid(t_ast_node *node, int *status)
 {
 	if (node == NULL)
 		return (false);
 	if (node->left == NULL)
 	{
-		ft_error_ope(E_SYNTAX, node->value, "requiere agrupar algún elemento",
+		ft_error_ope(E_SYNTAX, node->value, "requires grouping some element",
 			status);
 		return (false);
 	}
 	return (is_ast_valid(node->left, status));
 }
 
-bool	is_ast_valid(ASTNode *root, int *status)
+bool	is_ast_valid(t_ast_node *root, int *status)
 {
 	if (root == NULL)
 		return (true);
@@ -32,12 +32,12 @@ bool	is_ast_valid(ASTNode *root, int *status)
 		return (is_redirection_valid(root, status));
 	else
 	{
-		ft_error_ope(E_SYNTAX, root->value, "tipo no soportado", status);
+		ft_error_ope(E_SYNTAX, root->value, "unsupported type", status);
 		return (false);
 	}
 }
 
-bool	validate_ast(Token **tokens, ASTNode *root, int *status)
+bool	validate_ast(t_token **tokens, t_ast_node *root, int *status)
 {
 	if (tokens != NULL && root == NULL)
 		return (false);

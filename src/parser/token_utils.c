@@ -1,6 +1,6 @@
 #include "token.h"
 
-void	free_tokens(Token **tokens, int *num_tokens)
+void	free_tokens(t_token **tokens, int *num_tokens)
 {
 	int	i;
 
@@ -22,9 +22,10 @@ void	skip_delimiters(char **start)
 		(*start)++;
 }
 
-int	add_token(char **start, t_shell *data, Token t)
+int	add_token(char **start, t_shell *data, t_token t)
 {
-	data->tokens[data->num_tokens] = create_token(t.type, t.value, t.expect_arg);
+	data->tokens[data->num_tokens] = create_token(t.type, t.value,
+			t.expect_arg);
 	if (!data->tokens[data->num_tokens])
 		return (1);
 	data->num_tokens++;
@@ -34,9 +35,9 @@ int	add_token(char **start, t_shell *data, Token t)
 
 int	add_cmd_arg_token(char **start, t_shell *data)
 {
-	char		*end;
-	char		temp;
-	TokenType	type;
+	char			*end;
+	char			temp;
+	t_token_type	type;
 
 	end = *start;
 	while (*end && !strchr(DELIMITERS, *end) && *end != '"' && *end != '\''
@@ -60,7 +61,7 @@ int	add_cmd_arg_token(char **start, t_shell *data)
 	return (0);
 }
 
-void	print_tokens(Token **tokens, int n_tokens)
+void	print_tokens(t_token **tokens, int n_tokens)
 {
 	int	i;
 

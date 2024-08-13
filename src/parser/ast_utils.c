@@ -1,7 +1,7 @@
 #include "ast.h"
 
 // Function to find the corresponding closing parenthesis
-int	find_matching_paren(Token **tokens, int start, int num_tokens)
+int	find_matching_paren(t_token **tokens, int start, int num_tokens)
 {
 	int	depth;
 	int	i;
@@ -24,7 +24,7 @@ int	find_matching_paren(Token **tokens, int start, int num_tokens)
 }
 
 // Function to select the type of redirection
-const char	*node_type_to_symbol(NodeType type)
+const char	*node_type_to_symbol(t_node_type type)
 {
 	const char	*symbol[] = {OPE_COMMAND, OPE_ARGUMENT, OPE_PIPE, OPE_AND,
 		OPE_OR, OPE_PAREN, OPE_INPUT, OPE_HEREDOC, OPE_OUTPUT,
@@ -34,7 +34,7 @@ const char	*node_type_to_symbol(NodeType type)
 }
 
 // Function to select the type of operator
-NodeType	select_operator(TokenType type)
+t_node_type	select_operator(t_token_type type)
 {
 	if (type == T_PIPE)
 		return (NODE_PIPE);
@@ -57,7 +57,7 @@ NodeType	select_operator(TokenType type)
 }
 
 // Function to find the main operator considering precedence and parentheses
-int	find_operator(Token **tokens, int num_tokens)
+int	find_operator(t_token **tokens, int num_tokens)
 {
 	int	depth;
 	int	last_operator_index;
@@ -86,7 +86,7 @@ int	find_operator(Token **tokens, int num_tokens)
 }
 
 // AST Print function
-void	print_ast(ASTNode *root)
+void	print_ast(t_ast_node *root)
 {
 	int			i;
 	const char	*messages[] = {M_COMMAND, M_ARGUMENT, M_PIPE, M_AND, M_OR,

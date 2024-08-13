@@ -2,17 +2,17 @@
 
 typedef struct _test_token
 {
-	TokenType	type;
-	char		value[100];
-}				t_test_token;
+	t_token_type	type;
+	char			value[100];
+}					t_test_token;
 
 typedef struct _test_case {
-	const char	*input;
-	const Token	tokens[100];
-	int			num_tokens;
-}				t_test_case;
+	const char		*input;
+	const t_token	tokens[100];
+	int				num_tokens;
+}					t_test_case;
 
-Token	**tokenize_and_count(t_shell *data)
+t_token	**tokenize_and_count(t_shell *data)
 {
 	data->tokens = tokenize(data);
 	printf("Input: %s\n", data->prompt);
@@ -28,17 +28,19 @@ bool	compare_tokens(t_shell *data, const t_test_case *c)
 	if (data->num_tokens != c->num_tokens)
 	{
 		error = true;
-		printf("\e[31m -> Num tokens %d!=%d\n\e[0m", data->num_tokens, c->num_tokens);
+		printf("\e[31m -> Num tokens %d!=%d\n\e[0m", data->num_tokens,
+			c->num_tokens);
 	}
 	printf("#\tResult\t\t\tExpected\n");
 	i = -1;
 	while (++i < data->num_tokens)
 	{
-		printf("%d\t[%d] %10s\t", i, data->tokens[i]->type, data->tokens[i]->value);
+		printf("%d\t[%d] %10s\t", i, data->tokens[i]->type,
+			data->tokens[i]->value);
 		if (i < c->num_tokens)
 			printf("\t[%d] %10s", c->tokens[i].type, c->tokens[i].value);
-		if (data->tokens[i]->type != c->tokens[i].type || strcmp(data->tokens[i]->value,
-				c->tokens[i].value) != 0)
+		if (data->tokens[i]->type != c->tokens[i].type
+			|| strcmp(data->tokens[i]->value, c->tokens[i].value) != 0)
 		{
 			error = true;
 			printf("\e[31m -> failed\e[0m");

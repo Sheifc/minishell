@@ -1,8 +1,8 @@
 #ifndef AST_H
 # define AST_H
 
-# include "token.h"
 # include "structures.h"
+# include "token.h"
 # include <stdbool.h>
 # include <stdio.h>
 # include <stdlib.h>
@@ -41,24 +41,24 @@
 # define ERROR -2
 
 // AST
-ASTNode				*create_node(NodeType type, char *value, int level);
-void				free_ast(ASTNode **root);
-ASTNode				*build_ast(Token **tokens, int num_tokens, int level);
+t_ast_node	*create_node(t_node_type type, char *value, int level);
+void		free_ast(t_ast_node **root);
+t_ast_node	*build_ast(t_token **tokens, int num_tokens, int level);
 
 // AST handles
-ASTNode				*build_redirect_node(Token **tokens, char *name,
-						int num_tokens, int level);
-ASTNode				*build_command_node(Token **tokens, int n_token, int level);
-ASTNode				*handle_operators(Token **tokens, int n_token, int level,
-						int *pos);
-ASTNode				*handle_parentheses(Token **tokens, int n_token, int level);
-ASTNode				*handle_redirection(Token **tokens, int n_token, int level);
+t_ast_node	*build_redirect_node(t_token **tokens, char *name, int num_tokens,
+				int level);
+t_ast_node	*build_command_node(t_token **tokens, int n_token, int level);
+t_ast_node	*handle_operators(t_token **tokens, int n_token, int level,
+				int *pos);
+t_ast_node	*handle_parentheses(t_token **tokens, int n_token, int level);
+t_ast_node	*handle_redirection(t_token **tokens, int n_token, int level);
 
 // AST utils
-int					find_matching_paren(Token **tokens, int start, int n_token);
-const char			*node_type_to_symbol(NodeType type);
-NodeType			select_operator(TokenType type);
-int					find_operator(Token **tokens, int num_tokens);
-void				print_ast(ASTNode *root);
+int			find_matching_paren(t_token **tokens, int start, int n_token);
+const char	*node_type_to_symbol(t_node_type type);
+t_node_type	select_operator(t_token_type type);
+int			find_operator(t_token **tokens, int num_tokens);
+void		print_ast(t_ast_node *root);
 
 #endif

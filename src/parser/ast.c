@@ -1,11 +1,11 @@
 #include "ast.h"
 
 // Function to create an AST node
-ASTNode	*create_node(NodeType type, char *value, int level)
+t_ast_node	*create_node(t_node_type type, char *value, int level)
 {
-	ASTNode	*node;
+	t_ast_node	*node;
 
-	node = (ASTNode *)malloc(sizeof(ASTNode));
+	node = (t_ast_node *)malloc(sizeof(t_ast_node));
 	if (!node)
 	{
 		ft_error(E_MEMORY, NULL, NULL);
@@ -20,7 +20,7 @@ ASTNode	*create_node(NodeType type, char *value, int level)
 }
 
 // Function to free the AST memory
-void	free_ast(ASTNode **root)
+void	free_ast(t_ast_node **root)
 {
 	if ((*root) == NULL)
 		return ;
@@ -33,10 +33,10 @@ void	free_ast(ASTNode **root)
 }
 
 // Main function to build the AST
-ASTNode	*build_ast(Token **tokens, int num_tokens, int level)
+t_ast_node	*build_ast(t_token **tokens, int num_tokens, int level)
 {
-	int		result;
-	ASTNode	*root;
+	int			result;
+	t_ast_node	*root;
 
 	result = NOT_FOUND;
 	if (num_tokens <= 0 || tokens == NULL)

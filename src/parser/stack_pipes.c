@@ -1,8 +1,8 @@
 #include "stacks.h"
 
-void	print_pipe_stack(PipeStack *head)
+void	print_pipe_stack(t_pipe_stack *head)
 {
-	PipeStack	*current;
+	t_pipe_stack	*current;
 
 	current = head;
 	printf("Pipe stack:\n");
@@ -13,11 +13,11 @@ void	print_pipe_stack(PipeStack *head)
 	}
 }
 
-void	push_pipe(PipeStack **stack, int fdin, int fdout)
+void	push_pipe(t_pipe_stack **stack, int fdin, int fdout)
 {
-	PipeStack	*new_node;
+	t_pipe_stack	*new_node;
 
-	new_node = (PipeStack *)malloc(sizeof(PipeStack));
+	new_node = (t_pipe_stack *)malloc(sizeof(t_pipe_stack));
 	if (!new_node)
 	{
 		ft_error(E_MEMORY, NULL, NULL);
@@ -29,9 +29,9 @@ void	push_pipe(PipeStack **stack, int fdin, int fdout)
 	*stack = new_node;
 }
 
-PipeStack	*pop_pipe(PipeStack **stack)
+t_pipe_stack	*pop_pipe(t_pipe_stack **stack)
 {
-	PipeStack	*top;
+	t_pipe_stack	*top;
 
 	if (*stack == NULL)
 		return (NULL);
@@ -41,7 +41,7 @@ PipeStack	*pop_pipe(PipeStack **stack)
 	return (*stack);
 }
 
-PipeStack	*peek_pipe(PipeStack *stack)
+t_pipe_stack	*peek_pipe(t_pipe_stack *stack)
 {
 	if (stack == NULL)
 		return (NULL);

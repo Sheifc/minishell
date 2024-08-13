@@ -1,14 +1,14 @@
 #include "syntax.h"
 
-bool	is_command_with_args(ASTNode *node, int *status)
+bool	is_command_with_args(t_ast_node *node, int *status)
 {
-	ASTNode	*child;
+	t_ast_node	*child;
 
 	if (node == NULL)
 		return (false);
 	if (node->type != NODE_COMMAND)
 	{
-		ft_error_ope(E_SYNTAX, node->value, "no es un comando", status);
+		ft_error_ope(E_SYNTAX, node->value, "is not a command", status);
 		return (false);
 	}
 	child = node->left;
@@ -16,7 +16,7 @@ bool	is_command_with_args(ASTNode *node, int *status)
 	{
 		if (child->type != NODE_ARGUMENT)
 		{
-			ft_error_ope(E_SYNTAX, node->value, "no posee argumento valido",
+			ft_error_ope(E_SYNTAX, node->value, "has no valid argument",
 				status);
 			return (false);
 		}
@@ -25,7 +25,7 @@ bool	is_command_with_args(ASTNode *node, int *status)
 	return (true);
 }
 
-static bool	are_all_child_args(ASTNode *child)
+static bool	are_all_child_args(t_ast_node *child)
 {
 	while (child != NULL)
 	{
@@ -36,36 +36,36 @@ static bool	are_all_child_args(ASTNode *child)
 	return (true);
 }
 
-bool	is_command_with_args_mandatory(ASTNode *node, int *status)
+bool	is_command_with_args_mandatory(t_ast_node *node, int *status)
 {
 	if (node == NULL)
 		return (false);
 	if (node->type != NODE_COMMAND)
 	{
-		ft_error_ope(E_SYNTAX, node->value, "no es un comando", status);
+		ft_error_ope(E_SYNTAX, node->value, "is not a command", status);
 		return (false);
 	}
 	if (node->left == NULL)
 	{
-		ft_error_ope(E_SYNTAX, node->value, "requiere argumento obligatorio",
+		ft_error_ope(E_SYNTAX, node->value, "requires mandatory argument",
 			status);
 		return (false);
 	}
 	if (!are_all_child_args(node->left))
 	{
-		ft_error_ope(E_SYNTAX, node->value, "posee argumento invalido", status);
+		ft_error_ope(E_SYNTAX, node->value, "has invalid argument", status);
 		return (false);
 	}
 	return (true);
 }
 
-bool	is_binary_operator_valid(ASTNode *node, int *status)
+bool	is_binary_operator_valid(t_ast_node *node, int *status)
 {
 	if (node == NULL)
 		return (false);
 	if (node->left == NULL || node->right == NULL)
 	{
-		ft_error_ope(E_SYNTAX, node->value, "requiere dos operandos validos",
+		ft_error_ope(E_SYNTAX, node->value, "requires two valid operands",
 			status);
 		return (false);
 	}
@@ -73,22 +73,22 @@ bool	is_binary_operator_valid(ASTNode *node, int *status)
 			status));
 }
 
-bool	is_redirection_valid(ASTNode *node, int *status)
+bool	is_redirection_valid(t_ast_node *node, int *status)
 {
-	ASTNode	*child;
+	t_ast_node	*child;
 
 	if (node == NULL)
 		return (false);
 	if (node->left == NULL || node->right == NULL)
 	{
-		ft_error_ope(E_REDIRECT, node->value, "requiere dos operandos validos",
+		ft_error_ope(E_REDIRECT, node->value, "requires two valid operands",
 			status);
 		return (false);
 	}
 	child = node->right;
 	if (!child || (child->type != NODE_COMMAND))
 	{
-		ft_error_ope(E_REDIRECT, node->value, "no posee argumento valido",
+		ft_error_ope(E_REDIRECT, node->value, "has no valid argument",
 			status);
 		return (false);
 	}

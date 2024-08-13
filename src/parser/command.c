@@ -44,7 +44,7 @@ void	postprocess_cmds(t_cmd *cmd)
 
 t_cmd	*traverse_ast(t_cmd_arg *arg, t_shell *data)
 {
-	ASTNode	*node;
+	t_ast_node	*node;
 
 	node = arg->node;
 	if (arg == NULL || arg->node == NULL)

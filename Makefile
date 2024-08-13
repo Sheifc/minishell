@@ -18,8 +18,8 @@ OBJ_PARSER_DIR  = $(OBJ_DIR)parser/
 FILES_SRC       = main.c
 
 FILES_PARSER	=	parser_utils.c										\
-					command.c command_utils.c command_handles1.c		\
-					command_handles2.c command_handles_utils.c			\
+					command.c command_utils.c command_handles_a.c		\
+					command_handles_b.c command_handles_utils.c			\
 					command_exe.c command_extra.c						\
 					stack_operations.c stack_pipes.c					\
 					ast.c ast_utils.c ast_handles.c 					\
@@ -27,9 +27,9 @@ FILES_PARSER	=	parser_utils.c										\
 					token.c token_utils.c								\
 					token_handles.c token_handles_utils.c				\
 					token_preprocess.c token_preprocess_utils.c 		\
-					token_env.c											\
+					token_env.c token_env_utils.c						\
 					error.c												\
-					wildcard.c wildcard_utils.c
+					wildcard_bonus.c wildcard_utils_bonus.c
 
 FILES_EXEC      = init.c				\
 				  signals.c				\

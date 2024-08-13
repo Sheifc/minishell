@@ -63,7 +63,8 @@ bool	ok_count_quotes(const char *str)
 	return (false);
 }
 
-char	*preprocess_input(const char *input, t_word_features feat, t_shell *data)
+char	*preprocess_input(const char *input, t_word_features feat,
+	t_shell *data)
 {
 	char			*new_in;
 	char			*preproc_input;

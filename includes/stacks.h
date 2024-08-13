@@ -3,30 +3,33 @@
 
 # include "ast.h"
 
-typedef struct _OperatorStack
+typedef struct s_operator_stack
 {
-	NodeType				type;
-	struct _OperatorStack	*next;
-}							OperatorStack;
+	t_node_type				type;
+	struct s_operator_stack	*next;
+}							t_operator_stack;
 
-typedef struct _PipeStack
+typedef struct s_pipe_stack
 {
 	int						fdin;
 	int						fdout;
-	struct _PipeStack		*next;
-}							PipeStack;
+	struct s_pipe_stack		*next;
+}							t_pipe_stack;
 
 // Stack_operation
-void						print_ope_stack(OperatorStack *head);
-void						push_operator(OperatorStack **stack, NodeType type);
-NodeType					pop_operator(OperatorStack **stack);
-NodeType					peek_operator(OperatorStack *stack);
-NodeType					count_operator(OperatorStack *head, NodeType type);
+void						print_ope_stack(t_operator_stack *head);
+void						push_operator(t_operator_stack **stack,
+								t_node_type type);
+t_node_type					pop_operator(t_operator_stack **stack);
+t_node_type					peek_operator(t_operator_stack *stack);
+t_node_type					count_operator(t_operator_stack *head,
+								t_node_type type);
 
 // Stack_pipe
-void						print_pipe_stack(PipeStack *head);
-void						push_pipe(PipeStack **stack, int fdin, int fdout);
-PipeStack					*pop_pipe(PipeStack **stack);
-PipeStack					*peek_pipe(PipeStack *stack);
+void						print_pipe_stack(t_pipe_stack *head);
+void						push_pipe(t_pipe_stack **stack, int fdin,
+								int fdout);
+t_pipe_stack				*pop_pipe(t_pipe_stack **stack);
+t_pipe_stack				*peek_pipe(t_pipe_stack *stack);
 
 #endif

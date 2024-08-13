@@ -6,12 +6,12 @@
 
 typedef struct s_env
 {
-	char			*key;
-	char			*value;
-	struct s_env	*next;
-}					t_env;
+	char				*key;
+	char				*value;
+	struct s_env		*next;
+}						t_env;
 
-typedef enum _NodeType
+typedef enum s_node_type
 {
 	NODE_COMMAND,
 	NODE_ARGUMENT,
@@ -27,18 +27,18 @@ typedef enum _NodeType
 	NODE_UNKNOWN,
 	NODE_END,
 	NODE_UNDEFINED
-}					NodeType;
+}						t_node_type;
 
-typedef struct _ASTNode
+typedef struct s_ast_node
 {
-	int				level;
-	NodeType		type;
-	char			*value;
-	struct _ASTNode	*left;
-	struct _ASTNode	*right;
-}					ASTNode;
+	int					level;
+	t_node_type			type;
+	char				*value;
+	struct s_ast_node	*left;
+	struct s_ast_node	*right;
+}						t_ast_node;
 
-// TokenType:
+// t_token_type:
 // 	T_COMMAND			commands
 // 	T_ARG				arguments
 // 	T_PIPE				|
@@ -55,7 +55,7 @@ typedef struct _ASTNode
 //  T_WILDCARD			*?[]
 // 	T_UNKNOWN
 
-typedef enum _TokenType
+typedef enum s_token_type
 {
 	T_COMMAND,
 	T_ARG,
@@ -74,60 +74,60 @@ typedef enum _TokenType
 	T_WILDCARD,
 	T_REDIRECT_ARG,
 	T_UNKNOWN
-}					TokenType;
+}						t_token_type;
 
-typedef struct _Token
+typedef struct s_token
 {
-	TokenType		type;
-	char			*value;
-	bool			expect_arg;
-}					Token;
+	t_token_type		type;
+	char				*value;
+	bool				expect_arg;
+}						t_token;
 
-typedef struct _word_features
+typedef struct s_word_features
 {
-	int				start;
-	int				pos;
-	bool			btw_quotes;
-	bool			new_word;
-}					t_word_features;
+	int					start;
+	int					pos;
+	bool				btw_quotes;
+	bool				new_word;
+}						t_word_features;
 
 typedef enum s_redirect
 {
 	R_NONE,
 	R_INFILE,
 	R_OUTFILE
-}					t_redirect;
+}						t_redirect;
 
 typedef struct s_cmd
 {
-	char			*name;
-	char			**arg;
-	int				n_args;
-	int				fdin;
-	int				fdout;
-	int				parenthesis;
-	t_redirect		redirect;
-	struct s_cmd	*next;
-	NodeType		operator;
-}					t_cmd;
+	char				*name;
+	char				**arg;
+	int					n_args;
+	int					fdin;
+	int					fdout;
+	int					parenthesis;
+	t_redirect			redirect;
+	struct s_cmd		*next;
+	t_node_type			operator;
+}						t_cmd;
 
 typedef struct s_shell
 {
-	Token			**tokens;
-	ASTNode			*ast;
-	t_cmd			*cmd;
-	t_env			*env;
-	t_env			*export;
-	char			*prompt;
-	char			**envp;
-	char			*path;
-	int				status;
-	int				num_tokens;
-	int				paranthesis;
-	int				tmpin;
-	int				tmpout;
-	pid_t			pid;
-	int				cmd_count;
-}					t_shell;
+	t_token				**tokens;
+	t_ast_node			*ast;
+	t_cmd				*cmd;
+	t_env				*env;
+	t_env				*export;
+	char				*prompt;
+	char				**envp;
+	char				*path;
+	int					status;
+	int					num_tokens;
+	int					paranthesis;
+	int					tmpin;
+	int					tmpout;
+	pid_t				pid;
+	int					cmd_count;
+}						t_shell;
 
 #endif

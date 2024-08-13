@@ -1,8 +1,7 @@
 #include "token.h"
 
 // Function to create the wildcard token
-int handle_wildcards(char **start, t_shell *data,
-	TokenType type)
+int	handle_wildcards(char **start, t_shell *data, t_token_type type)
 {
 	char	*end;
 	char	temp;
@@ -28,7 +27,7 @@ int handle_wildcards(char **start, t_shell *data,
 	return (0);
 }
 
-void	handle_unmatched_quotes(char **start, char *end, Token **tokens,
+void	handle_unmatched_quotes(char **start, char *end, t_token **tokens,
 		int *n_tokens)
 {
 	char	*token_value;
@@ -41,7 +40,7 @@ void	handle_unmatched_quotes(char **start, char *end, Token **tokens,
 }
 
 // Function to create the text token
-void	handle_quotes(char **start, Token **tokens, int *n_tokens,
+void	handle_quotes(char **start, t_token **tokens, int *n_tokens,
 		char quote_char)
 {
 	char	*end;
@@ -62,9 +61,11 @@ void	handle_quotes(char **start, Token **tokens, int *n_tokens,
 					|| tokens[*n_tokens - 2]->type == T_OUTPUT
 					|| tokens[*n_tokens - 2]->type == T_OUTPUT_APPEND
 					|| tokens[*n_tokens - 2]->type == T_HEREDOC))
-				tokens[(*n_tokens)++] = create_token(T_REDIRECT_ARG, token_value, false);
+				tokens[(*n_tokens)++] = create_token(T_REDIRECT_ARG,
+						token_value, false);
 			else
-				tokens[(*n_tokens)++] = create_token(T_TEXT, token_value, false);
+				tokens[(*n_tokens)++] = create_token(T_TEXT, token_value,
+						false);
 			free(token_value);
 		}
 		else
@@ -73,7 +74,7 @@ void	handle_quotes(char **start, Token **tokens, int *n_tokens,
 					|| tokens[*n_tokens - 2]->type == T_OUTPUT
 					|| tokens[*n_tokens - 2]->type == T_OUTPUT_APPEND
 					|| tokens[*n_tokens - 2]->type == T_HEREDOC))
-				tokens[(*n_tokens)++] = create_token(T_REDIRECT_ARG,  " ", true);
+				tokens[(*n_tokens)++] = create_token(T_REDIRECT_ARG, " ", true);
 			else
 				tokens[(*n_tokens)++] = create_token(T_TEXT, " ", true);
 		}
@@ -88,8 +89,8 @@ void	handle_quotes(char **start, Token **tokens, int *n_tokens,
 
 int	handle_redirect_arg(char **start, t_shell *data)
 {
-	char		*end;
-	char		temp;
+	char	*end;
+	char	temp;
 
 	end = *start + 1;
 	while (*end && !ft_strchr(DELIMITERS, *end) && *end != '"' && *end != '\''
@@ -108,7 +109,8 @@ int	handle_redirect_arg(char **start, t_shell *data)
 			return (handle_wildcards(start, data, T_REDIRECT_ARG));
 		else
 		{
-			data->tokens[data->num_tokens] = create_token(T_REDIRECT_ARG, *start, true);
+			data->tokens[data->num_tokens] = create_token(T_REDIRECT_ARG,
+					*start, true);
 			if (!data->tokens[data->num_tokens])
 				return (1);
 			data->num_tokens++;
@@ -123,25 +125,25 @@ int	handle_redirect_arg(char **start, t_shell *data)
 int	handle_regular_tokens(char **start, t_shell *data)
 {
 	if (ft_strncmp(*start, "&&", 2) == 0)
-		return (add_token(start, data, (Token){T_AND, "&&", false}));
+		return (add_token(start, data, (t_token){T_AND, "&&", false}));
 	else if (ft_strncmp(*start, "||", 2) == 0)
-		return (add_token(start, data, (Token){T_OR, "||", false}));
+		return (add_token(start, data, (t_token){T_OR, "||", false}));
 	else if (ft_strncmp(*start, "<<", 2) == 0)
 		return (handle_heredoc_token(start, data));
 	else if (ft_strncmp(*start, ">>", 2) == 0)
-		return handle_output_append_token(start, data);
+		return (handle_output_append_token(start, data));
 	else if (**start == '|')
-		return (add_token(start, data, (Token){T_PIPE, "|", false}));
+		return (add_token(start, data, (t_token){T_PIPE, "|", false}));
 	else if (**start == '<')
 		return (handle_input_token(start, data));
 	else if (**start == '>')
 		return (handle_output_token(start, data));
 	else if (**start == ';')
-		return (add_token(start, data, (Token){T_SEMICOLON, ";", false}));
+		return (add_token(start, data, (t_token){T_SEMICOLON, ";", false}));
 	else if (**start == '(')
-		return (add_token(start, data, (Token){T_PAREN_OPEN, "(", false}));
+		return (add_token(start, data, (t_token){T_PAREN_OPEN, "(", false}));
 	else if (**start == ')')
-		return (add_token(start, data, (Token){T_PAREN_CLOSE, ")", false}));
+		return (add_token(start, data, (t_token){T_PAREN_CLOSE, ")", false}));
 	else if (is_wildcards(start))
 		return (handle_wildcards(start, data, T_WILDCARD));
 	else

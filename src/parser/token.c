@@ -1,10 +1,10 @@
 #include "token.h"
 
-Token	*create_token(TokenType type, const char *value, bool expect_arg)
+t_token	*create_token(t_token_type type, const char *value, bool expect_arg)
 {
-	Token	*token;
+	t_token	*token;
 
-	token = (Token *)malloc(sizeof(Token));
+	token = (t_token *)malloc(sizeof(t_token));
 	if (!token)
 	{
 		ft_error(E_MEMORY, NULL, NULL);
@@ -16,7 +16,7 @@ Token	*create_token(TokenType type, const char *value, bool expect_arg)
 	return (token);
 }
 
-void	free_token(Token **token)
+void	free_token(t_token **token)
 {
 	if (*token)
 	{
@@ -56,7 +56,7 @@ int	verify_tokens(t_shell *data)
 	return (balance_parentheses | balance_quotes % 2);
 }
 
-Token	**process_tokens(t_shell *data, char *input_copy)
+t_token	**process_tokens(t_shell *data, char *input_copy)
 {
 	char	*start;
 
@@ -74,7 +74,7 @@ Token	**process_tokens(t_shell *data, char *input_copy)
 	return (data->tokens);
 }
 
-Token	**tokenize(t_shell *data)
+t_token	**tokenize(t_shell *data)
 {
 	char			*input_copy;
 	char			*input;
@@ -85,7 +85,7 @@ Token	**tokenize(t_shell *data)
 	feat.btw_quotes = false;
 	feat.new_word = true;
 	input = preprocess_input(data->prompt, feat, data);
-	data->tokens = (Token **)malloc(MAX_TOKENS * sizeof(Token *));
+	data->tokens = (t_token **)malloc(MAX_TOKENS * sizeof(t_token *));
 	if (!data->tokens)
 	{
 		ft_error(E_MEMORY, NULL, &data->status);
