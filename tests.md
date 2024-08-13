@@ -1,5 +1,5 @@
 
-# EN RAMA EXECUTOR2: 12 AGOSTO
+# EN RAMA EXECUTOR2: 13 AGOSTO
 
 # LOS PASA COMO BASH
 
@@ -12,6 +12,10 @@ pwd > out | echo sheila > out1 | cat < infile | sort
 echo hi | echo hello | echo bye
 
 echo hi > out > out1 > out2
+
+export a > outfile
+
+export > outfile
 
 # NO LOS PASA
 
