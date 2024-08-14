@@ -11,7 +11,10 @@ void	clean_commands(t_cmd *cmd)
 			break ;
 		cmd->operator = cmd->next->operator;
 		if (cmd->next->fdout != -1)
+		{
 			cmd->fdout = cmd->next->fdout;
+			cmd->redirect = R_OUTFILE;
+		}
 		delete_command(&cmd->next);
 	}
 }
