@@ -23,8 +23,6 @@ void	set_up_fds(t_cmd *cmd)
 void	exec_one_cmd(t_shell *data, t_cmd *cmd)
 {
 	set_up_fds(cmd);
-	//set_fdin(data, cmd);
-	//set_fdout(data, cmd);
 	if (!execute_builtin(data, cmd, cmd->arg[0]))
 	{
 		data->pid = fork();
