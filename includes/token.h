@@ -40,6 +40,8 @@ void	handle_spaces_and_operators(const char *in, char **output,
 			t_word_features *ft);
 
 // token_env
+char	*create_new_result(const char *result, const char *pos,
+		const char *value, const char *name);
 char	*replace_variable(const char *pos, char *result, const char *var_name,
 			t_shell *data);
 int		is_btw_single_quotes(const char *str, const char *pos);
@@ -61,10 +63,13 @@ int		handle_regular_tokens(char **start, t_shell *data);
 
 // token_handles_utils
 bool	is_operator(const char *str);
-int		handle_heredoc_token(char **start, t_shell *data);
-int		handle_output_append_token(char **start, t_shell *data);
-int		handle_input_token(char **start, t_shell *data);
-int		handle_output_token(char **start, t_shell *data);
+int		handle_token(char **start, t_shell *data, t_token_type type,
+			char *value);
+void	handle_redirect_or_text_token(t_token **tokens, int *n_tokens,
+			char *token_value);
+void	add_token_and_free(t_token **tokens, int *n_tokens, t_token_type type,
+			char *value);
+int		add_redirect_token(t_shell *data, char **start, char *end);
 
 // token_utils
 void	free_tokens(t_token **tokens, int *num_tokens);
@@ -75,6 +80,8 @@ void	print_tokens(t_token **tokens, int n_tokens);
 
 // wildcard
 int		match(const char *pattern, const char *string);
+int		process_directory_entries(DIR *dir, const char *wildcard, t_shell *data,
+			t_token_type type);
 int		search_wildcard_matches(const char *wildcard, t_shell *data,
 			t_token_type type);
 bool	is_wildcards(char **start);

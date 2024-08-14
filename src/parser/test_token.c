@@ -19,28 +19,26 @@ t_token	**tokenize_and_count(t_shell *data)
 	return (data->tokens);
 }
 
-bool	compare_tokens(t_shell *data, const t_test_case *c)
+bool	compare_tokens(t_shell *d, const t_test_case *c)
 {
 	bool	error;
 	int		i;
 
 	error = false;
-	if (data->num_tokens != c->num_tokens)
+	if (d->num_tokens != c->num_tokens)
 	{
 		error = true;
-		printf("\e[31m -> Num tokens %d!=%d\n\e[0m", data->num_tokens,
-			c->num_tokens);
+		printf("\e[31m -> Num tokens\n\e[0m", d->num_tokens, c->num_tokens);
 	}
 	printf("#\tResult\t\t\tExpected\n");
 	i = -1;
-	while (++i < data->num_tokens)
+	while (++i < d->num_tokens)
 	{
-		printf("%d\t[%d] %10s\t", i, data->tokens[i]->type,
-			data->tokens[i]->value);
+		printf("%d\t[%d] %10s\t", i, d->tokens[i]->type, d->tokens[i]->value);
 		if (i < c->num_tokens)
 			printf("\t[%d] %10s", c->tokens[i].type, c->tokens[i].value);
-		if (data->tokens[i]->type != c->tokens[i].type
-			|| strcmp(data->tokens[i]->value, c->tokens[i].value) != 0)
+		if (d->tokens[i]->type != c->tokens[i].type
+			|| strcmp(d->tokens[i]->value, c->tokens[i].value) != 0)
 		{
 			error = true;
 			printf("\e[31m -> failed\e[0m");

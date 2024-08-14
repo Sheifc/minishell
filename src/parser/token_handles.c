@@ -41,14 +41,13 @@ void	handle_unmatched_quotes(char **start, char *end, t_token **tokens,
 
 // Function to create the text token
 void	handle_quotes(char **start, t_token **tokens, int *n_tokens,
-		char quote_char)
+	char quote_char)
 {
 	char	*end;
 	char	*token_value;
 
 	token_value = ft_strndup(*start, 1);
-	tokens[(*n_tokens)++] = create_token(T_QUOTE, token_value, false);
-	free(token_value);
+	add_token_and_free(tokens, n_tokens, T_QUOTE, token_value);
 	end = *start + 1;
 	while (*end && *end != quote_char)
 		end++;
@@ -57,27 +56,11 @@ void	handle_quotes(char **start, t_token **tokens, int *n_tokens,
 		if (*(end - 1) != quote_char)
 		{
 			token_value = ft_strndup(*start + 1, end - *start - 1);
-			if (*n_tokens > 1 && (tokens[*n_tokens - 2]->type == T_INPUT
-					|| tokens[*n_tokens - 2]->type == T_OUTPUT
-					|| tokens[*n_tokens - 2]->type == T_OUTPUT_APPEND
-					|| tokens[*n_tokens - 2]->type == T_HEREDOC))
-				tokens[(*n_tokens)++] = create_token(T_REDIRECT_ARG,
-						token_value, false);
-			else
-				tokens[(*n_tokens)++] = create_token(T_TEXT, token_value,
-						false);
+			handle_redirect_or_text_token(tokens, n_tokens, token_value);
 			free(token_value);
 		}
 		else
-		{
-			if (*n_tokens > 1 && (tokens[*n_tokens - 2]->type == T_INPUT
-					|| tokens[*n_tokens - 2]->type == T_OUTPUT
-					|| tokens[*n_tokens - 2]->type == T_OUTPUT_APPEND
-					|| tokens[*n_tokens - 2]->type == T_HEREDOC))
-				tokens[(*n_tokens)++] = create_token(T_REDIRECT_ARG, " ", true);
-			else
-				tokens[(*n_tokens)++] = create_token(T_TEXT, " ", true);
-		}
+			handle_redirect_or_text_token(tokens, n_tokens, " ");
 		token_value = ft_strndup(end, 1);
 		tokens[(*n_tokens)++] = create_token(T_QUOTE, token_value, true);
 		free(token_value);
@@ -90,7 +73,6 @@ void	handle_quotes(char **start, t_token **tokens, int *n_tokens,
 int	handle_redirect_arg(char **start, t_shell *data)
 {
 	char	*end;
-	char	temp;
 
 	end = *start + 1;
 	while (*end && !ft_strchr(DELIMITERS, *end) && *end != '"' && *end != '\''
@@ -100,24 +82,7 @@ int	handle_redirect_arg(char **start, t_shell *data)
 		&& ft_strncmp(end, ">>", 2) != 0)
 		end++;
 	if (end != *start + 1)
-	{
-		temp = *end;
-		*end = '\0';
-		while (ft_strchr(DELIMITERS, **start))
-			(*start)++;
-		if (is_wildcards(start))
-			return (handle_wildcards(start, data, T_REDIRECT_ARG));
-		else
-		{
-			data->tokens[data->num_tokens] = create_token(T_REDIRECT_ARG,
-					*start, true);
-			if (!data->tokens[data->num_tokens])
-				return (1);
-			data->num_tokens++;
-			*end = temp;
-			*start = end;
-		}
-	}
+		return (add_redirect_token(data, start, end));
 	return (0);
 }
 
@@ -129,15 +94,15 @@ int	handle_regular_tokens(char **start, t_shell *data)
 	else if (ft_strncmp(*start, "||", 2) == 0)
 		return (add_token(start, data, (t_token){T_OR, "||", false}));
 	else if (ft_strncmp(*start, "<<", 2) == 0)
-		return (handle_heredoc_token(start, data));
+		return (handle_token(start, data, T_HEREDOC, "<<"));
 	else if (ft_strncmp(*start, ">>", 2) == 0)
-		return (handle_output_append_token(start, data));
+		return (handle_token(start, data, T_OUTPUT_APPEND, ">>"));
 	else if (**start == '|')
 		return (add_token(start, data, (t_token){T_PIPE, "|", false}));
 	else if (**start == '<')
-		return (handle_input_token(start, data));
+		return (handle_token(start, data, T_INPUT, "<"));
 	else if (**start == '>')
-		return (handle_output_token(start, data));
+		return (handle_token(start, data, T_OUTPUT, ">"));
 	else if (**start == ';')
 		return (add_token(start, data, (t_token){T_SEMICOLON, ";", false}));
 	else if (**start == '(')

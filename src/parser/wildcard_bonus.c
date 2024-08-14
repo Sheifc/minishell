@@ -7,7 +7,9 @@ int	match(const char *pattern, const char *string)
 		return (0);
 	if (*pattern == '\0')
 		return (NOMATCH);
-	if (*pattern == '?')
+	if (*pattern == '?' && ((*(pattern - 1) != ' ' && *(pattern + 1)
+				&& *(pattern + 1) != ' ') || (*(pattern - 1) != ' '
+				&& !*(pattern + 1))))
 		return (handle_question(pattern, string));
 	else if (*pattern == '*')
 		return (handle_star(pattern, string));
@@ -25,20 +27,12 @@ static int	found_match(const char *pattern, const char *string)
 	return (NOMATCH);
 }
 
-// Function to search for matches in the current directory
-int	search_wildcard_matches(const char *wildcard, t_shell *data,
+int	process_directory_entries(DIR *dir, const char *wildcard, t_shell *data,
 		t_token_type type)
 {
-	DIR				*dir;
 	struct dirent	*entry;
 	int				found;
 
-	dir = opendir(".");
-	if (dir == NULL)
-	{
-		ft_error(E_FILE, NULL, &data->status);
-		return (-1);
-	}
 	found = 0;
 	entry = readdir(dir);
 	while (entry != NULL)
@@ -56,6 +50,21 @@ int	search_wildcard_matches(const char *wildcard, t_shell *data,
 	}
 	closedir(dir);
 	return (found);
+}
+
+// Function to search for matches in the current directory
+int	search_wildcard_matches(const char *wildcard, t_shell *data,
+		t_token_type type)
+{
+	DIR	*dir;
+
+	dir = opendir(".");
+	if (dir == NULL)
+	{
+		ft_error(E_FILE, NULL, &data->status);
+		return (-1);
+	}
+	return (process_directory_entries(dir, wildcard, data, type));
 }
 
 // Function to check if the word is a wildcard

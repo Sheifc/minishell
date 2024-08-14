@@ -1,47 +1,44 @@
 #include "token.h"
 #include "minishell.h"
 
+char	*create_new_result(const char *result, const char *pos,
+		const char *value, const char *name)
+{
+	char	*new_result;
+	size_t	new_length;
+
+	new_length = ft_strlen(result) + ft_strlen(value) - ft_strlen(name) - 1;
+	new_result = (char *)malloc((new_length + 1) * sizeof(char));
+	if (!new_result)
+	{
+		ft_error(E_MEMORY, NULL, NULL);
+		return (NULL);
+	}
+	strncpy(new_result, result, pos - result);
+	ft_strcpy(new_result + (pos - result), value);
+	ft_strcpy(new_result + (pos - result) + ft_strlen(value), pos
+		+ ft_strlen(name) + 1);
+	return (new_result);
+}
+
 char	*replace_variable(const char *pos, char *result, const char *name,
 		t_shell *data)
 {
 	char	*value;
 	char	*new_result;
-	size_t	new_length;
 
 	if (ft_strncmp((pos + 1), "?", 1) != 0)
 		value = get_value(data->env, name);
 	else
 		value = (char *)name;
 	if (value)
-	{
-		new_length = ft_strlen(result) + ft_strlen(value) - ft_strlen(name) - 1;
-		new_result = (char *)malloc((new_length + 1) * sizeof(char));
-		if (!new_result)
-		{
-			ft_error(E_MEMORY, NULL, NULL);
-			return (NULL);
-		}
-		strncpy(new_result, result, pos - result);
-		ft_strcpy(new_result + (pos - result), value);
-		ft_strcpy(new_result + (pos - result) + ft_strlen(value), pos
-			+ ft_strlen(name) + 1);
-		free(result);
-		return (new_result);
-	}
+		new_result = create_new_result(result, pos, value, name);
 	else
-	{
-		new_length = ft_strlen(result) - ft_strlen(name) - 1;
-		new_result = (char *)malloc((new_length + 1) * sizeof(char));
-		if (!new_result)
-		{
-			ft_error(E_MEMORY, NULL, NULL);
-			return (NULL);
-		}
-		strncpy(new_result, result, pos - result);
-		ft_strcpy(new_result + (pos - result), pos + ft_strlen(name) + 1);
-		free(result);
-		return (new_result);
-	}
+		new_result = create_new_result(result, pos, "", name);
+	if (!new_result)
+		return (NULL);
+	free(result);
+	return (new_result);
 }
 
 int	is_btw_single_quotes(const char *str, const char *pos)
@@ -87,7 +84,8 @@ char	*replace_env_variables(const char *input, t_shell *data)
 	while (pos)
 	{
 		if (is_btw_single_quotes(result, pos)
-			|| is_preceded_by_double_less(result, pos))
+			|| is_preceded_by_double_less(result, pos) || (*(pos - 1) == ' '
+				&& *(pos + 1) == ' '))
 		{
 			pos = ft_strchr(pos + 1, '$');
 			continue ;

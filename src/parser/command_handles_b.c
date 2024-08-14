@@ -53,7 +53,6 @@ void	append_commands(t_cmd **head, t_cmd **tail, t_cmd *new_cmds)
 		else
 		{
 			(*tail)->next = new_cmds;
-			// new_cmds->prev = *tail;
 		}
 		while ((*tail)->next)
 		{
