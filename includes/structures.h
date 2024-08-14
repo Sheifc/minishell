@@ -107,8 +107,8 @@ typedef struct s_cmd
 	int					fdout;
 	int					parenthesis;
 	t_redirect			redirect;
-	struct s_cmd		*next;
 	t_node_type			operator;
+	struct s_cmd		*next;
 }						t_cmd;
 
 typedef struct s_shell
