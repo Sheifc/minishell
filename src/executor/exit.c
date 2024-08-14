@@ -32,7 +32,7 @@ static int	check_too_many_arguments(t_cmd *cmd)
 	return (0);
 }
 
-void	check_nums(t_shell *data, t_cmd *cmd)
+static void	check_nums(t_shell *data, t_cmd *cmd)
 {
 	if (isnum(cmd->arg[1]) == 0)
 	{

@@ -40,44 +40,46 @@ void		sigchld_handler(int signum);
 void		init_signals(void);
 
 //*--------------------BUILTINS--------------------------------------
-
-// exec_builtins.c
 int			execute_builtin(t_shell *data, t_cmd *cmd, char *arg);
 
-// cd.c
+//*--------------------CD--------------------------------------------
 t_env		*env_lst_search(t_env *env, const char *key);
 void		ft_cd(t_shell *data, t_cmd *cmd);
-// echo.c
+
+//*--------------------ECHO------------------------------------------
 void		ft_echo(t_shell *data, t_cmd *cmd);
-// env.c
+
+//*--------------------ENV-------------------------------------------
+void		handle_env_other_errors(char *arg, t_shell *data);
+void		handle_env_error(char *arg, t_shell *data);
+void		fill_env_list(t_env **head, char **envp, int *i);
+void		init_env(t_shell *data, char **envp);
+void		print_env(t_env *env);
 void		ft_env(t_shell *data, t_env *env);
-// export.c
+
+//*--------------------EXPORT----------------------------------------
 int			is_valid(t_shell *data);
 t_env		*new_node(int i);
 void		addback_node(t_env **export, t_env *aux);
 void		print_export(t_shell *data);
 t_env		*new_node(int i);
+void		ft_swap(char **a, char **b);
 void		ft_export(t_shell *data, t_cmd *cmd);
-// exit.c
+
+//*--------------------EXIT------------------------------------------
 void		ft_exit(t_shell *data, t_cmd *cmd);
-// pwd.c
+
+//*--------------------PWD-------------------------------------------
 char		*get_current_directory(void);
 void		ft_pwd(t_shell *data);
-// unset.c
+
+//*--------------------UNSET-----------------------------------------
 void		ft_unset(t_shell *data);
 
-//*--------------------ENV-------------------------------------------
-
-// env.c
-void		fill_env_list(t_env **head, char **envp, int *i);
-void		init_env(t_shell *data, char **envp);
-void		print_env(t_env *env);
-
-// list_utils.c
+//*--------------------UTILS-----------------------------------------
 void		add(t_env **head, char *key, char *value);
 void		pop(t_env **head, char *key);
 t_cmd		*get_last_cmd(t_cmd *cmd);
-// key_value.c
 void		get_key_value(char *str, char **key, char **value);
 char		*get_value(t_env *env, const char *key);
 char		*get_cd_value(t_env *env, const char *key);
@@ -117,7 +119,6 @@ void		exec_bonus(t_shell *data, t_cmd *cmd);
 //*--------------------EXECUTOR UTILS--------------------------------
 
 void		get_path(t_shell *data, t_cmd *cmd);
-void		ft_swap(char **a, char **b);
 void		count_commands(t_shell *data);
 void		get_status(t_shell *data);
 void		wait_process(t_shell *data);

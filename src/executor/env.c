@@ -38,7 +38,12 @@ void	print_env(t_env *env)
 
 void	ft_env(t_shell *data, t_env *env)
 {
-	print_list(env);
-	data->status = 0;
+	if (!data->cmd->arg[1] || ft_strncmp(data->cmd->arg[1], "env\0", 4) == 0)
+	{
+		print_list(env);
+		data->status = 0;
+		return ;
+	}
+	handle_env_error(data->cmd->arg[1], data);
 	return ;
 }

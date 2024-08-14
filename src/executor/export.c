@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-void	pop_node_export(t_env **head, char *str)
+static void	pop_node_export(t_env **head, char *str)
 {
 	t_env	*previous;
 	t_env	*current;
@@ -28,7 +28,7 @@ void	pop_node_export(t_env **head, char *str)
 	}
 }
 
-void	sort_export(t_shell *data)
+static void	sort_export(t_shell *data)
 {
 	t_env	*one;
 	t_env	*other;
@@ -51,7 +51,7 @@ void	sort_export(t_shell *data)
 	}
 }
 
-void	add_node_export(int i, t_cmd *cmd, t_env **env)
+static void	add_node_export(int i, t_cmd *cmd, t_env **env)
 {
 	char	**str;
 	t_env	*aux;

@@ -43,6 +43,7 @@ FILES_EXEC      = init.c				\
                   pwd.c					\
                   cd.c					\
                   env.c					\
+				  env_error_handle.c	\
                   exit.c				\
                   export.c				\
 				  export_utils.c		\
