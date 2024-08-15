@@ -28,7 +28,7 @@ bool	compare_tokens(t_shell *d, const t_test_case *c)
 	if (d->num_tokens != c->num_tokens)
 	{
 		error = true;
-		printf("\e[31m -> Num tokens\n\e[0m", d->num_tokens, c->num_tokens);
+		printf("\e[31m -> #tokens: %d,%d\n\e[0m", d->num_tokens, c->num_tokens);
 	}
 	printf("#\tResult\t\t\tExpected\n");
 	i = -1;

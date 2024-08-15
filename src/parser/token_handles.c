@@ -81,9 +81,7 @@ int	handle_redirect_arg(char **start, t_shell *data)
 		&& ft_strncmp(end, "||", 2) != 0 && ft_strncmp(end, "<<", 2) != 0
 		&& ft_strncmp(end, ">>", 2) != 0)
 		end++;
-	if (end != *start + 1)
-		return (add_redirect_token(data, start, end));
-	return (0);
+	return (add_redirect_token(data, start, end));
 }
 
 // Main function for token matching

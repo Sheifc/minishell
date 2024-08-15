@@ -41,7 +41,7 @@ void	handle_spaces_and_operators(const char *in, char **output,
 
 // token_env
 char	*create_new_result(const char *result, const char *pos,
-		const char *value, const char *name);
+			const char *value, const char *name);
 char	*replace_variable(const char *pos, char *result, const char *var_name,
 			t_shell *data);
 int		is_btw_single_quotes(const char *str, const char *pos);

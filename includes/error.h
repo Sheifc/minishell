@@ -14,7 +14,7 @@
 //	E_FDS		Bad file descriptor
 //	E_SYNTAX	Syntax error
 //	E_MEMORY	Cannot allocate memory
-//	E_UNKNOWN   
+//	E_UNKNOWN
 
 typedef enum s_error_type
 {
@@ -30,6 +30,7 @@ typedef enum s_error_type
 
 // Error
 void	ft_error(const int error_code, const char *message, int *status);
-void	ft_error_ope(const int error_code, char *ope, const char *message, int *status);
+void	ft_error_ope(const int error_code, char *ope, const char *message,
+			int *status);
 
 #endif
