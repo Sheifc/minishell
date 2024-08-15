@@ -94,7 +94,7 @@ void	exec_pipe(t_shell *data, t_cmd *cmd)
 	}
 }
 
-void	exec_multiple_cmds(t_shell *data, t_cmd *cmd)
+/* void	exec_multiple_cmds(t_shell *data, t_cmd *cmd)
 {
 	int	execution;
 	int	total_status;
@@ -111,4 +111,4 @@ void	exec_multiple_cmds(t_shell *data, t_cmd *cmd)
 		exec_redir(data, cmd);
 	else if (cmd->operator == NODE_PIPE || cmd->operator == NODE_END)
 		exec_pipe(data, cmd);
-}
+} */

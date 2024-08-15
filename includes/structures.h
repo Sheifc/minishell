@@ -122,6 +122,8 @@ typedef struct s_shell
 	char				**envp;
 	char				*path;
 	int					status;
+	int					total_status;
+    int					flag;
 	int					num_tokens;
 	int					paranthesis;
 	int					tmpin;

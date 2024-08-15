@@ -30,7 +30,7 @@ void	exec_node_and(t_shell *data, t_cmd *cmd, int *execution)
 
 void	exec_bonus(t_shell *data, t_cmd *cmd, int *execution)
 {
-	if (cmd != NULL)
+	if (cmd != NULL && cmd->parenthesis == 0)
 	{
 		if (cmd->operator == NODE_AND)
 			exec_node_and(data, cmd, execution);
