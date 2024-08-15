@@ -25,7 +25,7 @@ void	redir_fdin(t_cmd *cmd)
 		if (dup2(cmd->fdin, 0) == -1)
 		{
 			perror("Error: dup2 failed for cmd->fdin");
-			exit(EXIT_FAILURE);
+			exit(1);
 		}
 	}
 }
@@ -37,7 +37,7 @@ void	redir_fdout(t_cmd *cmd)
 		if (dup2(cmd->fdout, 1) == -1)
 		{
 			perror("Error: dup2 failed for cmd->fdout");
-			exit(EXIT_FAILURE);
+			exit(1);
 		}
 	}
 }

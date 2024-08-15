@@ -114,7 +114,10 @@ void		exec_redir(t_shell *data, t_cmd *cmd);
 //*--------------------EXECUTOR BONUS--------------------------------
 void		exec_node_or(t_shell *data, t_cmd *cmd, int *execution);
 void		exec_node_and(t_shell *data, t_cmd *cmd, int *execution);
-void		exec_bonus(t_shell *data, t_cmd *cmd);
+void		exec_bonus(t_shell *data, t_cmd *cmd, int *execution);
+void		exec_and_parenthesis(t_shell *data, t_cmd *cmd, int *execution, int *flag);
+void		exec_or_parenthesis(t_shell *data, t_cmd *cmd, int *execution, int *flag);
+void		exec_parenthesis(t_shell *data, t_cmd *cmd, int *execution, int *flag);
 
 //*--------------------EXECUTOR UTILS--------------------------------
 

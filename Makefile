@@ -54,8 +54,10 @@ FILES_EXEC      = init.c				\
                   executor.c			\
 				  exec_utils.c			\
                   exec_one_cmd.c		\
+				  exec_multi_cmds.c		\
 				  exec_pipeline.c		\
-				  exec_bonus.c			\
+				  exec_and_or_bonus.c	\
+				  exec_parenthesis_bonus.c	\
 				  exec_redir.c			\
                   printing.c
 

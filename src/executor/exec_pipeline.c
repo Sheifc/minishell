@@ -14,8 +14,8 @@ void	run_single_cmd(t_shell *data, t_cmd *cmd)
 		{
 			if (dup2(cmd->fdout, 1) == -1)
 			{ 
-				perror("dup2 failed for cmd->fdout");
-				exit(EXIT_FAILURE);
+				perror("Error: dup2 failed for cmd->fdout");
+				exit(1);
 			}
 			close(cmd->fdout);
 		}
@@ -32,8 +32,8 @@ void	dup_fdpipe(int *fdpipe)
 	close(fdpipe[0]);
 	if (dup2(fdpipe[1], 1) == -1)
 	{
-		perror("dup2 failed for fdpipe[1]");
-		exit(EXIT_FAILURE);
+		perror("Error: dup2 failed for fdpipe[1]");
+		exit(1);
 	}
 	close(fdpipe[1]);
 }
@@ -50,20 +50,20 @@ void	exec_fork(t_shell *data, t_cmd *cmd, int *fdpipe)
 		{
 			if (dup2(cmd->fdout, 1) == -1)
 			{
-				perror("dup2 failed for cmd->fdout");
-				exit(EXIT_FAILURE);
+				perror("Error: dup2 failed for cmd->fdout");
+				exit(1);
 			}
 			close(cmd->fdout);
 		}
 	}
  	if (dup2(cmd->fdin, 0) == -1)
 	{
-		perror("dup2 failed for cmd->fdin");
-		exit(EXIT_FAILURE);
+		perror("Error: dup2 failed for cmd->fdin");
+		exit(1);
 	}
 	close(cmd->fdin);
 	run_single_cmd(data, cmd);
-	exit(EXIT_SUCCESS);
+	exit(0);
 }
 
 void	exec_pipe(t_shell *data, t_cmd *cmd)
@@ -94,14 +94,21 @@ void	exec_pipe(t_shell *data, t_cmd *cmd)
 	}
 }
 
-void	exec_multiple_cmds(t_shell *data, t_cmd *cmd)
+/* void	exec_multiple_cmds(t_shell *data, t_cmd *cmd)
 {
+	int	execution;
+	int	total_status;
+
+	execution = 0;
+	total_status = 0;
 	if (!cmd)
 		return ;
-	if (cmd->operator == NODE_OR || cmd->operator == NODE_AND)
-		exec_bonus(data, cmd);
+	if (cmd->parenthesis == 1)
+        exec_parenthesis(data, cmd, &execution, &total_status);
+	else if (cmd->operator == NODE_OR || cmd->operator == NODE_AND)
+		exec_bonus(data, cmd, &execution);
     else if (cmd->redirect == R_OUTFILE)
 		exec_redir(data, cmd);
 	else if (cmd->operator == NODE_PIPE || cmd->operator == NODE_END)
 		exec_pipe(data, cmd);
-}
+} */
