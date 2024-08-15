@@ -47,5 +47,5 @@ pid_t	saved_fork(void)
 void	wait_pid(pid_t pid, t_shell *data)
 {
 	waitpid(pid, &(data->status), 0);
-	data->status = WEXITSTATUS(data->status);
+	get_status(data);
 }

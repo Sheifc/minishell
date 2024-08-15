@@ -93,7 +93,7 @@ t_cmd	*handle_node_heredoc(t_cmd_arg *arg, t_shell *data)
 		exit(EXIT_SUCCESS);
 	}
 	signal(SIGINT, SIG_IGN);
-	waitpid(pid, NULL, 0);
+	wait_pid(pid, data);
 	fd = open(".heredoc_temp", O_RDONLY);
 	push_operator(arg->ope_stack, NODE_HEREDOC);
 	signal(SIGINT, sigint_handler);
