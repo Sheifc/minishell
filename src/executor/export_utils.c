@@ -29,9 +29,10 @@ int	is_valid(t_shell *data)
 		j = 0;
 		while (str[i][j] && str[i][j] != '=')
 		{
-			if ((ft_isdigit(str[i][0]) || !ft_isalnum(str[i][j])))
+			if ((ft_isdigit(str[i][0]) || !ft_isalnum(str[i][j])) && str[i][j] != '_')
 			{
 				printf("export: %s: not a valid identifier\n", str[i]);
+				data->status = 1;
 				return (0);
 			}
 			j++;

@@ -5,7 +5,7 @@ void	get_key_value(char *str, char **key, char **value)
 	char	*equal;
 
 	if (str == NULL || key == NULL || value == NULL)
-		perror("Error: null arguments");
+		return ;
 	*key = ft_substr(str, 0, ft_strchr(str, '=') - str);
 	equal = ft_strchr(str, '=');
 	if (equal)
@@ -19,7 +19,7 @@ char	*get_value(t_env *env, const char *key)
 	t_env *current;
 
 	if (env == NULL || key == NULL)
-		perror("Error: null arguments");
+		return (NULL);
 	current = env;
 	while (current != NULL)
 	{

@@ -26,21 +26,24 @@ static int	update_pwd_oldpwd(t_env *env, const char *key, char *value)
 	return (1);
 }
 
-static char	*get_pwd(t_shell *data, t_cmd *cmd, char *path, char *old_pwd)
+static char	*get_pwd(t_shell *data, t_cmd *cmd, char *path)
 {
 	if (cmd->n_args == 1 || !ft_strncmp(cmd->arg[1], "~\0", 2))
 	{
 		path = get_cd_value(data->env, "HOME");
 		if (!path)
-			perror("Error: HOME not found");
+		{
+			ft_putendl_fd("minishell: cd: HOME not set", 2);
+			data->status = 1;
+		}
 	}
 	else if (!ft_strncmp(cmd->arg[1], "-", 1))
 	{
 		path = get_cd_value(data->env, "OLDPWD");
 		if (!path)
 		{
-			free(old_pwd);
-			perror("Error: path not found");
+			ft_putendl_fd("minishell: cd: OLDPWD not set", 2);
+			data->status = 1;
 		}
 	}
 	else
@@ -71,6 +74,15 @@ static void	update_variables(char *new_pwd, char *old_pwd, t_shell *data)
 	}
 }
 
+void	check_args(t_shell *data, t_cmd *cmd)
+{
+	if (cmd->n_args > 2)
+	{
+		ft_putstr_fd("minishell: cd: too many arguments\n", 2);
+		data->status = 1;
+	}
+}
+
 void	ft_cd(t_shell *data, t_cmd *cmd)
 {
 	char	*pwd;
@@ -78,10 +90,14 @@ void	ft_cd(t_shell *data, t_cmd *cmd)
 	char	*new_pwd;
 
 	pwd = NULL;
+	check_args(data, cmd);
 	old_pwd = get_current_directory();
 	if (!old_pwd)
-		perror("Error: getting pwd");
-	pwd = get_pwd(data, cmd, pwd, old_pwd);
+	{
+		data->status = 1;
+		return ;
+	}
+	pwd = get_pwd(data, cmd, pwd);
 	if (!pwd)
 	{
 		free(old_pwd);
@@ -89,10 +105,20 @@ void	ft_cd(t_shell *data, t_cmd *cmd)
 		return ;
 	}
 	if (chdir(pwd) < 0)
-		perror("Error: chdir failed");
+	{
+		ft_putstr_fd("minishell: cd: ", 2);
+		ft_putstr_fd(pwd, 2);
+		ft_putendl_fd(": No such file or directory", 2);
+		data->status = 1;
+	}
 	new_pwd = get_current_directory();
 	update_variables(new_pwd, old_pwd, data);
-	free(old_pwd);
-	free(new_pwd);
-	data->status = 0;
+	if(old_pwd)
+		free(old_pwd);
+	if(new_pwd)
+		free(new_pwd);
+	if (data->status == 1)
+		data->status = 1;
+	else
+		data->status = 0;
 }

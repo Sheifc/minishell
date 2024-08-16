@@ -4,8 +4,6 @@ void	get_status(t_shell *data)
 {
 	if (WIFEXITED(data->status))
 		data->status = WEXITSTATUS(data->status);
-	if (data->status == 13)
-		data->status = 127;
 }
 
 void	wait_process(t_shell *data)
