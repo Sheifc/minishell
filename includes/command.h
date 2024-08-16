@@ -28,6 +28,7 @@ typedef struct s_cmd_arg
 	t_fds				fds;
 	t_operator_stack	**ope_stack;
 	t_pipe_stack		**pipe_stack;
+	bool				open_parenthesis;
 }						t_cmd_arg;
 
 // Command
@@ -43,17 +44,15 @@ void					delete_command(t_cmd **node);
 void					print_command(t_cmd *cmd);
 
 // Command handles1
+void					handle_parenthesis_status(t_cmd *cmd, t_cmd_arg *arg);
 t_cmd					*handle_node_command(t_cmd_arg *arg, t_shell *data);
-t_cmd					*handle_node_pipe(t_cmd_arg *arg, t_shell *data);
 t_cmd					*handle_node_output(t_cmd_arg *arg, t_shell *data);
 t_cmd					*handle_node_input(t_cmd_arg *arg, t_shell *data);
 t_cmd					*handle_node_heredoc(t_cmd_arg *arg, t_shell *data);
 
 // Command handles2
-t_cmd					*create_command(const char *name, t_fds fds,
-							t_node_type ope, t_shell *data);
-t_cmd					*create_command_from_ast(t_cmd_arg *arg, t_shell *data,
-							t_node_type ope);
+t_cmd					*create_command(t_cmd_arg *arg, t_shell *data);
+t_cmd					*create_command_from_ast(t_cmd_arg *arg, t_shell *data);
 void					append_commands(t_cmd **head, t_cmd **tail,
 							t_cmd *new_cmds);
 t_cmd					*handle_node_and_or_semicolon(t_cmd_arg *arg,

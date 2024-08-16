@@ -91,7 +91,8 @@ void	free_commands(t_cmd **head)
 void	print_command(t_cmd *cmd)
 {
 	int			i;
-	const char	*symbol[] = {"None", "Infile", "Outfile"};
+	const char	*symbol_redirect[] = {"None", "Infile", "Outfile"};
+	const char	*symbol_parenthesis[] = {"None", "Open", "Close"};
 
 	printf(" Command: \e[33m%s\e[0m\n", cmd->name);
 	i = -1;
@@ -99,9 +100,11 @@ void	print_command(t_cmd *cmd)
 		printf("    Arg[%d]: %s\n", i, cmd->arg[i]);
 	printf("  \e[34mfd_in: %d\e[0m, \e[35mfd_out: %d\e[0m\n", cmd->fdin,
 		cmd->fdout);
-	printf("  parenthesis: %d\n", cmd->parenthesis);
 	printf("  next_operator: %s [%d]\n", node_type_to_symbol(cmd->operator),
 		cmd->operator);
-	printf("  \e[36mredirect: %s [%d]\e[0m\n", symbol[cmd->redirect],
+	printf("  \e[36mredirect: %s [%d]\e[0m\n", symbol_redirect[cmd->redirect],
 		cmd->redirect);
+	printf("  \e[32mparenthesis: %d, paranethesis_status: %s [%d], \e[0m\n",
+		cmd->parenthesis, symbol_parenthesis[cmd->paranethesis_status],
+		cmd->paranethesis_status);
 }

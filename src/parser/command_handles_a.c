@@ -1,28 +1,34 @@
 #include "command.h"
 #include "minishell.h"
 
+void	handle_parenthesis_status(t_cmd *cmd, t_cmd_arg *arg)
+{
+	t_node_type	ope;
+
+	ope = peek_operator(*arg->ope_stack);
+	if (arg->open_parenthesis && ope != NODE_PARENTHESIS)
+		cmd->paranethesis_status = P_OPEN;
+	if (ope == NODE_PARENTHESIS)
+	{
+		if (!arg->open_parenthesis)
+			cmd->paranethesis_status = P_CLOSE;
+		pop_operator(arg->ope_stack);
+		ope = peek_operator(*arg->ope_stack);
+	}
+	cmd->operator = ope;
+}
+
 t_cmd	*handle_node_command(t_cmd_arg *arg, t_shell *data)
 {
-	t_node_type	parent_ope;
 	t_cmd		*cmd;
 
 	cmd = NULL;
 	data->paranthesis = count_operator(*arg->ope_stack, NODE_PARENTHESIS);
-	parent_ope = peek_operator(*arg->ope_stack);
-	if (parent_ope == NODE_PARENTHESIS)
-	{
-		pop_operator(arg->ope_stack);
-		parent_ope = peek_operator(*arg->ope_stack);
-	}
-	cmd = create_command_from_ast(arg, data, parent_ope);
+	cmd = create_command_from_ast(arg, data);
+	if (arg->open_parenthesis == true)
+		arg->open_parenthesis = false;
 	pop_operator(arg->ope_stack);
 	return (cmd);
-}
-
-t_cmd	*handle_node_pipe(t_cmd_arg *arg, t_shell *data)
-{
-	push_operator(arg->ope_stack, arg->node->type);
-	return (process_node_commands(arg, data, 0, R_NONE));
 }
 
 t_cmd	*handle_node_output(t_cmd_arg *arg, t_shell *data)

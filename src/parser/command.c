@@ -55,7 +55,10 @@ t_cmd	*traverse_ast(t_cmd_arg *arg, t_shell *data)
 	if (node->type == NODE_COMMAND)
 		return (handle_node_command(arg, data));
 	else if (node->type == NODE_PIPE)
-		return (handle_node_pipe(arg, data));
+	{
+		push_operator(arg->ope_stack, arg->node->type);
+		return (process_node_commands(arg, data, 0, R_NONE));
+	}
 	else if (node->type == NODE_OUTPUT || node->type == NODE_OUTPUT_APPEND)
 		return (handle_node_output(arg, data));
 	else if (node->type == NODE_INPUT)

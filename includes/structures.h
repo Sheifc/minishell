@@ -98,6 +98,13 @@ typedef enum s_redirect
 	R_OUTFILE
 }						t_redirect;
 
+typedef enum s_parenthesis
+{
+	P_NONE,
+	P_OPEN,
+	P_CLOSE
+}						t_parenthesis;
+
 typedef struct s_cmd
 {
 	char				*name;
@@ -107,6 +114,7 @@ typedef struct s_cmd
 	int					fdout;
 	int					parenthesis;
 	t_redirect			redirect;
+	t_parenthesis		paranethesis_status;
 	t_node_type			operator;
 	struct s_cmd		*next;
 }						t_cmd;
@@ -123,7 +131,7 @@ typedef struct s_shell
 	char				*path;
 	int					status;
 	int					total_status;
-    int					flag;
+	int					flag;
 	int					num_tokens;
 	int					paranthesis;
 	int					tmpin;
