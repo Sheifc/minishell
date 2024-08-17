@@ -17,6 +17,11 @@ void	clean_commands(t_cmd *cmd)
 		}
 		delete_command(&cmd->next);
 	}
+	if (cmd && (ft_strcmp(cmd->name, "save_outfile") == 0
+			|| ft_strcmp(cmd->name, "read_infile") == 0
+			|| ft_strcmp(cmd->name, "save_append") == 0
+			|| ft_strcmp(cmd->name, "heredoc") == 0))
+		delete_command(&cmd);
 }
 
 void	postprocess_cmds(t_cmd *cmd)
@@ -41,7 +46,8 @@ void	postprocess_cmds(t_cmd *cmd)
 	else if (cmd->fdout != -1)
 		cmd->redirect = R_OUTFILE;
 	clean_commands(cmd);
-	cmd = cmd->next;
+	if (cmd)
+		cmd = cmd->next;
 	postprocess_cmds(cmd);
 }
 

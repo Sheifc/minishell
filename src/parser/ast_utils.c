@@ -98,8 +98,8 @@ void	print_ast(t_ast_node *root)
 	i = -1;
 	while (++i < root->level)
 		printf("   ");
-	printf("(%d) %s[%d]: %s (%lu)\n", root->level, messages[root->type], root->type,
-		root->value, ft_strlen(root->value));
+	printf("(%d) %s[%d]: %s (%lu)\n", root->level, messages[root->type],
+		root->type, root->value, ft_strlen(root->value));
 	print_ast(root->left);
 	print_ast(root->right);
 }

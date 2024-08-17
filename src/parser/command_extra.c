@@ -58,9 +58,10 @@ t_cmd	*generate_commands(t_shell *data, bool is_valid, t_fds fds)
 		arg.fds = fds;
 		arg.ope_stack = &ope_stack;
 		arg.pipe_stack = &pipe_stack;
-		// printf("\n**** Generating Commands: ****\n");
 		data->cmd = traverse_ast(&arg, data);
 		postprocess_cmds(data->cmd);
+		if (data->cmd == NULL || data->cmd->name == NULL)
+			data->cmd = NULL;
 		// print_commands(data->cmd);
 		free_ast(&data->ast);
 		if (pipe_stack != NULL)
@@ -76,7 +77,7 @@ void	print_commands(t_cmd *cmd)
 	t_cmd	*current;
 
 	current = NULL;
-	if (cmd)
+	if (cmd && cmd->name)
 	{
 		printf("\n**** List of Commands: ****\n");
 		current = cmd;
