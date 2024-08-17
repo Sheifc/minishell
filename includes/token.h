@@ -93,4 +93,7 @@ int		handle_star(const char *pattern, const char *string);
 int		handle_brackets(const char *pattern, const char *string);
 int		handle_exact_match(const char *pattern, const char *string);
 
+// wildcard_preprocess
+char	*remove_repeated_chars(const char *str, char ch);
+
 #endif

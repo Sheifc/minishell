@@ -27,27 +27,32 @@ static int	found_match(const char *pattern, const char *string)
 	return (NOMATCH);
 }
 
-int	process_directory_entries(DIR *dir, const char *wildcard, t_shell *data,
+int	process_directory_entries(DIR *dir, const char *wildcard, t_shell *d,
 		t_token_type type)
 {
 	struct dirent	*entry;
 	int				found;
+	char			*clean_wildcard;
 
 	found = 0;
 	entry = readdir(dir);
+	clean_wildcard = remove_repeated_chars(wildcard, '*');
 	while (entry != NULL)
 	{
-		if (found_match(wildcard, entry->d_name) == 0)
+		if (found_match(clean_wildcard, entry->d_name) == 0)
 		{
 			found = 1;
-			data->tokens[data->num_tokens] = create_token(type, entry->d_name,
-					true);
-			if (!data->tokens[data->num_tokens])
+			d->tokens[d->num_tokens] = create_token(type, entry->d_name, true);
+			if (!d->tokens[d->num_tokens])
+			{
+				free(clean_wildcard);
 				return (-1);
-			data->num_tokens++;
+			}
+			d->num_tokens++;
 		}
 		entry = readdir(dir);
 	}
+	free(clean_wildcard);
 	closedir(dir);
 	return (found);
 }

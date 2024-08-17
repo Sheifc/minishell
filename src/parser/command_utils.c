@@ -97,7 +97,8 @@ void	print_command(t_cmd *cmd)
 	printf(" Command: \e[33m%s\e[0m\n", cmd->name);
 	i = -1;
 	while (++i < cmd->n_args)
-		printf("    Arg[%d]: %s\n", i, cmd->arg[i]);
+		printf("    Arg[%d]: %s (%lu)\n", i, cmd->arg[i],
+			ft_strlen(cmd->arg[i]));
 	printf("  \e[34mfd_in: %d\e[0m, \e[35mfd_out: %d\e[0m\n", cmd->fdin,
 		cmd->fdout);
 	printf("  next_operator: %s [%d]\n", node_type_to_symbol(cmd->operator),

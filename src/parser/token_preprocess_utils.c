@@ -57,9 +57,9 @@ char	*get_converted_word(const char *palabra, int longitud)
 	original_word = ft_strndup(palabra, longitud);
 	word_without_quotes = remove_quotes(original_word);
 	word_between_quotes = NULL;
-	if (original_word[0] == '"' && original_word[longitud - 1] == '"')
+	if (ft_strchr(original_word, '\"'))
 		word_between_quotes = add_quotes(word_without_quotes, "\"");
-	else if (original_word[0] == '\'' && original_word[longitud - 1] == '\'')
+	else if (ft_strchr(original_word, '\''))
 		word_between_quotes = add_quotes(word_without_quotes, "\'");
 	else
 		word_between_quotes = strdup(word_without_quotes);

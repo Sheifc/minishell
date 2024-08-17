@@ -65,8 +65,8 @@ bool	is_binary_operator_valid(t_ast_node *node, int *status)
 		return (false);
 	if (node->left == NULL || node->right == NULL)
 	{
-		ft_error_ope(E_SYNTAX, node->value, "requires two valid operands",
-			status);
+		ft_error_syntax(E_SYNTAX, node->value, "syntax error near unexpected "
+			"token", status);
 		return (false);
 	}
 	return (is_ast_valid(node->left, status) && is_ast_valid(node->right,
@@ -79,17 +79,17 @@ bool	is_redirection_valid(t_ast_node *node, int *status)
 
 	if (node == NULL)
 		return (false);
-	if (node->left == NULL || node->right == NULL)
+	if (node->right == NULL)
 	{
-		ft_error_ope(E_REDIRECT, node->value, "requires two valid operands",
-			status);
+		ft_error_syntax(E_SYNTAX, "newline", "syntax error near unexpected "
+			"token", status);
 		return (false);
 	}
 	child = node->right;
 	if (!child || (child->type != NODE_COMMAND))
 	{
-		ft_error_ope(E_REDIRECT, node->value, "has no valid argument",
-			status);
+		ft_error_syntax(E_SYNTAX, "newline", "syntax error near unexpected "
+			"token", status);
 		return (false);
 	}
 	return (true);

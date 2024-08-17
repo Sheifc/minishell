@@ -55,3 +55,14 @@ void	ft_error_ope(const int error_code, char *ope, const char *message,
 	else if (status != NULL)
 		*status = error_code;
 }
+
+void	ft_error_syntax(const int error_code, char *ope, const char *message,
+	int *status)
+{
+	fprintf(stderr, "\e[31m Minishell(%d): %s \'%s\'\e[0m\n", error_code,
+		message, ope);
+	if (status != NULL && error_code <= 0)
+		*status = errno;
+	else if (status != NULL)
+		*status = error_code;
+}

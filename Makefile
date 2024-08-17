@@ -29,7 +29,8 @@ FILES_PARSER	=	parser_utils.c										\
 					token_preprocess.c token_preprocess_utils.c 		\
 					token_env.c token_env_utils.c						\
 					error.c												\
-					wildcard_bonus.c wildcard_utils_bonus.c
+					wildcard_bonus.c wildcard_utils_bonus.c				\
+					wildcard_preprocess_bonus.c
 
 FILES_EXEC      = init.c				\
 				  signals.c				\
