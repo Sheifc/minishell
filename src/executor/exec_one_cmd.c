@@ -4,8 +4,6 @@ void	get_status(t_shell *data)
 {
 	if (WIFEXITED(data->status))
 		data->status = WEXITSTATUS(data->status);
-	if (data->status == 13)
-		data->status = 127;
 }
 
 void	wait_process(t_shell *data)
@@ -27,18 +25,18 @@ void	exec_one_cmd(t_shell *data, t_cmd *cmd)
 	{
 		data->pid = fork();
 		if (data->pid < 0)
-			perror("Error: fork failed");
+			perror("minishell: error: fork");
 		else if (data->pid == 0)
 		{
 			get_path(data, cmd);
 			if (!data->path)
 			{
-				perror("Error: command not found");
+				perror("minishell: error: command not found");
 				exit(127);
 			}
 			if (execve(data->path, cmd->arg, data->envp) < 0)
 			{
-				perror("Error: execve failed");
+				perror("minishell: error: execve failed");
 				exit(1);
 			}
 		}

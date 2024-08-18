@@ -5,7 +5,7 @@ NAME            = minishell
 
 CC              = gcc
 CFLAGS          = -Wall -Werror -Wextra -Iincludes -Ilibft/includes -g #-fsanitize=address
-#LDFLAGS         = -fsanitize=address
+LDFLAGS         = -fsanitize=address
 RM              = rm -rf
 
 SRC_DIR         = src/
@@ -43,6 +43,9 @@ FILES_EXEC      = init.c				\
                   echo.c				\
                   pwd.c					\
                   cd.c					\
+				  cd_utils.c			\
+				  cd_chdir.c			\
+				  cd_update_vars.c		\
                   env.c					\
 				  env_error_handle.c	\
                   exit.c				\

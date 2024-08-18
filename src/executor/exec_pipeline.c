@@ -7,21 +7,21 @@ void	run_single_cmd(t_shell *data, t_cmd *cmd)
 		get_path(data, cmd);
 		if (!data->path)
 		{
-			perror("Error: command not found");
+			perror("minishell: error: command not found");
 			exit(127);
 		}
 		if (cmd->fdout != -1 && cmd->fdout != 0)
 		{
 			if (dup2(cmd->fdout, 1) == -1)
 			{ 
-				perror("Error: dup2 failed for cmd->fdout");
+				perror("minishell: error: dup2");
 				exit(1);
 			}
 			close(cmd->fdout);
 		}
 		if (execve(data->path, cmd->arg, data->envp) < 0)
 		{
-			perror("Error: execve failed");
+			perror("minishell: error: execve");
 			exit(1);
 		}
 	}
@@ -32,7 +32,7 @@ void	dup_fdpipe(int *fdpipe)
 	close(fdpipe[0]);
 	if (dup2(fdpipe[1], 1) == -1)
 	{
-		perror("Error: dup2 failed for fdpipe[1]");
+		perror("minishell: error: dup2");
 		exit(1);
 	}
 	close(fdpipe[1]);
@@ -50,7 +50,7 @@ void	exec_fork(t_shell *data, t_cmd *cmd, int *fdpipe)
 		{
 			if (dup2(cmd->fdout, 1) == -1)
 			{
-				perror("Error: dup2 failed for cmd->fdout");
+				perror("minishell: error: dup2");
 				exit(1);
 			}
 			close(cmd->fdout);
@@ -58,7 +58,7 @@ void	exec_fork(t_shell *data, t_cmd *cmd, int *fdpipe)
 	}
  	if (dup2(cmd->fdin, 0) == -1)
 	{
-		perror("Error: dup2 failed for cmd->fdin");
+		perror("minishell: error: dup2");
 		exit(1);
 	}
 	close(cmd->fdin);

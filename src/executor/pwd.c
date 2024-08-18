@@ -1,12 +1,17 @@
 #include "minishell.h"
 
-char	*get_current_directory(void)
+char	*get_current_directory(t_shell *data)
 {
 	char	*path;
 
 	path = getcwd(NULL, 0);
 	if (!path)
-		perror("Error: getcwd failed");
+	{
+		ft_putendl_fd("minishell: getcwd: "
+		"No such file or directory", 2);
+		data->status = 1;
+		return (NULL);
+	}
 	return (path);
 }
 
@@ -14,7 +19,12 @@ void	ft_pwd(t_shell *data)
 {
 	char	*path;
 
-	path = get_current_directory();
+	path = get_current_directory(data);
+	if (!path)
+	{
+		data->status = 1;
+		return ;
+	}
 	printf("%s\n", path);
 	free(path);
 	data->status = 0;

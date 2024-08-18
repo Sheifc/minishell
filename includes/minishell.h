@@ -45,6 +45,12 @@ int			execute_builtin(t_shell *data, t_cmd *cmd, char *arg);
 
 //*--------------------CD--------------------------------------------
 t_env		*env_lst_search(t_env *env, const char *key);
+char		*get_cd_value(t_env *env, const char *key);
+int			multiple_args(t_shell *data, t_cmd *cmd);
+char		*get_pwd(t_shell *data, t_cmd *cmd, char *path);
+int			ft_chdir(t_shell *data, char *pwd);
+char		*go_to(t_shell *data, char *location, char *error);
+int			update_variables(char *new_pwd, char *old_pwd, t_env *list);
 void		ft_cd(t_shell *data, t_cmd *cmd);
 
 //*--------------------ECHO------------------------------------------
@@ -71,7 +77,7 @@ void		ft_export(t_shell *data, t_cmd *cmd);
 void		ft_exit(t_shell *data, t_cmd *cmd);
 
 //*--------------------PWD-------------------------------------------
-char		*get_current_directory(void);
+char		*get_current_directory(t_shell *data);
 void		ft_pwd(t_shell *data);
 
 //*--------------------UNSET-----------------------------------------
@@ -83,7 +89,7 @@ void		pop(t_env **head, char *key);
 t_cmd		*get_last_cmd(t_cmd *cmd);
 void		get_key_value(char *str, char **key, char **value);
 char		*get_value(t_env *env, const char *key);
-char		*get_cd_value(t_env *env, const char *key);
+void		update_status(t_shell *data);
 
 //*--------------------EXECUTOR--------------------------------------
 
@@ -143,6 +149,8 @@ void		print_cmds(t_cmd *cmd);
 
 void		free_env_list(t_env *head);
 void		free_env_node(t_env **node);
+
+void		free_pwd(char *old_pwd, char *new_pwd);
 
 void		free_arg(char ***matrix);
 void		free_cmd(t_cmd **cmd);

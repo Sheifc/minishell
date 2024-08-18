@@ -6,7 +6,7 @@ void	fdin(t_cmd *cmd)
 	{
 		if (dup2(cmd->fdin, 0) == -1)
 		{
-			perror("Error: dup2 failed for cmd->fdin");
+			perror("minishell: error: dup2");
 			exit(EXIT_FAILURE);
 		}
 		close(cmd->fdin);
@@ -19,7 +19,7 @@ void	fdout(t_cmd *cmd)
 	{
 		if (dup2(cmd->fdout, 1) == -1)
 		{
-			perror("Error: dup2 failed for cmd->fdout");
+			perror("minishell: error: dup2");
 			exit(EXIT_FAILURE);
 		}
 		close(cmd->fdout);

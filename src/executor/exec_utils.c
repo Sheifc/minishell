@@ -17,7 +17,7 @@ void	save_pipe(int *fdpipe)
 {
 	if (pipe(fdpipe) < 0)
 	{
-		perror("pipe failed");
+		perror("minishell: error: pipe");
 		exit(EXIT_FAILURE);
 	}
 }
@@ -27,7 +27,7 @@ pid_t	save_fork(t_shell *data)
 	data->pid = fork();
 	if (data->pid == -1)
 	{
-		perror("Error: fork failed");
+		perror("minishell: error: fork");
 		exit(1);
 	}
 	return (data->pid);
@@ -38,7 +38,7 @@ pid_t	saved_fork(void)
 	pid_t pid = fork();
 	if (pid == -1)
 	{
-		perror("Error: fork failed");
+		perror("minishell: error: fork failed");
 		exit(1);
 	}
 	return (pid);

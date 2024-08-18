@@ -7,12 +7,12 @@ void	run_cmd(t_shell *data, t_cmd *cmd)
 		get_path(data, cmd);
 		if (!data->path)
 		{
-			perror("Error: command not found");
+			perror("minishell: error: command not found");
 			exit(127);
 		}
 		if (execve(data->path, cmd->arg, data->envp) < 0)
 		{
-			perror("Error: execve failed");
+			perror("minishell: error: execve");
 			exit(1);
 		}
 	}
@@ -24,7 +24,7 @@ void	redir_fdin(t_cmd *cmd)
 	{
 		if (dup2(cmd->fdin, 0) == -1)
 		{
-			perror("Error: dup2 failed for cmd->fdin");
+			perror("minishell: error: dup2");
 			exit(1);
 		}
 	}
@@ -36,7 +36,7 @@ void	redir_fdout(t_cmd *cmd)
 	{
 		if (dup2(cmd->fdout, 1) == -1)
 		{
-			perror("Error: dup2 failed for cmd->fdout");
+			perror("minishell: error: dup2");
 			exit(1);
 		}
 	}
