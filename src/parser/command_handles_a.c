@@ -7,11 +7,11 @@ void	handle_parenthesis_status(t_cmd *cmd, t_cmd_arg *arg)
 
 	ope = peek_operator(*arg->ope_stack);
 	if (arg->open_parenthesis && ope != NODE_PARENTHESIS)
-		cmd->paranethesis_status = P_OPEN;
+		cmd->parenthesis_status = P_OPEN;
 	if (ope == NODE_PARENTHESIS)
 	{
 		if (!arg->open_parenthesis)
-			cmd->paranethesis_status = P_CLOSE;
+			cmd->parenthesis_status = P_CLOSE;
 		pop_operator(arg->ope_stack);
 		ope = peek_operator(*arg->ope_stack);
 	}

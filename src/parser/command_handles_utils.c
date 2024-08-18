@@ -47,7 +47,7 @@ char	*read_until_eof(char *line, char *eof)
 			break ;
 		if (line == NULL)
 		{
-			printf("bash: warning: here-document at line %ld delimited by "
+			printf("minishell: warning: here-document at line %ld delimited by "
 				"(wanted «%s»)\n", i, eof);
 			break ;
 		}

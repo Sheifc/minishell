@@ -114,7 +114,7 @@ typedef struct s_cmd
 	int					fdout;
 	int					parenthesis;
 	t_redirect			redirect;
-	t_parenthesis		paranethesis_status;
+	t_parenthesis		parenthesis_status;
 	t_node_type			operator;
 	struct s_cmd		*next;
 }						t_cmd;

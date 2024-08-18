@@ -105,7 +105,7 @@ void	print_command(t_cmd *cmd)
 		cmd->operator);
 	printf("  \e[36mredirect: %s [%d]\e[0m\n", symbol_redirect[cmd->redirect],
 		cmd->redirect);
-	printf("  \e[32mparenthesis: %d, paranethesis_status: %s [%d], \e[0m\n",
-		cmd->parenthesis, symbol_parenthesis[cmd->paranethesis_status],
-		cmd->paranethesis_status);
+	printf("  \e[32mparenthesis: %d, parenthesis_status: %s [%d], \e[0m\n",
+		cmd->parenthesis, symbol_parenthesis[cmd->parenthesis_status],
+		cmd->parenthesis_status);
 }
