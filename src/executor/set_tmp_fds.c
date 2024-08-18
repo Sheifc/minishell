@@ -5,13 +5,13 @@ void	set_tmp_fds(t_shell *data)
 	data->tmpin = dup(0);
 	if (data->tmpin == -1)
 	{
-		perror("Error: dup failed for tmpin");
+		perror("minishell: error: dup");
 		return ;
 	}
 	data->tmpout = dup(1);
 	if (data->tmpout == -1)
 	{
-		perror("Error: dup failed for tmpout");
+		perror("minishel: error: dup");
 		close(data->tmpin);
 		return ;
 	}
@@ -23,7 +23,7 @@ void	dup_fdin_tmp(t_shell *data, t_cmd *cmd)
 		cmd->fdin = dup(data->tmpin);
 	if (cmd->fdin == -1)
 	{
-		perror("Error: dup failed for fdin");
+		perror("minishell: error: dup");
 		return ;
 	}
 }
@@ -34,12 +34,12 @@ void	set_fdin(t_shell *data, t_cmd *cmd)
 		cmd->fdin = dup(data->tmpin);
 	if (cmd->fdin == -1)
 	{
-		perror("Error: dup failed for fdout");
+		perror("minishell: error: dup");
 		return ;
 	}
 	if (dup2(cmd->fdin, 1) == -1)
 	{
-		perror("Error: dup2 failed for fdout");
+		perror("minishell: error: dup2");
 		close(cmd->fdin);
 		return ;
 	}
@@ -52,12 +52,12 @@ void	set_fdout(t_shell *data, t_cmd *cmd)
 		cmd->fdout = dup(data->tmpout);
 	if (cmd->fdout == -1)
 	{
-		perror("Error: dup failed for fdout");
+		perror("minishell: error: dup");
 		return ;
 	}
 	if (dup2(cmd->fdout, 1) == -1)
 	{
-		perror("Error: dup2 failed for fdout");
+		perror("minishell: error: dup2");
 		close(cmd->fdout);
 		return ;
 	}

@@ -29,13 +29,3 @@ char	*get_value(t_env *env, const char *key)
 	}
 	return (NULL);
 }
-
-char	*get_cd_value(t_env *env, const char *key)
-{
-	t_env	*node;
-
-	node = env_lst_search(env, key);
-	if (node)
-		return (node->value);
-	return (NULL);
-}
