@@ -1,11 +1,17 @@
 #include "command.h"
+#include "minishell.h"
 
 t_token	**tokenize_input(t_shell *data)
 {
 	data->tokens = NULL;
 	if (data->prompt && ft_strlen(data->prompt) > 0)
 	{
-		// printf("\n**** Tokens: ****\n");
+		if (!ft_strlen(data->prompt) || only_wildcard(data->prompt) == 1)
+		{
+			ft_error(E_COMMAND, "command not found: No such file or directory",
+				&data->status);
+			return (data->tokens);
+		}
 		data->tokens = tokenize(data);
 		// print_tokens(data->tokens, data->num_tokens);
 		if (verify_tokens(data) != 0)

@@ -24,7 +24,7 @@ typedef enum s_error_type
 	E_SYNTAX = 10,
 	E_REDIRECT = 11,
 	E_MEMORY = 12,
-	E_COMMAND = 13,
+	E_COMMAND = 127,
 	E_UNKNOWN
 }		t_error_type;
 

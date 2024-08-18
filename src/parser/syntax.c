@@ -22,9 +22,6 @@ bool	is_ast_valid(t_ast_node *root, int *status)
 	else if (root->type == NODE_AND || root->type == NODE_OR
 		|| root->type == NODE_PIPE)
 		return (is_binary_operator_valid(root, status));
-	else if (root->type == NODE_SEMICOLON)
-		return (is_ast_valid(root->left, status) && is_ast_valid(root->right,
-				status));
 	else if (root->type == NODE_PARENTHESIS)
 		return (is_parenthesis_valid(root, status));
 	else if (root->type == NODE_INPUT || root->type == NODE_HEREDOC
@@ -32,7 +29,7 @@ bool	is_ast_valid(t_ast_node *root, int *status)
 		return (is_redirection_valid(root, status));
 	else
 	{
-		ft_error_ope(E_SYNTAX, root->value, "unsupported type", status);
+		ft_error_syntax(E_SYNTAX, root->value, "syntax error near unexpected token", status);
 		return (false);
 	}
 }

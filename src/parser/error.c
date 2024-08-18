@@ -11,7 +11,7 @@ char	*str_error(int ecode)
 	else if (ecode == E_REDIRECT)
 		return ("Redirect");
 	else if (ecode == E_COMMAND)
-		return ("Command");
+		return ("Minishell");
 	return ("Unknown");
 }
 
@@ -27,7 +27,7 @@ void	ft_error(const int error_code, const char *message, int *status)
 		fprintf(stderr, "\e[31m %s error(%d): %s\e[0m\n",
 			str_error(error_code), error_code, strerror(errno));
 	else
-		fprintf(stderr, "\e[31m %s error(%d): %s\e[0m\n",
+		fprintf(stderr, "\e[31m %s(%d): %s\e[0m\n",
 			str_error(error_code), error_code, message);
 	if (status != NULL && error_code <= 0)
 		*status = errno;
