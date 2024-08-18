@@ -41,6 +41,11 @@ int	verify_tokens(t_shell *data)
 			balance_parentheses++;
 		else if (data->tokens[i]->type == T_PAREN_CLOSE)
 			balance_parentheses--;
+		if (data->tokens[i]->type == T_REDIRECT_ARG && (ft_strcmp(data->tokens[i]->value, ">") == 0 || ft_strcmp(data->tokens[i]->value, "<") == 0))
+		{
+			ft_error_syntax(E_SYNTAX, data->tokens[i]->value, "syntax error near unexpected token", &data->status);
+			return (1);
+		}
 	}
 	if (balance_parentheses < 0)
 		ft_error(E_SYNTAX, "A parenthesis has not been opened", &data->status);

@@ -20,7 +20,9 @@ void	clean_commands(t_cmd *cmd)
 	if (cmd && (ft_strcmp(cmd->name, "save_outfile") == 0
 			|| ft_strcmp(cmd->name, "read_infile") == 0
 			|| ft_strcmp(cmd->name, "save_append") == 0
-			|| ft_strcmp(cmd->name, "heredoc") == 0))
+			|| ft_strcmp(cmd->name, "heredoc") == 0
+			|| ft_strcmp(cmd->name, ":") == 0
+			|| ft_strcmp(cmd->name, "!") == 0))
 		delete_command(&cmd);
 }
 
@@ -28,18 +30,11 @@ void	postprocess_cmds(t_cmd *cmd)
 {
 	if (cmd == NULL)
 		return ;
-	if (ft_strcmp(cmd->name, "cat") == 0 && cmd->fdin == 0 && cmd->n_args == 1)
+	if (ft_strcmp(cmd->name, "/") == 0 || ft_strcmp(cmd->name, ".")==0 || ft_strcmp(cmd->name, "..")==0 || ft_strcmp(cmd->name, "~")==0)
 	{
-		close(cmd->fdout);
-		cmd->fdout = STDOUT_FILENO;
-		if (cmd->operator == NODE_PIPE)
-		{
-			if (cmd->next)
-			{
-				close(cmd->next->fdin);
-				cmd->next->fdin = STDIN_FILENO;
-			}
-		}
+		ft_error_ope(E_SYNTAX, cmd->name, "Is a directory", NULL);
+		free_commands(&cmd);
+		return ;
 	}
 	if (cmd->fdin != -1)
 		cmd->redirect = R_INFILE;

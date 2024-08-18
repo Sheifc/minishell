@@ -7,7 +7,7 @@ int	only_spaces(char *prompt)
 	i = 0;
 	while (prompt[i])
 	{
-		if (prompt[i] != ' ')
+		if (prompt[i] != ' ' && prompt[i] != '\t')
 			return (0);
 		i++;
 	}

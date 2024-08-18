@@ -29,7 +29,7 @@ int	add_token(char **start, t_shell *data, t_token t)
 	if (!data->tokens[data->num_tokens])
 		return (1);
 	data->num_tokens++;
-	*start += strlen(t.value);
+	*start += ft_strlen(t.value);
 	return (0);
 }
 

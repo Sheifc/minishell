@@ -73,7 +73,6 @@ void	handle_quotes(char **start, t_token **tokens, int *n_tokens,
 int	handle_redirect_arg(char **start, t_shell *data)
 {
 	char	*end;
-
 	end = *start + 1;
 	while (*end && !ft_strchr(DELIMITERS, *end) && *end != '"' && *end != '\''
 		&& *end != '(' && *end != ')' && *end != '|' && *end != '<'
@@ -81,6 +80,8 @@ int	handle_redirect_arg(char **start, t_shell *data)
 		&& ft_strncmp(end, "||", 2) != 0 && ft_strncmp(end, "<<", 2) != 0
 		&& ft_strncmp(end, ">>", 2) != 0)
 		end++;
+	if (ft_strlen(end) == 0)
+		return (0);
 	return (add_redirect_token(data, start, end));
 }
 
