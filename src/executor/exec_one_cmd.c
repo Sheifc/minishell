@@ -12,6 +12,13 @@ void	wait_process(t_shell *data)
 	get_status(data);
 }
 
+void	ft_error_cmd(t_cmd *cmd)
+{
+	ft_putstr_fd("minishell: ", 2);
+	ft_putstr_fd(cmd->arg[0], 2);
+	ft_putendl_fd(": command not found", 2);
+}
+
 void	set_up_fds(t_cmd *cmd)
 {
 	fdin(cmd);
@@ -31,7 +38,7 @@ void	exec_one_cmd(t_shell *data, t_cmd *cmd)
 			get_path(data, cmd);
 			if (!data->path)
 			{
-				perror("minishell: error: command not found");
+				ft_error_cmd(cmd);
 				exit(127);
 			}
 			if (execve(data->path, cmd->arg, data->envp) < 0)

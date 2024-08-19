@@ -7,7 +7,7 @@ void	run_cmd(t_shell *data, t_cmd *cmd)
 		get_path(data, cmd);
 		if (!data->path)
 		{
-			perror("minishell: error: command not found");
+			ft_error_cmd(cmd);
 			exit(127);
 		}
 		if (execve(data->path, cmd->arg, data->envp) < 0)

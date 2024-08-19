@@ -90,8 +90,12 @@ t_cmd		*get_last_cmd(t_cmd *cmd);
 void		get_key_value(char *str, char **key, char **value);
 char		*get_value(t_env *env, const char *key);
 void		update_status(t_shell *data);
+void		ft_error_cmd(t_cmd *cmd);
 
 //*--------------------CHECKER---------------------------------------
+int			is_invalid_ampersand(char *arg);
+int			is_invalid_dot_usage(char *arg);
+int			is_special_char(char c);
 int			checker(t_shell *data, t_cmd *cmd);
 
 //*--------------------EXECUTOR--------------------------------------
