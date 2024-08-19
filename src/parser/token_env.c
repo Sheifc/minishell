@@ -84,8 +84,8 @@ char	*replace_env_variables(const char *input, t_shell *data)
 	while (pos)
 	{
 		if (is_btw_single_quotes(result, pos)
-			|| is_preceded_by_double_less(result, pos) || (*(pos - 1) == ' '
-				&& *(pos + 1) == ' '))
+			|| is_preceded_by_double_less(result, pos) || (*(pos + 1) == ' '
+			|| *(pos + 1) == '\0'))
 		{
 			pos = ft_strchr(pos + 1, '$');
 			continue ;

@@ -12,6 +12,7 @@ t_token	**tokenize_input(t_shell *data)
 				&data->status);
 			return (data->tokens);
 		}
+		// printf("\n**** Tokens: ****\n");
 		data->tokens = tokenize(data);
 		// print_tokens(data->tokens, data->num_tokens);
 		if (verify_tokens(data) != 0)

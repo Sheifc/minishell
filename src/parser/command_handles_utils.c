@@ -9,14 +9,13 @@ void	delete_command(t_cmd **node)
 		return ;
 	next_node = (*node)->next;
 	if ((*node)->name)
-		free((*node)->name);
+		ft_free_str((*node)->name);
 	if ((*node)->arg)
 	{
 		i = -1;
 		while (++i < (*node)->n_args)
 		{
-			if ((*node)->arg[i])
-				free((*node)->arg[i]);
+				ft_free_str((*node)->arg[i]);
 		}
 		free((*node)->arg);
 	}
