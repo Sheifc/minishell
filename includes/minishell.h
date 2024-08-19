@@ -91,6 +91,9 @@ void		get_key_value(char *str, char **key, char **value);
 char		*get_value(t_env *env, const char *key);
 void		update_status(t_shell *data);
 
+//*--------------------CHECKER---------------------------------------
+int			checker(t_shell *data, t_cmd *cmd);
+
 //*--------------------EXECUTOR--------------------------------------
 
 void		set_tmp_fds(t_shell *data);

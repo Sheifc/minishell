@@ -52,6 +52,7 @@ FILES_EXEC      = init.c				\
                   export.c				\
 				  export_utils.c		\
                   unset.c				\
+				  checker_pre_exec.c	\
 				  path.c				\
 				  set_fds.c				\
 				  set_tmp_fds.c			\

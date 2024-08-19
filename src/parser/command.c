@@ -30,12 +30,12 @@ void	postprocess_cmds(t_cmd *cmd)
 {
 	if (cmd == NULL)
 		return ;
-	if (ft_strcmp(cmd->name, "/") == 0 || ft_strcmp(cmd->name, ".")==0 || ft_strcmp(cmd->name, "..")==0 || ft_strcmp(cmd->name, "~")==0)
+/* 	if (ft_strcmp(cmd->name, "/") == 0 || ft_strcmp(cmd->name, ".")==0 || ft_strcmp(cmd->name, "..")==0 || ft_strcmp(cmd->name, "~")==0)
 	{
 		ft_error_ope(E_SYNTAX, cmd->name, "Is a directory", NULL);
 		free_commands(&cmd);
 		return ;
-	}
+	} */
 	if (cmd->fdin != -1)
 		cmd->redirect = R_INFILE;
 	else if (cmd->fdout != -1)
