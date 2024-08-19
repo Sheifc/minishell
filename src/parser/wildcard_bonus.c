@@ -78,7 +78,7 @@ bool	is_wildcards(char **start)
 	char	*end;
 
 	end = *start;
-	while (*end && !strchr(" \r\n\t\v\f\"'()|<>;&", *end))
+	while (*end && !ft_strchr(" \r\n\t\v\f\"'()|<>;&", *end))
 	{
 		if (*end == '*' || *end == '?' || *end == '[' || *end == ']')
 			return (true);
