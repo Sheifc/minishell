@@ -11,7 +11,7 @@ typedef struct s_env
 	struct s_env		*next;
 }						t_env;
 
-typedef enum s_node_type
+typedef enum e_node_type
 {
 	NODE_COMMAND,
 	NODE_ARGUMENT,
@@ -55,7 +55,7 @@ typedef struct s_ast_node
 //  T_WILDCARD			*?[]
 // 	T_UNKNOWN
 
-typedef enum s_token_type
+typedef enum e_token_type
 {
 	T_COMMAND,
 	T_ARG,
@@ -91,14 +91,14 @@ typedef struct s_word_features
 	bool				new_word;
 }						t_word_features;
 
-typedef enum s_redirect
+typedef enum e_redirect
 {
 	R_NONE,
 	R_INFILE,
 	R_OUTFILE
 }						t_redirect;
 
-typedef enum s_parenthesis
+typedef enum e_parenthesis
 {
 	P_NONE,
 	P_OPEN,

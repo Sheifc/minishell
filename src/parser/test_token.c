@@ -1,12 +1,12 @@
 #include "token.h"
 
-typedef struct _test_token
+typedef struct s_test_token
 {
 	t_token_type	type;
 	char			value[100];
 }					t_test_token;
 
-typedef struct _test_case {
+typedef struct s_test_case {
 	const char		*input;
 	const t_token	tokens[100];
 	int				num_tokens;

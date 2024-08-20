@@ -16,7 +16,7 @@
 //	E_MEMORY	Cannot allocate memory
 //	E_UNKNOWN
 
-typedef enum s_error_type
+typedef enum e_error_type
 {
 	E_AUTO = 0,
 	E_FILE,

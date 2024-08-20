@@ -27,7 +27,7 @@
 //*--------------------INIT------------------------------------------
 void		init(t_shell *data, char **envp);
 int			only_spaces(char *prompt);
-int         only_wildcard(char *prompt);
+int			only_wildcard(char *prompt);
 void		init_shell(t_shell *data, char **envp);
 
 //*--------------------SIGNALS---------------------------------------

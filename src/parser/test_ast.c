@@ -1,6 +1,6 @@
 #include "syntax.h"
 
-typedef struct _test_ast
+typedef struct s_test_ast
 {
 	char	inputs[100];
 	bool	is_valid;
