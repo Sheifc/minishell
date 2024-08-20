@@ -17,7 +17,8 @@
 # define NOMATCH -1
 
 // token
-t_token	*create_token(t_token_type type, const char *value, bool exp_arg);
+t_token	*create_token(t_token_type type, const char *value, bool exp_arg,
+			t_shell *data);
 void	free_token(t_token **token);
 int		verify_tokens(t_shell *data);
 t_token	**process_tokens(t_shell *data, char *input_copy);
@@ -54,10 +55,8 @@ char	*extract_variable_name(const char *start);
 
 // token_handles
 int		handle_wildcards(char **start, t_shell *data, t_token_type type);
-void	handle_unmatched_quotes(char **start, char *end, t_token **tokens,
-			int *n_tokens);
-void	handle_quotes(char **start, t_token **tokens, int *n_tokens,
-			char quote_char);
+void	handle_unmatched_quotes(char **start, char *end, t_shell *data);
+void	handle_quotes(char **start, t_shell *data, char quote_char);
 int		handle_redirect_arg(char **start, t_shell *data);
 int		handle_regular_tokens(char **start, t_shell *data);
 
@@ -65,10 +64,8 @@ int		handle_regular_tokens(char **start, t_shell *data);
 bool	is_operator(const char *str);
 int		handle_token(char **start, t_shell *data, t_token_type type,
 			char *value);
-void	handle_redirect_or_text_token(t_token **tokens, int *n_tokens,
-			char *token_value);
-void	add_token_and_free(t_token **tokens, int *n_tokens, t_token_type type,
-			char *value);
+void	handle_redirect_or_text_token(t_shell *data, char *token_value);
+void	add_token_and_free(t_shell *data, t_token_type type, char *value);
 int		add_redirect_token(t_shell *data, char **start, char *end);
 
 // token_utils

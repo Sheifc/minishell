@@ -17,7 +17,8 @@ int	handle_wildcards(char **start, t_shell *data, t_token_type type)
 		return (1);
 	if (found == 0)
 	{
-		data->tokens[data->num_tokens] = create_token(type, *start, false);
+		data->tokens[data->num_tokens] = create_token(type, *start, false,
+				data);
 		if (!data->tokens[data->num_tokens])
 			return (1);
 		data->num_tokens++;
@@ -27,27 +28,26 @@ int	handle_wildcards(char **start, t_shell *data, t_token_type type)
 	return (0);
 }
 
-void	handle_unmatched_quotes(char **start, char *end, t_token **tokens,
-		int *n_tokens)
+void	handle_unmatched_quotes(char **start, char *end, t_shell *data)
 {
 	char	*token_value;
 
 	token_value = ft_strdup(*start + 1);
-	tokens[(*n_tokens)++] = create_token(T_TEXT, token_value, false);
+	data->tokens[data->num_tokens++] = create_token(T_TEXT, token_value, false,
+			data);
 	if (token_value)
 		free(token_value);
 	*start = end;
 }
 
 // Function to create the text token
-void	handle_quotes(char **start, t_token **tokens, int *n_tokens,
-	char quote_char)
+void	handle_quotes(char **start, t_shell *d, char quote_char)
 {
 	char	*end;
-	char	*token_value;
+	char	*value;
 
-	token_value = ft_strndup(*start, 1);
-	add_token_and_free(tokens, n_tokens, T_QUOTE, token_value);
+	value = ft_strndup(*start, 1);
+	add_token_and_free(d, T_QUOTE, value);
 	end = *start + 1;
 	while (*end && *end != quote_char)
 		end++;
@@ -55,19 +55,19 @@ void	handle_quotes(char **start, t_token **tokens, int *n_tokens,
 	{
 		if (*(end - 1) != quote_char)
 		{
-			token_value = ft_strndup(*start + 1, end - *start - 1);
-			handle_redirect_or_text_token(tokens, n_tokens, token_value);
-			free(token_value);
+			value = ft_strndup(*start + 1, end - *start - 1);
+			handle_redirect_or_text_token(d, value);
+			free(value);
 		}
 		else
-			handle_redirect_or_text_token(tokens, n_tokens, " ");
-		token_value = ft_strndup(end, 1);
-		tokens[(*n_tokens)++] = create_token(T_QUOTE, token_value, true);
-		free(token_value);
+			handle_redirect_or_text_token(d, " ");
+		value = ft_strndup(end, 1);
+		d->tokens[d->num_tokens++] = create_token(T_QUOTE, value, true, d);
+		free(value);
 		*start = end + 1;
 	}
 	else
-		handle_unmatched_quotes(start, end, tokens, n_tokens);
+		handle_unmatched_quotes(start, end, d);
 }
 
 int	handle_redirect_arg(char **start, t_shell *data)

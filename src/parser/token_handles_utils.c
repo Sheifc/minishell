@@ -14,23 +14,24 @@ int	handle_token(char **start, t_shell *data, t_token_type type,
 	return (handle_redirect_arg(start, data));
 }
 
-void	handle_redirect_or_text_token(t_token **tokens, int *n_tokens,
-	char *token_value)
+void	handle_redirect_or_text_token(t_shell *data, char *token_value)
 {
-	if (*n_tokens > 1 && (tokens[*n_tokens - 2]->type == T_INPUT
-			|| tokens[*n_tokens - 2]->type == T_OUTPUT
-			|| tokens[*n_tokens - 2]->type == T_OUTPUT_APPEND
-			|| tokens[*n_tokens - 2]->type == T_HEREDOC))
-		tokens[(*n_tokens)++] = create_token(T_REDIRECT_ARG, token_value,
-				false);
+	if (data->num_tokens > 1
+		&& (data->tokens[data->num_tokens - 2]->type == T_INPUT
+			|| data->tokens[data->num_tokens - 2]->type == T_OUTPUT
+			|| data->tokens[data->num_tokens - 2]->type == T_OUTPUT_APPEND
+			|| data->tokens[data->num_tokens - 2]->type == T_HEREDOC))
+		data->tokens[(data->num_tokens)++] = create_token(T_REDIRECT_ARG,
+				token_value, false, data);
 	else
-		tokens[(*n_tokens)++] = create_token(T_TEXT, token_value, false);
+		data->tokens[(data->num_tokens)++] = create_token(T_TEXT, token_value,
+				false, data);
 }
 
-void	add_token_and_free(t_token **tokens, int *n_tokens, t_token_type type,
+void	add_token_and_free(t_shell *data, t_token_type type,
 	char *value)
 {
-	tokens[(*n_tokens)++] = create_token(type, value, false);
+	data->tokens[data->num_tokens++] = create_token(type, value, false, data);
 	free(value);
 }
 
@@ -44,7 +45,8 @@ int	add_redirect_token(t_shell *data, char **start, char *end)
 		(*start)++;
 	if (is_wildcards(start))
 		return (handle_wildcards(start, data, T_REDIRECT_ARG));
-	data->tokens[data->num_tokens] = create_token(T_REDIRECT_ARG, *start, true);
+	data->tokens[data->num_tokens] = create_token(T_REDIRECT_ARG, *start, true,
+			data);
 	if (!data->tokens[data->num_tokens])
 		return (1);
 	data->num_tokens++;

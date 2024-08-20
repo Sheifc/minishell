@@ -5,6 +5,11 @@ char	*initialize_result(const char *input)
 	char	*result;
 
 	result = (char *)malloc((ft_strlen(input) + 1) * sizeof(char));
+	if (!result)
+	{
+		ft_error(E_MEMORY, NULL, NULL);
+		return (NULL);
+	}
 	ft_strcpy(result, input);
 	return (result);
 }

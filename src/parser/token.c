@@ -1,13 +1,17 @@
 #include "token.h"
 
-t_token	*create_token(t_token_type type, const char *value, bool expect_arg)
+t_token	*create_token(t_token_type type, const char *value, bool expect_arg,
+	t_shell *data)
 {
 	t_token	*token;
 
 	token = (t_token *)malloc(sizeof(t_token));
 	if (!token)
 	{
-		ft_error(E_MEMORY, NULL, NULL);
+		if (data)
+			ft_error(E_MEMORY, NULL, &data->status);
+		else
+			ft_error(E_MEMORY, NULL, NULL);
 		return (NULL);
 	}
 	token->type = type;
@@ -38,7 +42,7 @@ t_token	**process_tokens(t_shell *data, char *input_copy)
 		if (!*start)
 			break ;
 		if (*start == '"' || *start == '\'')
-			handle_quotes(&start, data->tokens, &data->num_tokens, *start);
+			handle_quotes(&start, data, *start);
 		else if (handle_regular_tokens(&start, data) != 0)
 			return (NULL);
 	}

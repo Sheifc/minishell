@@ -24,8 +24,8 @@ void	skip_delimiters(char **start)
 
 int	add_token(char **start, t_shell *data, t_token t)
 {
-	data->tokens[data->num_tokens] = create_token(t.type, t.value,
-			t.expect_arg);
+	data->tokens[data->num_tokens] = create_token(t.type, t.value, t.expect_arg,
+			data);
 	if (!data->tokens[data->num_tokens])
 		return (1);
 	data->num_tokens++;
@@ -52,7 +52,7 @@ int	add_cmd_arg_token(char **start, t_shell *data)
 		type = T_ARG;
 	else
 		type = T_COMMAND;
-	data->tokens[data->num_tokens] = create_token(type, *start, true);
+	data->tokens[data->num_tokens] = create_token(type, *start, true, data);
 	if (!data->tokens[data->num_tokens])
 		return (1);
 	data->num_tokens++;

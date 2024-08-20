@@ -28,7 +28,7 @@ static int	found_match(const char *pattern, const char *string)
 }
 
 int	process_directory_entries(DIR *dir, const char *wildcard, t_shell *d,
-		t_token_type type)
+		t_token_type t)
 {
 	struct dirent	*entry;
 	int				found;
@@ -42,7 +42,7 @@ int	process_directory_entries(DIR *dir, const char *wildcard, t_shell *d,
 		if (found_match(clean_wildcard, entry->d_name) == 0)
 		{
 			found = 1;
-			d->tokens[d->num_tokens] = create_token(type, entry->d_name, true);
+			d->tokens[d->num_tokens] = create_token(t, entry->d_name, true, d);
 			if (!d->tokens[d->num_tokens])
 			{
 				free(clean_wildcard);
