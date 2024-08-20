@@ -27,40 +27,6 @@ void	free_token(t_token **token)
 	*token = NULL;
 }
 
-int	verify_tokens(t_shell *data)
-{
-	int	balance_parentheses;
-	int	balance_quotes;
-	int	i;
-
-	i = -1;
-	balance_parentheses = 0;
-	while (data->tokens && ++i < data->num_tokens)
-	{
-		if (data->tokens[i]->type == T_PAREN_OPEN)
-			balance_parentheses++;
-		else if (data->tokens[i]->type == T_PAREN_CLOSE)
-			balance_parentheses--;
-		if (data->tokens[i]->type == T_REDIRECT_ARG && (ft_strcmp(data->tokens[i]->value, ">") == 0 || ft_strcmp(data->tokens[i]->value, "<") == 0))
-		{
-			ft_error_syntax(E_SYNTAX, data->tokens[i]->value, "syntax error near unexpected token", &data->status);
-			return (1);
-		}
-	}
-	if (balance_parentheses < 0)
-		ft_error(E_SYNTAX, "A parenthesis has not been opened", &data->status);
-	else if (balance_parentheses > 0)
-		ft_error(E_SYNTAX, "A parenthesis has not been closed", &data->status);
-	i = -1;
-	balance_quotes = 0;
-	while (data->tokens && ++i < data->num_tokens)
-		if (data->tokens[i]->type == T_QUOTE)
-			balance_quotes++;
-	if (balance_quotes % 2 != 0)
-		ft_error(E_SYNTAX, "Invalid number of quotes", &data->status);
-	return (balance_parentheses | balance_quotes % 2);
-}
-
 t_token	**process_tokens(t_shell *data, char *input_copy)
 {
 	char	*start;

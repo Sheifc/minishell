@@ -73,6 +73,7 @@ void	handle_quotes(char **start, t_token **tokens, int *n_tokens,
 int	handle_redirect_arg(char **start, t_shell *data)
 {
 	char	*end;
+
 	end = *start + 1;
 	while (*end && !ft_strchr(DELIMITERS, *end) && *end != '"' && *end != '\''
 		&& *end != '(' && *end != ')' && *end != '|' && *end != '<'

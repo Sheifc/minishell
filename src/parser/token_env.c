@@ -14,7 +14,7 @@ char	*create_new_result(const char *result, const char *pos,
 		ft_error(E_MEMORY, NULL, NULL);
 		return (NULL);
 	}
-	strncpy(new_result, result, pos - result);
+	ft_strncpy(new_result, result, pos - result);
 	ft_strcpy(new_result + (pos - result), value);
 	ft_strcpy(new_result + (pos - result) + ft_strlen(value), pos
 		+ ft_strlen(name) + 1);
@@ -85,7 +85,7 @@ char	*replace_env_variables(const char *input, t_shell *data)
 	{
 		if (is_btw_single_quotes(result, pos)
 			|| is_preceded_by_double_less(result, pos) || (*(pos + 1) == ' '
-			|| *(pos + 1) == '\0'))
+				|| *(pos + 1) == '\0'))
 		{
 			pos = ft_strchr(pos + 1, '$');
 			continue ;

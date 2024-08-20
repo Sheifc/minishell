@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sheferna <sheferna@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: svilla-d <svilla-d@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 12:05:09 by sheferna          #+#    #+#             */
-/*   Updated: 2024/08/01 00:25:59 by sheferna         ###   ########.fr       */
+/*   Updated: 2024/08/20 08:54:25 by svilla-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,6 +125,15 @@ void				*ft_memmove(void *dst, const void *src, size_t len);
  * @returns the length of src.
 */
 size_t				ft_strlcpy(char *dst, const char *src, size_t dstsize);
+/**
+* @brief Copy strings with the same input parameters
+		and output result as strncpy(3).
+ * @param dst The string dst.
+ * @param src The string source.
+ * @param size Number of bytes to copy.
+ * @returns the pinter dst.
+*/
+char				*ft_strncpy(char *dst, const char *src, size_t n);
 /**
  * @brief Copy strings.
  * @param dst The string dst.

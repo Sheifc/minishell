@@ -29,7 +29,8 @@ bool	is_ast_valid(t_ast_node *root, int *status)
 		return (is_redirection_valid(root, status));
 	else
 	{
-		ft_error_syntax(E_SYNTAX, root->value, "syntax error near unexpected token", status);
+		ft_error_syntax(E_SYNTAX, root->value,
+			"syntax error near unexpected token", status);
 		return (false);
 	}
 }

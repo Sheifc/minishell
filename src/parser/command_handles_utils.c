@@ -15,7 +15,7 @@ void	delete_command(t_cmd **node)
 		i = -1;
 		while (++i < (*node)->n_args)
 		{
-				ft_free_str((*node)->arg[i]);
+			ft_free_str((*node)->arg[i]);
 		}
 		free((*node)->arg);
 	}

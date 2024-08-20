@@ -16,7 +16,7 @@ int	only_spaces(char *prompt)
 
 int	only_wildcard(char *prompt)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (prompt[i])

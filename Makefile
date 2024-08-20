@@ -24,7 +24,7 @@ FILES_PARSER	=	parser_utils.c										\
 					stack_operations.c stack_pipes.c					\
 					ast.c ast_utils.c ast_handles.c 					\
 					syntax.c syntax_utils.c								\
-					token.c token_utils.c								\
+					token.c token_utils.c token_verify.c				\
 					token_handles.c token_handles_utils.c				\
 					token_preprocess.c token_preprocess_utils.c 		\
 					token_env.c token_env_utils.c						\
