@@ -11,7 +11,7 @@ int	is_invalid_dot_usage(char *arg)
 {
 	if (arg[0] == '.')
 	{
-		if (arg[1] == '\0' || ft_isalpha(arg[1]) 
+		if (arg[1] == '\0' || ft_isalpha(arg[1]) || arg[1] == '.'
 		|| (arg[1] == '/' && (arg[2] == '\0') && !ft_isalpha(arg[2])))
 			return (1);
 	}

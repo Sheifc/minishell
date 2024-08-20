@@ -10,7 +10,6 @@ void	init_shell(t_shell *data, char **envp)
 	data->path = NULL;
 	data->status = 0;
 	data->total_status = 0;
-	data->flag = 1;
 	data->pid = 0;
 	data->cmd_count = 0;
 }
