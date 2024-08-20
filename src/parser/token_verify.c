@@ -43,7 +43,7 @@ int	verify_quotes(t_shell *data)
 	}
 	if (balance % 2 != 0)
 	{
-		ft_error(E_SYNTAX, "Invalid number of quotes", &data->status);
+		ft_error(E_SYNTAX, "invalid number of quotes", &data->status);
 		return (1);
 	}
 	return (0);

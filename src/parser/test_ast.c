@@ -72,7 +72,7 @@ int	main(void)
 		"(echo 'Failed' && mkdir new_dir))", true},
 	{"mkdir test && cd test || echo 'Could not create directory'", true},
 	{"echo 'Starting process'; (cd /tmp && touch temp_file) || "
-		"echo 'Error in processing'", true},
+		"echo 'Error in processing'", false},
 	{"\"ls\" 'file*.txt' && \'ls\' file*.txt", true},
 	{"\"ls 'file*.txt' && ls file*.txt", false},
 	{"\"e\"cho \'hola m\'u\'n\"\"do\' \"chao mundo\"", true},

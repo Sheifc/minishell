@@ -40,7 +40,7 @@ int	add_cmd_arg_token(char **start, t_shell *data)
 	t_token_type	type;
 
 	end = *start;
-	while (*end && !strchr(DELIMITERS, *end) && *end != '"' && *end != '\''
+	while (*end && !ft_strchr(DELIMITERS, *end) && *end != '"' && *end != '\''
 		&& *end != '(' && *end != ')' && *end != '|' && *end != '<'
 		&& *end != '>' && *end != ';' && ft_strncmp(end, "&&", 2) != 0
 		&& ft_strncmp(end, "||", 2) != 0 && ft_strncmp(end, "<<", 2) != 0

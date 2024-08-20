@@ -2,8 +2,8 @@
 
 bool	is_operator(const char *str)
 {
-	return (strcmp(str, "&&") == 0 || strcmp(str, "||") == 0 || strcmp(str,
-			"|") == 0 || strcmp(str, ";") == 0);
+	return (ft_strcmp(str, "&&") == 0 || ft_strcmp(str, "||") == 0
+		|| ft_strcmp(str, "|") == 0 || strcmp(str, ";") == 0);
 }
 
 int	handle_token(char **start, t_shell *data, t_token_type type,

@@ -62,7 +62,7 @@ char	*get_converted_word(const char *palabra, int longitud)
 	else if (ft_strchr(original_word, '\''))
 		word_between_quotes = add_quotes(word_without_quotes, "\'");
 	else
-		word_between_quotes = strdup(word_without_quotes);
+		word_between_quotes = ft_strdup(word_without_quotes);
 	free(original_word);
 	free(word_without_quotes);
 	return (word_between_quotes);

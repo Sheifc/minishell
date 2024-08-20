@@ -71,8 +71,6 @@ t_cmd	*handle_node_input(t_cmd_arg *arg, t_shell *data)
 				&data->status);
 			return (NULL);
 		}
-		// printf(" \e[1;36mfile: (W)%d: infile: %s\e[0m\n", fd,
-		//	node->right->left->value);
 	}
 	push_operator(arg->ope_stack, arg->node->type);
 	return (process_node_commands(arg, data, fd, R_INFILE));
