@@ -6,14 +6,44 @@ void	update_total_status(t_shell *data)
         data->total_status = 1;
 }
 
-void	parenthesis_open(t_shell *data, t_cmd **cmd)
+void	parenthesis_open(t_shell *data, t_cmd **cmd, int *execution)
 {
-    while (*cmd != NULL && (*cmd)->parenthesis_status != P_CLOSE)
+	if (*cmd != NULL && (*cmd)->parenthesis_status != P_CLOSE && *execution == 0)
+	{
+		exec_one_cmd(data, *cmd);
+		update_total_status(data);
+		*execution = 1;
+	}
+    if (*cmd != NULL && (*cmd)->parenthesis_status != P_CLOSE && *execution == 1)
     {
-        exec_one_cmd(data, *cmd);
-        update_total_status(data);
-        *cmd = (*cmd)->next;
+        if (((*cmd)->operator == NODE_AND && data->status == 0) ||
+            ((*cmd)->operator == NODE_OR && data->status != 0))
+        {
+			*cmd = (*cmd)->next;
+			*execution = 0;
+			parenthesis_open(data, cmd, execution);
+        }
     }
+	else if (*cmd != NULL)
+	{
+		*execution = 0;
+		exec_parenthesis(data, *cmd, execution);
+	}
+}
+
+void	next(t_shell *data, t_cmd **cmd, int *execution)
+{
+	if ((*cmd) == NULL)
+		return;
+	if ((*cmd)->operator == NODE_AND && data->status == 0)
+		exec_node_and(data, *cmd, execution);
+	else if ((*cmd)->operator == NODE_OR && data->status != 0)
+		exec_node_or(data, *cmd, execution);
+	else if((*cmd)->parenthesis_status == P_OPEN && *execution == 0)
+		exec_parenthesis(data, *cmd, execution);
+	else if (*execution == 0)
+		exec_one_cmd(data, *cmd);
+	*cmd = (*cmd)->next;
 }
 
 void	parenthesis_close(t_shell *data, t_cmd **cmd, int *execution)
@@ -26,26 +56,21 @@ void	parenthesis_close(t_shell *data, t_cmd **cmd, int *execution)
     else
         *execution = 1;
     *cmd = (*cmd)->next;
+	exec_parenthesis(data, *cmd, execution);
 }
 
 void	exec_parenthesis(t_shell *data, t_cmd *cmd, int *execution)
 {
-    while (cmd != NULL)
+    if (cmd != NULL)
     {
-        if (cmd->parenthesis_status == P_OPEN)
+        if (cmd->parenthesis_status == P_OPEN && *execution == 0)
         {
             data->total_status = 0;
-			parenthesis_open(data, &cmd);
+            parenthesis_open(data, &cmd, execution);
         }
-		if (cmd != NULL && cmd->parenthesis_status == P_CLOSE)
-			parenthesis_close(data, &cmd, execution);
-        else if (cmd != NULL && cmd->parenthesis_status != P_OPEN)
-        {
-            if (cmd->operator == NODE_AND && data->status == 0)
-                exec_node_and(data, cmd, execution);
-            else if (cmd->operator == NODE_OR && data->status != 0)
-                exec_node_or(data, cmd, execution);
-            cmd = cmd->next;
-        }
-    }
+        else if (cmd->parenthesis_status == P_CLOSE && *execution == 0)
+            parenthesis_close(data, &cmd, execution);
+        else if (cmd != NULL)
+			next(data, &cmd, execution);
+	}
 }
