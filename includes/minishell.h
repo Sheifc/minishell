@@ -130,7 +130,7 @@ void		exec_node_or(t_shell *data, t_cmd *cmd, int *execution);
 void		exec_node_and(t_shell *data, t_cmd *cmd, int *execution);
 void		exec_bonus(t_shell *data, t_cmd *cmd, int *execution);
 void		update_total_status(t_shell *data);
-void		parenthesis_open(t_shell *data, t_cmd **cmd);
+void		parenthesis_open(t_shell *data, t_cmd **cmd, int *execution);
 void		parenthesis_close(t_shell *data, t_cmd **cmd, int *execution);
 void		exec_parenthesis(t_shell *data, t_cmd *cmd, int *execution);
 
