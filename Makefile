@@ -4,7 +4,7 @@ LIBS            = -lft -lreadline
 NAME            = minishell
 
 CC              = gcc
-CFLAGS          = -Wall -Werror -Wextra -Iincludes -Ilibft/includes -g #-fsanitize=address
+CFLAGS          = -Wall -Werror -Wextra -Iincludes -Ilibft/includes -g
 LDFLAGS         = -fsanitize=address
 RM              = rm -rf
 
