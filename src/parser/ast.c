@@ -31,9 +31,9 @@ void	free_ast(t_ast_node **root)
 {
 	if ((*root) == NULL)
 		return ;
+	free((*root)->value);
 	free_ast(&(*root)->left);
 	free_ast(&(*root)->right);
-	free((*root)->value);
 	free(*root);
 	*root = NULL;
 }

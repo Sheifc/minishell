@@ -1,18 +1,16 @@
 #include "token.h"
 
-void	free_tokens(t_token **tokens, int *num_tokens)
+void	free_tokens(t_token ***tokens, int *num_tokens)
 {
 	int	i;
 
-	if (tokens && *tokens)
-	{
-		i = -1;
-		while (++i < *num_tokens)
-			free_token(&tokens[i]);
-		free(*tokens);
-		*tokens = NULL;
-	}
-	tokens = NULL;
+	if (*tokens == NULL)
+		return ;
+	i = -1;
+	while (++i < *num_tokens)
+		free_token(&(*tokens)[i]);
+	free(*tokens);
+	*tokens = NULL;
 	*num_tokens = 0;
 }
 

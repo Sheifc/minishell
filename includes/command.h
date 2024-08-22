@@ -15,7 +15,7 @@
 # define READ 0
 # define WRITE 1
 # define CMD_BUFFER_SIZE 4096
-
+# define W_HEREDOC "minishell: warning: here-document at line %ld delimited by (wanted «%s»)\n"
 typedef struct s_fds
 {
 	int					in;

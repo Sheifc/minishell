@@ -46,8 +46,7 @@ char	*read_until_eof(char *line, char *eof)
 			break ;
 		if (line == NULL)
 		{
-			printf("minishell: warning: here-document at line %ld delimited by "
-				"(wanted «%s»)\n", i, eof);
+			printf(W_HEREDOC, i, eof);
 			break ;
 		}
 		temp_input = ft_strdup(input);
@@ -56,6 +55,7 @@ char	*read_until_eof(char *line, char *eof)
 		ft_free_str(&temp_input);
 		ft_free_str(&line);
 	}
+	ft_free_str(&line);
 	return (input);
 }
 

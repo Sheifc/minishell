@@ -69,7 +69,7 @@ void	add_token_and_free(t_shell *data, t_token_type type, char *value);
 int		add_redirect_token(t_shell *data, char **start, char *end);
 
 // token_utils
-void	free_tokens(t_token **tokens, int *num_tokens);
+void	free_tokens(t_token ***tokens, int *num_tokens);
 void	skip_delimiters(char **start);
 int		add_token(char **start, t_shell *data, t_token t);
 int		add_cmd_arg_token(char **start, t_shell *data);
