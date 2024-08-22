@@ -26,7 +26,7 @@ int	is_special_char(char c)
 		|| (c == 64)
 		|| (c >= 91 && c <= 96) || c == 123 
 		|| c == 125 || c == 126 
-		|| ((unsigned char)c >= 128 && (unsigned char)c <= 255))
+		|| ((unsigned char)c >= 128 && (unsigned char)c < 255))
 		return (1);
 	return (0);
 }
