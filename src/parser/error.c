@@ -11,21 +11,23 @@ char	*str_error(int ecode)
 	else if (ecode == E_REDIRECT)
 		return ("Redirect");
 	else if (ecode == E_COMMAND)
-		return ("Minishell");
+		return ("minishell");
 	return ("Unknown");
 }
 
 void	ft_error(const int error_code, const char *message, int *status)
 {
 	if ((message == NULL || ft_strlen(message) == 0) && error_code <= 0)
-		printf("\e[31m Minishell error(%d): %s\e[0m\n", errno, strerror(errno));
+		ft_fprintf(STDERR_FILENO, "\e[31m minishell(%d): %s\e[0m\n",
+			errno, strerror(errno));
 	else if (error_code <= 0)
-		printf("\e[31m Minishell error(%d): %s\e[0m\n", errno, message);
+		ft_fprintf(STDERR_FILENO, "\e[31m minishell(%d): %s\e[0m\n",
+			errno, message);
 	else if (message == NULL || ft_strlen(message) == 0)
-		printf("\e[31m %s error(%d): %s\e[0m\n", str_error(error_code),
-			error_code, strerror(errno));
+		ft_fprintf(STDERR_FILENO, "\e[31m %s error(%d): %s\e[0m\n",
+			str_error(error_code), error_code, strerror(errno));
 	else
-		printf("\e[31m Minishell(%d): %s\e[0m\n", error_code,
+		ft_fprintf(STDERR_FILENO, "\e[31m minishell(%d): %s\e[0m\n", error_code,
 			message);
 	if (status != NULL && error_code <= 0)
 		*status = errno;
@@ -37,17 +39,17 @@ void	ft_error_ope(const int error_code, char *ope, const char *message,
 		int *status)
 {
 	if ((message == NULL || ft_strlen(message) == 0) && error_code <= 0)
-		printf("\e[31m Minishell error(%d): \'%s\' %s\e[0m\n", errno, ope,
-			strerror(errno));
+		ft_fprintf(STDERR_FILENO, "\e[31m minishell(%d): \'%s\' %s\e[0m\n",
+			errno, ope, strerror(errno));
 	else if (error_code <= 0)
-		printf("\e[31m Minishell error(%d): \'%s\' %s\e[0m\n", errno, ope,
-			message);
+		ft_fprintf(STDERR_FILENO, "\e[31m minishell(%d): \'%s\' %s\e[0m\n",
+			errno, ope, message);
 	else if (message == NULL || ft_strlen(message) == 0)
-		printf("\e[31m %s error(%d): \'%s\' %s\e[0m\n", str_error(error_code),
-			error_code, ope, strerror(errno));
+		ft_fprintf(STDERR_FILENO, "\e[31m %s error(%d): \'%s\' %s\e[0m\n",
+			str_error(error_code), error_code, ope, strerror(errno));
 	else
-		printf("\e[31m %s error(%d): \'%s\' %s\e[0m\n", str_error(error_code),
-			error_code, ope, message);
+		ft_fprintf(STDERR_FILENO, "\e[31m %s error(%d): \'%s\' %s\e[0m\n",
+			str_error(error_code), error_code, ope, message);
 	if (status != NULL && error_code <= 0)
 		*status = errno;
 	else if (status != NULL)
@@ -57,7 +59,8 @@ void	ft_error_ope(const int error_code, char *ope, const char *message,
 void	ft_error_syntax(const int error_code, char *ope, const char *message,
 		int *status)
 {
-	printf("\e[31m Minishell(%d): %s \'%s\'\e[0m\n", error_code, message, ope);
+	ft_fprintf(STDERR_FILENO, "\e[31m minishell(%d): %s \'%s\'\e[0m\n",
+		error_code, message, ope);
 	if (status != NULL && error_code <= 0)
 		*status = errno;
 	else if (status != NULL)

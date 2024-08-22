@@ -6,7 +6,7 @@
 /*   By: svilla-d <svilla-d@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 12:05:09 by sheferna          #+#    #+#             */
-/*   Updated: 2024/08/20 08:54:25 by svilla-d         ###   ########.fr       */
+/*   Updated: 2024/08/22 10:17:38 by svilla-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -495,49 +495,68 @@ void				ft_free_matrix(char **matrix);
  */
 int					ft_printf(char const *format, ...);
 /**
+ * @brief Outputs the string 'format' to the standard output, replacing
+ * 			any format specifiers with the values from the additional arguments.
+ * @param fd The file descriptor to read from.
+ * @param format The format string containing the text to be written
+ * 			to stdout and the format specifiers,
+ * 			which define how subsequent arguments are converted for output.
+ * @returns The number of characters printed (excluding the null byte
+ * 			used to end
+ *          output to strings).
+ */
+int					ft_fprintf(int fd, char const *format, ...);
+/**
  * @brief Handles the printing of various types based on the 'format' specifier.
  * @param format The format specifier character (e.g., 's' for string,
  * 		'd' for decimal integer).
  * @param ap A va_list representing the arguments passed to the format string.
+ * @param fd The file descriptor to read from.
  * @returns The number of characters printed for the given format.
  */
-int					print_format(char format, va_list ap);
+int					print_format(char format, va_list *ap, int fd);
 /**
  * @brief Prints a single character to the standard output.
  * @param c The character to print.
+ * @param fd The file descriptor to read from.
  * @returns The number of characters printed.
  */
-int					ft_putchar_pf(int c);
+int					ft_putchar_pf(int c, int fd);
 /**
  * @brief Prints a string to the standard output. If the string is NULL,
  * 			prints "(null)".
  * @param str The string to print.
+ * @param fd The file descriptor to read from.
  * @returns The number of characters printed.
  */
-int					ft_putstr_pf(char *str);
+int					ft_putstr_pf(char *str, int fd);
 /**
  * @brief Prints the address pointed to by 'ptr' in hexadecimal format.
  * @param ptr The pointer whose address is to be printed.
+ * @param fd The file descriptor to read from.
  * @returns The number of characters printed.
  */
-int					ft_putptr_pf(unsigned long ptr);
+int					ft_putptr_pf(unsigned long ptr, int fd);
 /**
  * @brief Prints 'n' in 'base' using 'base_digits'.
  * @param n Number to print.
  * @param base Base for printing.
  * @param base_digits Digits for the base.
+ * @param fd The file descriptor to read from.
  * @returns Printed character count.
  */
-int					ft_putnbrbase_pf(long n, int base, const char *base_digits);
+int					ft_putnbrbase_pf(long n, int base, const char *base_digits,
+						int fd);
 /**
  * @brief Prints 'n' in 'base' with 'base_digits', for pointer addresses.
  * @param n Number to print.
  * @param base Numerical base for printing.
  * @param base_digits Digits characters for the base.
+ * @param fd The file descriptor to read from.
  * @returns Number of characters printed.
  */
 int					ft_putnbrbase_ptr_pf(unsigned long n, int base,
-						const char *base_digits);
+						const char *base_digits, int fd);
 
 // ------------------ get_next_line functions --------------------------------
 /**

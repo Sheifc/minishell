@@ -65,6 +65,7 @@ t_cmd	*generate_commands(t_shell *data, bool is_valid, t_fds fds)
 		arg.fds = fds;
 		arg.ope_stack = &ope_stack;
 		arg.pipe_stack = &pipe_stack;
+		arg.open_parenthesis = false;
 		data->cmd = traverse_ast(&arg, data);
 		postprocess_cmds(data->cmd);
 		if (data->cmd == NULL || data->cmd->name == NULL)

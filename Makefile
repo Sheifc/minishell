@@ -173,6 +173,8 @@ cmd: $(OBJ_SRC_CMD)
 directories:
 	mkdir -p $(AST_OBJ_DIR) $(TOKEN_OBJ_DIR) $(CMD_OBJ_DIR)
 
+tests: token ast cmd
+
 # norminette src/parser/token*
 # norminette src/parser/wildcard*
 # norminette src/parser/ast*
