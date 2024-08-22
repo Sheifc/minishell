@@ -49,64 +49,76 @@
     - export a b=$LESS $USER $HOME=la $COLORTERM=pa c=d
 
 # cd
-    - directorio existe
-    - directorio no existe
-    - file existe
-    - cd
-    -            cd
-    - cd - = $OLDPWD
-    - cd ~ = $HOME
-    - cd $HOME si $HOME no existe
-    - cd directorio con distintos permisos
+    - directorio existe PASSED
+    - directorio no existe PASSED
+    - file existe PASSED
+    - cd passed
+    -            cd PASSED
+    - cd - = $OLDPWD PASSED
+    - cd ~ = $HOME PASSED
+    - cd $HOME si $HOME no existe -----> unset $HOME no lo elimina?
+    - cd directorio con distintos permisos PASSED
+
+minishell$ unset $HOME
+
+**** List of Commands: ****
+ Command: unset
+    Arg[0]: unset (5)
+    Arg[1]: /Users/sheila (13)
+  fd_in: -1, fd_out: -1
+  next_operator: END [12]
+  redirect: None [0]
+  parenthesis: 0, parenthesis_status: None [0], 
+minishell$ 
 
 # Env
-    - env
-    - env lalal
-    - env directorio
+    - env PASSED
+    - env lalal PASSED
+    - env directorio PASSED
 
-# pwd
-    - con y sin argumentos
+# pwd 
+    - con y sin argumentos PASSED
 
 # unset
-    - con y sin argumentos
-    - varios argumentos
+    - con y sin argumentos PASSED
+    - varios argumentos PASSED
 
 # exit 
-    - exit
-    - exit 0
-    - exit 1
-    - exit 42
-    - exit lalal
+    - exit PASSED
+    - exit 0 PASSED 
+    - exit 1 PASSED 
+    - exit 42 PASSED
+    - exit lalal PASSED
 
 # pipe
-    - ls | wc
-    - ls|wc
-    - sort colors.txt | uniq | sort -r | wc
-    - ls || wc
-    - ls |   | wc
-    - ls |   >/>>/</<< wc
-    - ls | wc |
-    - |
-    - | ls | wc
+    - ls | wc PASSED
+    - ls|wc PASSED
+    - sort colors.txt | uniq | sort -r | wc PASSED
+    - ls || wc FAILED, DEFENDIBLE
+    - ls |   | wc bash: syntax error near unexpected token `|' bash-3.2$ echo $? 258
+    - ls |   >/>>/</<< wc FAILED, SE EJECUTA > QUE NO DEBE PASAR Y AL HACER CONTROL D DA SEG FAULT POR SANITIZER
+    - ls | wc | bash: syntax error: unexpected end of file bash-3.2$ echo $? 258
+    - | bash: syntax error near unexpected token `|' bash-3.2$ echo $? 258
+    - | ls | wc bash: syntax error near unexpected token `|' bash-3.2$ echo $? 258
 
 # redirecciones
-    - </<</>/>>
-    - echo hola >>>>>>> file
-    - echo hola <<<<<<< file
-    - echo hola>file
-    - echo hola </<</>/>>   </<</>/>> file
-    - echo hola </<</>/>>   | file
-    - echo hola > file </<</>/>>
-    - echo hola > file
-    - echo hola > file > file2 > file3
-    - echo hola > file > file2 > file3 | ls
-    - wc < colors.txt
-    - wc < colors.txt > file
-    - cat colors.txt | wc
-    - echo hola > file << EOF
-    - cat << EOF > file
-    - << EOF
-    - cat << hola << que << tal
+    - </<</>/>> bash: syntax error near unexpected token `newline' bash-3.2$ echo $? 258
+    - echo hola >>>>>>> file bash: syntax error near unexpected token `>>' bash-3.2$ echo $? 258
+    - echo hola <<<<<<< file bash: syntax error near unexpected token `<<<' bash-3.2$ echo $? 258
+    - echo hola>file PASSED
+    - echo hola </<</>/>>   </<</>/>> file FAILED SANITIZER bash-3.2$ echo hola </<</>/>>   </<</>/>> file bash: syntax error near unexpected token `<' bash-3.2$ echo $? 258
+    - echo hola </<</>/>>   | file FAILED SANITIZER bash-3.2$ echo hola </<</>/>>   | file bash: syntax error near unexpected token `|' bash-3.2$ ECHO $? 258
+    - echo hola > file </<</>/>> PASSED
+    - echo hola > file FAILED: habiendo un archivo ya creado con el mismo nombre "file", crea otro nuevo con el mismo nombre "file", REVISAR
+    - echo hola > file > file2 > file3 PASSED
+    - echo hola > file > file2 > file3 | ls PASSED
+    - wc < colors.txt PASSED
+    - wc < colors.txt > file FAILED SANITIZER
+    - cat colors.txt | wc PASSED
+    - echo hola > file << EOF PASSED
+    - cat << EOF > file PASSED
+    - << EOF FAILED SANITIZER
+    - cat << hola << que << tal FAILED
     - cat << hola << que << tal -> aplicarle señales a heredoc 
     - cat << EOF | ls   PASSED
     - echo hola | cat | cat | cat | cat | cat | cat | cat PASSED
