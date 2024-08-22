@@ -19,6 +19,13 @@ t_ast_node	*create_node(t_node_type type, char *value, int level)
 	return (node);
 }
 
+void	ft_free_str2(char **str)
+{
+	if (*str != NULL)
+		free(*str);
+	*str = NULL;
+}
+
 // Function to free the AST memory
 void	free_ast(t_ast_node **root)
 {
@@ -26,8 +33,7 @@ void	free_ast(t_ast_node **root)
 		return ;
 	free_ast(&(*root)->left);
 	free_ast(&(*root)->right);
-	if ((*root)->value)
-		free((*root)->value);
+	free((*root)->value);
 	free(*root);
 	*root = NULL;
 }

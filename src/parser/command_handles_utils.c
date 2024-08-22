@@ -9,13 +9,13 @@ void	delete_command(t_cmd **node)
 		return ;
 	next_node = (*node)->next;
 	if ((*node)->name)
-		ft_free_str((*node)->name);
+		ft_free_str(&(*node)->name);
 	if ((*node)->arg)
 	{
 		i = -1;
 		while (++i < (*node)->n_args)
 		{
-			ft_free_str((*node)->arg[i]);
+			ft_free_str(&(*node)->arg[i]);
 		}
 		free((*node)->arg);
 	}
@@ -23,11 +23,11 @@ void	delete_command(t_cmd **node)
 	*node = next_node;
 }
 
-void	ft_free_str(char *str)
+void	ft_free_str(char **str)
 {
-	if (!str)
-		free(str);
-	str = NULL;
+	if (*str != NULL)
+		free(*str);
+	*str = NULL;
 }
 
 char	*read_until_eof(char *line, char *eof)
@@ -51,10 +51,10 @@ char	*read_until_eof(char *line, char *eof)
 			break ;
 		}
 		temp_input = ft_strdup(input);
-		ft_free_str(input);
+		ft_free_str(&input);
 		input = ft_strjoin(temp_input, line);
-		ft_free_str(temp_input);
-		ft_free_str(line);
+		ft_free_str(&temp_input);
+		ft_free_str(&line);
 	}
 	return (input);
 }
@@ -67,11 +67,11 @@ void	ft_read_stdin(int fd, char *eof, t_shell *data)
 
 	line = NULL;
 	input = read_until_eof(line, eof);
-	ft_free_str(line);
+	ft_free_str(&line);
 	replace_input = replace_env_variables(input, data);
-	ft_free_str(input);
+	ft_free_str(&input);
 	write(fd, replace_input, ft_strlen(replace_input));
-	ft_free_str(replace_input);
+	ft_free_str(&replace_input);
 }
 
 t_cmd	*process_node_commands(t_cmd_arg *arg, t_shell *data, int fd,

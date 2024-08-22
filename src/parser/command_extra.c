@@ -71,12 +71,12 @@ t_cmd	*generate_commands(t_shell *data, bool is_valid, t_fds fds)
 		if (data->cmd == NULL || data->cmd->name == NULL)
 			data->cmd = NULL;
 		// print_commands(data->cmd);
-		free_ast(&data->ast);
-		if (pipe_stack != NULL)
-			free(pipe_stack);
-		if (ope_stack != NULL)
-			free(ope_stack);
 	}
+	free_ast(&data->ast);
+	if (pipe_stack != NULL)
+		free(pipe_stack);
+	if (ope_stack != NULL)
+		free(ope_stack);
 	return (data->cmd);
 }
 
