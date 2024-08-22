@@ -51,7 +51,7 @@ void	process_test_case(const t_test_ast *test_value, int index)
 	print_ast(ast);
 	is_valid = validate_ast(data.tokens, ast, &data.status);
 	print_result(test_value->is_valid, is_valid && balance == 0);
-	free_tokens(data.tokens, &data.num_tokens);
+	free_tokens(&data.tokens, &data.num_tokens);
 	free_ast(&ast);
 	free(data.prompt);
 	printf("\n");

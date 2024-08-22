@@ -94,6 +94,7 @@ t_cmd	*handle_node_heredoc(t_cmd_arg *arg, t_shell *data)
 		if (arg->node->right && arg->node->right->left)
 			ft_read_stdin(fd, arg->node->right->left->value, data);
 		close(fd);
+		free_all(data);
 		exit(EXIT_SUCCESS);
 	}
 	signal(SIGINT, SIG_IGN);

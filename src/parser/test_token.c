@@ -55,7 +55,7 @@ void	free_tokens_and_print_result(t_shell *data, bool error)
 	else
 		printf("\e[31mTest case: error\n\e[0m");
 	printf("\n");
-	free_tokens(data->tokens, &data->num_tokens);
+	free_tokens(&data->tokens, &data->num_tokens);
 }
 
 int	run_test_case(const t_test_case *c)

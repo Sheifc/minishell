@@ -22,4 +22,7 @@ void	free_all(t_shell *data)
 	}
 	if (data->cmd)
 		free_commands(&data->cmd);
+	if (data->ast)
+		free_ast(&data->ast);
+
 }
