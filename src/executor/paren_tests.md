@@ -10,15 +10,15 @@
 
 (echo hola && echo hello) || (echo bye || ls)
 
-(echo hola && ec) || echo bye FAILED
+(echo hola && ec) || echo bye
 
 (ec && echo hello) || echo bye FAILED
 
-(echo hola && ec) && echo bye FAILED
+(echo hola && ec) && echo bye
 
-(ec && echo hello) && echo bye FAILED
+(ec && echo hello) && echo bye
 
-(echo hola && echo hello) && (ec || ls) FAILED
+(echo hola && echo hello) && (ec || ls)
 
 BASH
 

@@ -51,7 +51,7 @@ int	checker(t_shell *data, t_cmd *cmd)
 		|| is_invalid_dot_usage(arg) || is_invalid_ampersand(arg))
         {
             printf("minishell: syntax error near unexpected token `%s'\n", arg);
-            data->status = 258;
+            data->status = 2;
             return (1);
         }
         current = current->next;
