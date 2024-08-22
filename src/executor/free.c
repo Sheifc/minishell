@@ -2,6 +2,9 @@
 
 void	free_all(t_shell *data)
 {
+	free(data->path);
+	data->path = NULL;
+	
 	if (data->prompt)
 	{
 		free(data->prompt);

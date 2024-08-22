@@ -39,6 +39,7 @@ void	exec_one_cmd(t_shell *data, t_cmd *cmd)
 			if (!data->path)
 			{
 				ft_error_cmd(cmd);
+				free_all(data);
 				exit(127);
 			}
 			if (execve(data->path, cmd->arg, data->envp) < 0)
