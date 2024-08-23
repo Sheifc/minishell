@@ -32,38 +32,38 @@ FILES_PARSER	=	parser_utils.c										\
 					wildcard_bonus.c wildcard_utils_bonus.c				\
 					wildcard_preprocess_bonus.c
 
-FILES_EXEC      = init.c				\
-				  signals.c				\
-				  exec_builtins.c		\
-				  free_env.c			\
-				  free_cmd.c			\
-                  free.c				\
-                  list_utils.c			\
-                  key_value.c			\
-                  echo.c				\
-                  pwd.c					\
-                  cd.c					\
-				  cd_utils.c			\
-				  cd_chdir.c			\
-				  cd_update_vars.c		\
-                  env.c					\
-				  env_error_handle.c	\
-                  exit.c				\
-                  export.c				\
-				  export_utils.c		\
-                  unset.c				\
-				  checker_pre_exec.c	\
-				  path.c				\
-				  set_fds.c				\
-				  set_tmp_fds.c			\
-                  executor.c			\
-				  exec_utils.c			\
-                  exec_one_cmd.c		\
-				  exec_multi_cmds.c		\
-				  exec_pipeline.c		\
-				  exec_and_or_bonus.c	\
+FILES_EXEC      = init.c					\
+				  signals.c					\
+				  exec_builtins.c			\
+				  free_env.c				\
+				  free_cmd.c				\
+                  free_all.c				\
+                  list_utils.c				\
+                  key_value.c				\
+                  echo.c					\
+                  pwd.c						\
+                  cd.c						\
+				  cd_utils.c				\
+				  cd_chdir.c				\
+				  cd_update_vars.c			\
+                  env.c						\
+				  env_error_handle.c		\
+                  exit.c					\
+                  export.c					\
+				  export_utils.c			\
+                  unset.c					\
+				  checker_pre_exec.c		\
+				  path.c					\
+				  set_fds.c					\
+				  set_tmp_fds.c				\
+                  executor.c				\
+				  exec_utils.c				\
+                  exec_one_cmd.c			\
+				  exec_multi_cmds.c			\
+				  exec_pipeline.c			\
+				  exec_and_or_bonus.c		\
 				  exec_parenthesis_bonus.c	\
-				  exec_redir.c			\
+				  exec_redir.c				\
                   printing.c
 
 
