@@ -8,6 +8,7 @@ void	run_single_cmd(t_shell *data, t_cmd *cmd)
 		if (!data->path)
 		{
 			ft_error_cmd(cmd);
+			free_all(data);
 			exit(127);
 		}
 		if (cmd->fdout != -1 && cmd->fdout != 0)
