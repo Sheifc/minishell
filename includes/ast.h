@@ -42,6 +42,7 @@
 
 // AST
 t_ast_node	*create_node(t_node_type type, char *value, int level);
+void		ft_free_str(char **str);
 void		free_ast(t_ast_node **root);
 t_ast_node	*build_ast(t_token **tokens, int num_tokens, int level);
 

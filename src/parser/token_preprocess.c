@@ -67,12 +67,11 @@ char	*preprocess_input(const char *input, t_word_features feat,
 	t_shell *data)
 {
 	char			*new_in;
-	char			*preproc_input;
 
 	if (ok_count_quotes(input) == false)
 	{
-		preproc_input = ft_strdup(input);
-		return (preproc_input);
+		new_in = ft_strdup(input);
+		return (new_in);
 	}
 	new_in = (char *)malloc(MAX_LENGTH * sizeof(char));
 	if (!new_in)
@@ -85,7 +84,5 @@ char	*preprocess_input(const char *input, t_word_features feat,
 		handle_character(input, &new_in, &feat);
 	if (!feat.new_word)
 		process_word(input, feat.start, ft_strlen(input) - feat.start, new_in);
-	preproc_input = replace_env_variables(new_in, data);
-	free(new_in);
-	return (preproc_input);
+	return (new_in);
 }

@@ -29,10 +29,10 @@ typedef enum e_error_type
 }		t_error_type;
 
 // Error
-void	ft_error(const int error_code, const char *message, int *status);
-void	ft_error_ope(const int error_code, char *ope, const char *message,
+void	*ft_error(const int error_code, const char *message, int *status);
+void	*ft_error_ope(const int error_code, char *ope, const char *message,
 			int *status);
-void	ft_error_syntax(const int error_code, char *ope, const char *message,
+void	*ft_error_syntax(const int error_code, char *ope, const char *message,
 			int *status);
 
 #endif

@@ -28,7 +28,7 @@ t_ast_node	*create_ast(t_shell *data)
 	{
 		// printf("\n**** AST: ****\n");
 		data->ast = build_ast(data->tokens, data->num_tokens, 0);
-		// print_ast(ast);
+		// print_ast(data->ast);
 	}
 	return (data->ast);
 }

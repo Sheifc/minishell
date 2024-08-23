@@ -83,10 +83,7 @@ t_cmd	*handle_node_heredoc(t_cmd_arg *arg, t_shell *data)
 
 	pid = fork();
 	if (pid == -1)
-	{
-		ft_error(E_AUTO, "heredoc fork failed", &data->status);
-		return (NULL);
-	}
+		return (ft_error(E_AUTO, "heredoc fork failed", &data->status));
 	if (pid == 0)
 	{
 		signal(SIGINT, heredoc_handler);

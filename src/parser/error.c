@@ -15,7 +15,7 @@ char	*str_error(int ecode)
 	return ("Unknown");
 }
 
-void	ft_error(const int error_code, const char *message, int *status)
+void	*ft_error(const int error_code, const char *message, int *status)
 {
 	if ((message == NULL || ft_strlen(message) == 0) && error_code <= 0)
 		ft_fprintf(STDERR_FILENO, "\e[31m minishell(%d): %s\e[0m\n",
@@ -33,9 +33,10 @@ void	ft_error(const int error_code, const char *message, int *status)
 		*status = errno;
 	else if (status != NULL)
 		*status = error_code;
+	return (NULL);
 }
 
-void	ft_error_ope(const int error_code, char *ope, const char *message,
+void	*ft_error_ope(const int error_code, char *ope, const char *message,
 		int *status)
 {
 	if ((message == NULL || ft_strlen(message) == 0) && error_code <= 0)
@@ -54,9 +55,10 @@ void	ft_error_ope(const int error_code, char *ope, const char *message,
 		*status = errno;
 	else if (status != NULL)
 		*status = error_code;
+	return (NULL);
 }
 
-void	ft_error_syntax(const int error_code, char *ope, const char *message,
+void	*ft_error_syntax(const int error_code, char *ope, const char *message,
 		int *status)
 {
 	ft_fprintf(STDERR_FILENO, "\e[31m minishell(%d): %s \'%s\'\e[0m\n",
@@ -65,4 +67,5 @@ void	ft_error_syntax(const int error_code, char *ope, const char *message,
 		*status = errno;
 	else if (status != NULL)
 		*status = error_code;
+	return (NULL);
 }

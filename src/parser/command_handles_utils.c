@@ -23,21 +23,13 @@ void	delete_command(t_cmd **node)
 	*node = next_node;
 }
 
-void	ft_free_str(char **str)
+char	*read_until_eof(char *line, char *eof, char *result)
 {
-	if (*str != NULL)
-		free(*str);
-	*str = NULL;
-}
-
-char	*read_until_eof(char *line, char *eof)
-{
-	char			*input;
 	char			*temp_input;
 	unsigned long	i;
 
 	i = 0;
-	input = ft_strdup("");
+	result = ft_strdup("");
 	while (++i)
 	{
 		write(1, "> ", 2);
@@ -46,17 +38,18 @@ char	*read_until_eof(char *line, char *eof)
 			break ;
 		if (line == NULL)
 		{
-			printf(W_HEREDOC, i, eof);
+			printf("minishell: warning: here-document at line %ld delimited by "
+				"(wanted «%s»)\n", i, eof);
 			break ;
 		}
-		temp_input = ft_strdup(input);
-		ft_free_str(&input);
-		input = ft_strjoin(temp_input, line);
+		temp_input = ft_strdup(result);
+		ft_free_str(&result);
+		result = ft_strjoin(temp_input, line);
 		ft_free_str(&temp_input);
 		ft_free_str(&line);
 	}
 	ft_free_str(&line);
-	return (input);
+	return (result);
 }
 
 void	ft_read_stdin(int fd, char *eof, t_shell *data)
@@ -66,7 +59,8 @@ void	ft_read_stdin(int fd, char *eof, t_shell *data)
 	char	*input;
 
 	line = NULL;
-	input = read_until_eof(line, eof);
+	input = NULL;
+	input = read_until_eof(line, eof, input);
 	ft_free_str(&line);
 	replace_input = replace_env_variables(input, data);
 	ft_free_str(&input);

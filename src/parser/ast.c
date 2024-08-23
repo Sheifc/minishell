@@ -19,7 +19,7 @@ t_ast_node	*create_node(t_node_type type, char *value, int level)
 	return (node);
 }
 
-void	ft_free_str2(char **str)
+void	ft_free_str(char **str)
 {
 	if (*str != NULL)
 		free(*str);

@@ -29,13 +29,22 @@ t_cmd	*create_command_from_ast(t_cmd_arg *arg, t_shell *data)
 {
 	t_cmd		*cmd;
 	t_ast_node	*arg_node;
+	char		*preproc_input;
 
 	cmd = create_command(arg, data);
 	arg_node = arg->node->left;
 	while (arg_node)
 	{
 		if (arg_node->type == NODE_ARGUMENT)
-			add_argument(cmd, arg_node->value);
+		{
+			if (ft_strcmp(arg->node->value, "unset") != 0
+				&& arg->node->type != NODE_HEREDOC)
+				preproc_input = replace_env_variables(arg_node->value, data);
+			else
+				preproc_input = ft_strdup(arg_node->value);
+			add_argument(cmd, preproc_input);
+			ft_free_str(&preproc_input);
+		}
 		arg_node = arg_node->left;
 	}
 	return (cmd);
