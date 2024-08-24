@@ -1,41 +1,44 @@
 #include "command.h"
 
-void	clean_commands(t_cmd *cmd)
+void	clean_commands(t_cmd **cmd, t_cmd **head)
 {
-	while (cmd->next)
+	while ((*cmd)->next)
 	{
-		if (ft_strcmp(cmd->next->name, "save_outfile") != 0
-			&& ft_strcmp(cmd->next->name, "read_infile") != 0
-			&& ft_strcmp(cmd->next->name, "save_append") != 0
-			&& ft_strcmp(cmd->next->name, "heredoc") != 0)
+		if (ft_strcmp((*cmd)->next->name, "save_outfile") != 0
+			&& ft_strcmp((*cmd)->next->name, "read_infile") != 0
+			&& ft_strcmp((*cmd)->next->name, "save_append") != 0
+			&& ft_strcmp((*cmd)->next->name, "heredoc") != 0)
 			break ;
-		cmd->operator = cmd->next->operator;
-		if (cmd->next->fdout != -1)
+		(*cmd)->operator = (*cmd)->next->operator;
+		if ((*cmd)->next->fdout != -1)
 		{
-			cmd->fdout = cmd->next->fdout;
-			cmd->redirect = R_OUTFILE;
+			(*cmd)->fdout = (*cmd)->next->fdout;
+			(*cmd)->redirect = R_OUTFILE;
 		}
-		delete_command(&cmd->next);
+		delete_command(&(*cmd)->next, head);
 	}
-	if (cmd && (ft_strcmp(cmd->name, "save_outfile") == 0
-			|| ft_strcmp(cmd->name, "read_infile") == 0
-			|| ft_strcmp(cmd->name, "save_append") == 0
-			|| ft_strcmp(cmd->name, "heredoc") == 0))
-		delete_command(&cmd);
+	if (*cmd && (ft_strcmp((*cmd)->name, "save_outfile") == 0
+			|| ft_strcmp((*cmd)->name, "read_infile") == 0
+			|| ft_strcmp((*cmd)->name, "save_append") == 0
+			|| ft_strcmp((*cmd)->name, "heredoc") == 0))
+		delete_command(cmd, head);
 }
 
-void	postprocess_cmds(t_cmd *cmd)
+void	postprocess_cmds(t_shell *data)
 {
-	if (cmd == NULL)
-		return ;
-	if (cmd->fdin != -1)
-		cmd->redirect = R_INFILE;
-	else if (cmd->fdout != -1)
-		cmd->redirect = R_OUTFILE;
-	clean_commands(cmd);
-	if (cmd)
-		cmd = cmd->next;
-	postprocess_cmds(cmd);
+	t_cmd	*current_cmd;
+
+	current_cmd = data->cmd;
+	while (current_cmd != NULL)
+	{
+		if (current_cmd->fdin != -1)
+			current_cmd->redirect = R_INFILE;
+		else if (current_cmd->fdout != -1)
+			current_cmd->redirect = R_OUTFILE;
+		clean_commands(&current_cmd, &data->cmd);
+		if (current_cmd)
+			current_cmd = current_cmd->next;
+	}
 }
 
 t_cmd	*traverse_ast(t_cmd_arg *arg, t_shell *data)

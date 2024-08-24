@@ -32,7 +32,7 @@ typedef struct s_cmd_arg
 }						t_cmd_arg;
 
 // Command
-void					postprocess_cmds(t_cmd *cmd);
+void					postprocess_cmds(t_shell *data);
 t_cmd					*traverse_ast(t_cmd_arg *arg, t_shell *data);
 
 // Command utils
@@ -40,7 +40,6 @@ void					print_fd_contents(int fd);
 void					add_argument(t_cmd *cmd, const char *arg);
 char					**build_cmd_args(t_cmd *cmd);
 void					free_commands(t_cmd **head);
-void					delete_command(t_cmd **node);
 void					print_command(t_cmd *cmd);
 
 // Command handles1
@@ -60,7 +59,7 @@ t_cmd					*handle_node_and_or_semicolon(t_cmd_arg *arg,
 t_cmd					*handle_node_parenthesis(t_cmd_arg *arg, t_shell *data);
 
 // Command handles utils
-void					delete_command(t_cmd **node);
+void					delete_command(t_cmd **node, t_cmd **head);
 char					*read_until_eof(char *line, char *eof, char *result);
 void					ft_read_stdin(int fd, char *eof, t_shell *data);
 t_cmd					*process_node_commands(t_cmd_arg *arg, t_shell *data,

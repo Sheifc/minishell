@@ -65,7 +65,7 @@ t_cmd	*generate_commands(t_shell *data, bool is_valid, t_fds fds)
 		arg.pipe_stack = &pipe_stack;
 		arg.open_parenthesis = false;
 		data->cmd = traverse_ast(&arg, data);
-		postprocess_cmds(data->cmd);
+		postprocess_cmds(data);
 		if (data->cmd == NULL || data->cmd->name == NULL)
 			data->cmd = NULL;
 		// print_commands(data->cmd);
@@ -83,7 +83,7 @@ void	print_commands(t_cmd *cmd)
 	t_cmd	*current;
 
 	current = NULL;
-	if (cmd && cmd->name)
+	if (cmd)
 	{
 		printf("\n**** List of Commands: ****\n");
 		current = cmd;

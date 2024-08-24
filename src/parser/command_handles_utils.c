@@ -1,6 +1,6 @@
 #include "command.h"
 
-void	delete_command(t_cmd **node)
+void	delete_command(t_cmd **node, t_cmd **head)
 {
 	int		i;
 	t_cmd	*next_node;
@@ -8,6 +8,8 @@ void	delete_command(t_cmd **node)
 	if (*node == NULL)
 		return ;
 	next_node = (*node)->next;
+	if (*node == *head)
+		*head = next_node;
 	if ((*node)->name)
 		ft_free_str(&(*node)->name);
 	if ((*node)->arg)
