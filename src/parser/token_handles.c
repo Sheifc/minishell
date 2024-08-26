@@ -46,8 +46,7 @@ void	handle_quotes(char **start, char **end)
 	bool			in_quote;
 	char			quote;
 
-	while (ft_strchr(DELIMITERS, **start))
-		(*start)++;
+	skip_delimiters(start);
 	in_quote = false;
 	*end = *start;
 	quote = -1;
@@ -74,8 +73,10 @@ int	handle_redirect_arg(char **start, t_shell *data)
 	char	*value;
 	int		size;
 
-	end = *start;
 	skip_delimiters(start);
+	if (*start[0] == '\0')
+		return (0);
+	end = *start;
 	if (*end && (*end == '('
 			|| *end == ')' || *end == '|' || *end == '<' || *end == '>'
 			|| *end == ';' || ft_strncmp(end, "||", 2) == 0
@@ -85,7 +86,7 @@ int	handle_redirect_arg(char **start, t_shell *data)
 	{
 		size = get_operation_size(end);
 		value = ft_strndup(end, size);
-		ft_error_syntax(E_SYNTAX, value, "syntax error near unexpected ",
+		ft_error_syntax(E_SYNTAX, value, "syntax error near unexpected",
 			&data->status);
 		free(value);
 		return (1);

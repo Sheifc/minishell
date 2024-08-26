@@ -42,7 +42,10 @@ t_token	**process_tokens(t_shell *data, char *input_copy)
 		if (!*start)
 			break ;
 		if (handle_regular_tokens(&start, data) != 0)
+		{
+			free_tokens(&data->tokens, &data->num_tokens);
 			return (NULL);
+		}
 	}
 	return (data->tokens);
 }

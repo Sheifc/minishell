@@ -175,14 +175,8 @@ directories:
 
 tests: token ast cmd
 
-# norminette src/parser/token*
-# norminette src/parser/wildcard*
-# norminette src/parser/ast*
-# norminette src/parser/syntax*
-# norminette src/parser/command*
-# norminette src/parser/error*
-# norminette src/parser/stack*
-# norminette src/parser/test_*
-# norminette includes/token.h includes/ast.h includes/syntax.h includes/command.h includes/stacks.h
+# norminette src/parser/*
+# norminette includes/*
+# valgrind --suppressions=readline.supp --leak-check=full --show-leak-kinds=all -s ./minishell
 
 .PHONY: all clean fclean re test_token test_ast directories
