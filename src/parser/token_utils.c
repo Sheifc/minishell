@@ -37,13 +37,7 @@ int	add_cmd_arg_token(char **start, t_shell *data)
 	char			temp;
 	t_token_type	type;
 
-	end = *start;
-	while (*end && !ft_strchr(DELIMITERS, *end) && *end != '"' && *end != '\''
-		&& *end != '(' && *end != ')' && *end != '|' && *end != '<'
-		&& *end != '>' && *end != ';' && ft_strncmp(end, "&&", 2) != 0
-		&& ft_strncmp(end, "||", 2) != 0 && ft_strncmp(end, "<<", 2) != 0
-		&& ft_strncmp(end, ">>", 2) != 0)
-		end++;
+	handle_quotes(start, &end);
 	temp = *end;
 	*end = '\0';
 	if (data->num_tokens > 0 && data->tokens[data->num_tokens - 1]->expect_arg)

@@ -37,7 +37,8 @@ t_cmd					*traverse_ast(t_cmd_arg *arg, t_shell *data);
 
 // Command utils
 void					print_fd_contents(int fd);
-void					add_argument(t_cmd *cmd, const char *arg);
+void					add_argument(t_cmd *cmd, const char *arg,
+							t_shell *data);
 char					**build_cmd_args(t_cmd *cmd);
 void					free_commands(t_cmd **head);
 void					print_command(t_cmd *cmd);

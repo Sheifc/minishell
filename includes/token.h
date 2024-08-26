@@ -28,9 +28,7 @@ t_token	**tokenize(t_shell *data);
 char	*process_word(const char *input, int start, int length, char *output);
 int		get_operation_size(const char *str);
 void	handle_character(const char *input, char **output, t_word_features *ft);
-bool	ok_count_quotes(const char *str);
-char	*preprocess_input(const char *input, t_word_features feat,
-			t_shell *data);
+int		count_quotes(const char *str);
 
 // token_preprocess_utils
 char	*remove_quotes(const char *input);
@@ -45,7 +43,7 @@ char	*create_new_result(const char *result, const char *pos,
 			const char *value, const char *name);
 char	*replace_variable(const char *pos, char *result, const char *var_name,
 			t_shell *data);
-int		is_btw_single_quotes(const char *str, const char *pos);
+bool	is_btw_single_quotes(const char *str, const char *pos);
 int		is_preceded_by_double_less(const char *str, const char *pos);
 char	*replace_env_variables(const char *input, t_shell *data);
 
@@ -56,16 +54,14 @@ char	*extract_variable_name(const char *start);
 // token_handles
 int		handle_wildcards(char **start, t_shell *data, t_token_type type);
 void	handle_unmatched_quotes(char **start, char *end, t_shell *data);
-void	handle_quotes(char **start, t_shell *data, char quote_char);
+void	handle_quotes(char **start, char **end);
 int		handle_redirect_arg(char **start, t_shell *data);
 int		handle_regular_tokens(char **start, t_shell *data);
 
 // token_handles_utils
-bool	is_operator(const char *str);
 int		handle_token(char **start, t_shell *data, t_token_type type,
 			char *value);
-void	handle_redirect_or_text_token(t_shell *data, char *token_value);
-void	add_token_and_free(t_shell *data, t_token_type type, char *value);
+char	*parse_string(const char *input, t_shell *data);
 int		add_redirect_token(t_shell *data, char **start, char *end);
 
 // token_utils

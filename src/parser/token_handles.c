@@ -41,48 +41,56 @@ void	handle_unmatched_quotes(char **start, char *end, t_shell *data)
 }
 
 // Function to create the text token
-void	handle_quotes(char **start, t_shell *d, char quote_char)
+void	handle_quotes(char **start, char **end)
 {
-	char	*end;
-	char	*value;
+	bool			in_quote;
+	char			quote;
 
-	value = ft_strndup(*start, 1);
-	add_token_and_free(d, T_QUOTE, value);
-	end = *start + 1;
-	while (*end && *end != quote_char)
-		end++;
-	if (*end == quote_char)
+	while (ft_strchr(DELIMITERS, **start))
+		(*start)++;
+	in_quote = false;
+	*end = *start;
+	quote = -1;
+	while (**end && ((!ft_strchr(DELIMITERS, **end) && **end != '('
+				&& **end != ')' && **end != '|' && **end != '<' && **end != '>'
+				&& **end != ';' && ft_strncmp(*end, "&&", 2) != 0
+				&& ft_strncmp(*end, "||", 2) != 0
+				&& ft_strncmp(*end, "<<", 2) != 0
+				&& ft_strncmp(*end, ">>", 2) != 0)
+			|| in_quote))
 	{
-		if (*(end - 1) != quote_char)
+		if ((**end == '"' || **end == '\'') && (!in_quote || **end == quote))
 		{
-			value = ft_strndup(*start + 1, end - *start - 1);
-			handle_redirect_or_text_token(d, value);
-			free(value);
+			quote = **end;
+			in_quote = !in_quote;
 		}
-		else
-			handle_redirect_or_text_token(d, " ");
-		value = ft_strndup(end, 1);
-		d->tokens[d->num_tokens++] = create_token(T_QUOTE, value, true, d);
-		free(value);
-		*start = end + 1;
+		(*end)++;
 	}
-	else
-		handle_unmatched_quotes(start, end, d);
 }
 
 int	handle_redirect_arg(char **start, t_shell *data)
 {
 	char	*end;
+	char	*value;
+	int		size;
 
-	end = *start + 1;
-	while (*end && !ft_strchr(DELIMITERS, *end) && *end != '"' && *end != '\''
-		&& *end != '(' && *end != ')' && *end != '|' && *end != '<'
-		&& *end != '>' && *end != ';' && ft_strncmp(end, "&&", 2) != 0
-		&& ft_strncmp(end, "||", 2) != 0 && ft_strncmp(end, "<<", 2) != 0
-		&& ft_strncmp(end, ">>", 2) != 0)
-		end++;
-	if (ft_strlen(end) == 0)
-		return (0);
+	end = *start;
+	skip_delimiters(start);
+	if (*end && (*end == '('
+			|| *end == ')' || *end == '|' || *end == '<' || *end == '>'
+			|| *end == ';' || ft_strncmp(end, "||", 2) == 0
+			|| ft_strncmp(end, "||", 2) == 0
+			|| ft_strncmp(end, "<<", 2) == 0
+			|| ft_strncmp(end, ">>", 2) == 0))
+	{
+		size = get_operation_size(end);
+		value = ft_strndup(end, size);
+		ft_error_syntax(E_SYNTAX, value, "syntax error near unexpected ",
+			&data->status);
+		free(value);
+		return (1);
+	}
+	handle_quotes(start, &end);
 	return (add_redirect_token(data, start, end));
 }
 

@@ -13,10 +13,14 @@ char	*process_word(const char *input, int start, int length, char *output)
 
 int	get_operation_size(const char *str)
 {
-	if (ft_strcmp(str, "&&") == 0 || ft_strcmp(str, "||") == 0)
+	if (ft_strncmp(str, "&&", 2) == 0 || ft_strncmp(str, "||", 2) == 0)
 		return (2);
-	if (ft_strcmp(str, "|") == 0 || ft_strcmp(str, ";") == 0 || ft_strcmp(str,
-			"(") == 0 || ft_strcmp(str, ")") == 0)
+	if (ft_strncmp(str, "<<", 2) == 0 || ft_strncmp(str, ">>", 2) == 0)
+		return (2);
+	if (ft_strncmp(str, ">", 1) == 0 || ft_strncmp(str, "<", 1) == 0)
+		return (1);
+	if (ft_strncmp(str, "|", 1) == 0 || ft_strncmp(str, ";", 1) == 0
+		|| ft_strncmp(str, "(", 1) == 0 || ft_strncmp(str, ")", 1) == 0)
 		return (1);
 	return (0);
 }
@@ -46,43 +50,36 @@ void	handle_character(const char *in, char **output, t_word_features *ft)
 	}
 }
 
-bool	ok_count_quotes(const char *str)
+void	update_quote_state(char c, bool *in_single_quote, bool *in_double_quote,
+		int *count)
 {
-	int	count;
-	int	i;
-
-	count = 0;
-	i = -1;
-	while (str[++i] != '\0')
+	if (c == '\'' && !(*in_double_quote))
 	{
-		if (str[i] == '\'' || str[i] == '"')
-			++count;
+		*in_single_quote = !(*in_single_quote);
+		(*count)++;
 	}
-	if (count % 2 == 0)
-		return (true);
-	return (false);
+	else if (c == '"' && !(*in_single_quote))
+	{
+		*in_double_quote = !(*in_double_quote);
+		(*count)++;
+	}
 }
 
-char	*preprocess_input(const char *input, t_word_features feat,
-	t_shell *data)
+int	count_quotes(const char *str)
 {
-	char			*new_in;
+	int		i;
+	int		count;
+	bool	in_single_quote;
+	bool	in_double_quote;
 
-	if (ok_count_quotes(input) == false)
+	i = 0;
+	count = 0;
+	in_single_quote = false;
+	in_double_quote = false;
+	while (str[i] != '\0')
 	{
-		new_in = ft_strdup(input);
-		return (new_in);
+		update_quote_state(str[i], &in_single_quote, &in_double_quote, &count);
+		i++;
 	}
-	new_in = (char *)malloc(MAX_LENGTH * sizeof(char));
-	if (!new_in)
-	{
-		ft_error(E_MEMORY, NULL, &data->status);
-		return (NULL);
-	}
-	new_in[0] = '\0';
-	while (++feat.pos <= (int)ft_strlen(input))
-		handle_character(input, &new_in, &feat);
-	if (!feat.new_word)
-		process_word(input, feat.start, ft_strlen(input) - feat.start, new_in);
-	return (new_in);
+	return (count);
 }

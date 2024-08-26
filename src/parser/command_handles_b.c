@@ -1,9 +1,9 @@
 #include "command.h"
 
-// Función para crear un nodo de comando
 t_cmd	*create_command(t_cmd_arg *arg, t_shell *data)
 {
 	t_cmd		*cmd;
+	char		*value;
 
 	cmd = (t_cmd *)malloc(sizeof(t_cmd));
 	if (!cmd)
@@ -11,7 +11,8 @@ t_cmd	*create_command(t_cmd_arg *arg, t_shell *data)
 		ft_error(E_MEMORY, NULL, &data->status);
 		return (NULL);
 	}
-	cmd->name = ft_strdup(arg->node->value);
+	value = replace_env_variables(arg->node->value, data);
+	cmd->name = parse_string(value, data);
 	cmd->arg = NULL;
 	cmd->n_args = 0;
 	cmd->fdin = arg->fds.in;
@@ -21,7 +22,8 @@ t_cmd	*create_command(t_cmd_arg *arg, t_shell *data)
 	handle_parenthesis_status(cmd, arg);
 	cmd->next = NULL;
 	cmd->redirect = R_NONE;
-	add_argument(cmd, arg->node->value);
+	add_argument(cmd, value, data);
+	free(value);
 	return (cmd);
 }
 
@@ -37,12 +39,11 @@ t_cmd	*create_command_from_ast(t_cmd_arg *arg, t_shell *data)
 	{
 		if (arg_node->type == NODE_ARGUMENT)
 		{
-			if (ft_strcmp(arg->node->value, "unset") != 0
-				&& arg->node->type != NODE_HEREDOC)
+			if (arg->node->type != NODE_HEREDOC)
 				preproc_input = replace_env_variables(arg_node->value, data);
 			else
 				preproc_input = ft_strdup(arg_node->value);
-			add_argument(cmd, preproc_input);
+			add_argument(cmd, preproc_input, data);
 			ft_free_str(&preproc_input);
 		}
 		arg_node = arg_node->left;

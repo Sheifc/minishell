@@ -4,7 +4,7 @@ LIBS            = -lft -lreadline
 NAME            = minishell
 
 CC              = gcc
-CFLAGS          = -Wall -Werror -Wextra -Iincludes -Ilibft/includes -g #-fsanitize=address
+CFLAGS          = -Wall -Werror -Wextra -Iincludes -Ilibft/includes -g #-fsanitize=address 
 LDFLAGS         = -fsanitize=address
 RM              = rm -rf
 
@@ -27,7 +27,7 @@ FILES_PARSER	=	parser_utils.c										\
 					token.c token_utils.c token_verify.c				\
 					token_handles.c token_handles_utils.c				\
 					token_preprocess.c token_preprocess_utils.c 		\
-					token_env.c token_env_utils.c						\
+					enviroment.c enviroment_utils.c	enviroment_check.c	\
 					error.c												\
 					wildcard_bonus.c wildcard_utils_bonus.c				\
 					wildcard_preprocess_bonus.c

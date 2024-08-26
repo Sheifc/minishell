@@ -20,8 +20,8 @@ typedef enum e_error_type
 {
 	E_AUTO = 0,
 	E_FILE,
+	E_SYNTAX = 2,
 	E_FDS = 9,
-	E_SYNTAX = 10,
 	E_REDIRECT = 11,
 	E_MEMORY = 12,
 	E_COMMAND = 127,

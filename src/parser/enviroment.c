@@ -41,22 +41,6 @@ char	*replace_variable(const char *pos, char *result, const char *name,
 	return (new_result);
 }
 
-int	is_btw_single_quotes(const char *str, const char *pos)
-{
-	int			in_single_quotes;
-	const char	*ptr;
-
-	in_single_quotes = 0;
-	ptr = str;
-	while (ptr < pos)
-	{
-		if (*ptr == '\'')
-			in_single_quotes = !in_single_quotes;
-		ptr++;
-	}
-	return (in_single_quotes);
-}
-
 int	is_preceded_by_double_less(const char *str, const char *pos)
 {
 	const char	*p;

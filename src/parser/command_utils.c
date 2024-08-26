@@ -20,7 +20,7 @@ void	print_fd_contents(int fd)
 }
 
 // Función para agregar un argumento al nodo de comando
-void	add_argument(t_cmd *cmd, const char *arg)
+void	add_argument(t_cmd *cmd, const char *arg, t_shell *data)
 {
 	int		i;
 	char	**new_args;
@@ -34,7 +34,7 @@ void	add_argument(t_cmd *cmd, const char *arg)
 	i = -1;
 	while (++i < cmd->n_args)
 		new_args[i] = cmd->arg[i];
-	new_args[cmd->n_args] = ft_strdup(arg);
+	new_args[cmd->n_args] = parse_string(arg, data);
 	free(cmd->arg);
 	cmd->arg = new_args;
 	new_args[cmd->n_args + 1] = NULL;

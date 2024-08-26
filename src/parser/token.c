@@ -1,7 +1,7 @@
 #include "token.h"
 
 t_token	*create_token(t_token_type type, const char *value, bool expect_arg,
-	t_shell *data)
+		t_shell *data)
 {
 	t_token	*token;
 
@@ -41,9 +41,7 @@ t_token	**process_tokens(t_shell *data, char *input_copy)
 		skip_delimiters(&start);
 		if (!*start)
 			break ;
-		if (*start == '"' || *start == '\'')
-			handle_quotes(&start, data, *start);
-		else if (handle_regular_tokens(&start, data) != 0)
+		if (handle_regular_tokens(&start, data) != 0)
 			return (NULL);
 	}
 	return (data->tokens);
@@ -51,15 +49,10 @@ t_token	**process_tokens(t_shell *data, char *input_copy)
 
 t_token	**tokenize(t_shell *data)
 {
-	char			*input_copy;
-	char			*input;
-	t_word_features	feat;
+	char	*input;
 
-	feat.start = 0;
-	feat.pos = -1;
-	feat.btw_quotes = false;
-	feat.new_word = true;
-	input = preprocess_input(data->prompt, feat, data);
+	if (count_quotes(data->prompt) % 2 != 0)
+		return (ft_error(E_SYNTAX, "invalid number of quotes", &data->status));
 	data->tokens = (t_token **)malloc(MAX_TOKENS * sizeof(t_token *));
 	if (!data->tokens)
 	{
@@ -67,13 +60,12 @@ t_token	**tokenize(t_shell *data)
 		return (NULL);
 	}
 	data->num_tokens = 0;
-	input_copy = ft_strdup(input);
-	free(input);
-	if (process_tokens(data, input_copy) == NULL)
+	input = ft_strdup(data->prompt);
+	if (process_tokens(data, input) == NULL)
 	{
-		free(input_copy);
+		free(input);
 		return (NULL);
 	}
-	free(input_copy);
+	free(input);
 	return (data->tokens);
 }
