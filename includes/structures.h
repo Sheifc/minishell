@@ -6,7 +6,7 @@
 /*   By: sheferna <sheferna@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 19:19:19 by sheferna          #+#    #+#             */
-/*   Updated: 2024/08/23 19:19:21 by sheferna         ###   ########.fr       */
+/*   Updated: 2024/08/27 05:00:33 by sheferna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,23 +49,6 @@ typedef struct s_ast_node
 	struct s_ast_node	*left;
 	struct s_ast_node	*right;
 }						t_ast_node;
-
-// t_token_type:
-// 	T_COMMAND			commands
-// 	T_ARG				arguments
-// 	T_PIPE				|
-// 	T_AND				&&
-// 	T_OR				||
-// 	T_PAREN_OPEN		(
-// 	T_PAREN_CLOSE		)
-// 	T_TEXT				"..."
-// 	T_INPUT				<
-// 	T_HEREDOC			<<
-// 	T_OUTPUT			>
-// 	T_OUTPUT_APPEND		>>
-// 	T_SEMICOLON			;
-//  T_WILDCARD			*?[]
-// 	T_UNKNOWN
 
 typedef enum e_token_type
 {
