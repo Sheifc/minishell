@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: svilla-d <svilla-d@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: sheferna <sheferna@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 12:05:09 by sheferna          #+#    #+#             */
-/*   Updated: 2024/08/22 10:17:38 by svilla-d         ###   ########.fr       */
+/*   Updated: 2024/08/27 18:53:04 by sheferna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -403,7 +403,7 @@ t_list				*ft_lstnew(void *content);
  * @brief Add the node 'new' to the end of the linked list 'lst'.
  * @param lst The pointer to the first node of the linked list.
 
-	* @param new The pointer to the node to add at the beginning to the linked list.
+ * @param new The pointer to the node to add at the beginning to the linked list.
  */
 void				ft_lstadd_front(t_list **lst, t_list *new);
 /**

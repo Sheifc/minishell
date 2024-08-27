@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   command_utils.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sheferna <sheferna@student.42malaga.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/08/27 18:46:23 by sheferna          #+#    #+#             */
+/*   Updated: 2024/08/27 18:51:58 by sheferna         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "command.h"
 
 // Función que imprime el contenido dentro de un fd
@@ -105,8 +117,8 @@ void	print_command(t_cmd *cmd)
 			cmd->fdout);
 		printf("  next_operator: %s [%d]\n", node_type_to_symbol(cmd->operator),
 			cmd->operator);
-		printf("  \e[36mredirect: %s [%d]\e[0m\n", symbol_redirect[cmd->redirect],
-			cmd->redirect);
+		printf("  \e[36mredirect: %s [%d]\e[0m\n",
+			symbol_redirect[cmd->redirect], cmd->redirect);
 		printf("  \e[32mparenthesis: %d, parenthesis_status: %s [%d], \e[0m\n",
 			cmd->parenthesis, symbol_parenthesis[cmd->parenthesis_status],
 			cmd->parenthesis_status);

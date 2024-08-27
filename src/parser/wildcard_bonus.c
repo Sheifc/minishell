@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   wildcard_bonus.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sheferna <sheferna@student.42malaga.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/08/27 18:48:21 by sheferna          #+#    #+#             */
+/*   Updated: 2024/08/27 18:48:22 by sheferna         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "token.h"
 
 // Main function for pattern matching
@@ -80,7 +92,8 @@ bool	is_wildcards(char **start)
 	end = *start;
 	while (*end && !ft_strchr(" \r\n\t\v\f\"'()|<>;&", *end))
 	{
-		if (*end == '*' || *end == '?' || *end == '[' || *end == ']')
+		if ((*end == '*' || *end == '?' || *end == '[' || *end == ']')
+			&& (*(end - 1) && *(end -1) != '$'))
 			return (true);
 		end++;
 	}

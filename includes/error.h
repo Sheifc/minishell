@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   error.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sheferna <sheferna@student.42malaga.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/08/27 18:50:06 by sheferna          #+#    #+#             */
+/*   Updated: 2024/08/27 18:50:07 by sheferna         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef ERROR_H
 # define ERROR_H
 
@@ -7,14 +19,6 @@
 # include <stdlib.h>
 # include <string.h>
 # include <unistd.h>
-
-// Errors:
-//	E_AUTO		-
-//	E_FILE		No such file or directory
-//	E_FDS		Bad file descriptor
-//	E_SYNTAX	Syntax error
-//	E_MEMORY	Cannot allocate memory
-//	E_UNKNOWN
 
 typedef enum e_error_type
 {

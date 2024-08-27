@@ -6,7 +6,7 @@
 #    By: sheferna <sheferna@student.42malaga.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/27 05:20:05 by sheferna          #+#    #+#              #
-#    Updated: 2024/08/27 05:24:49 by sheferna         ###   ########.fr        #
+#    Updated: 2024/08/27 16:48:52 by sheferna         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,8 +16,8 @@ LIBS            =	-lft -lreadline
 NAME            =	minishell
 
 CC              =	gcc
-CFLAGS          =	-Wall -Werror -Wextra -Iincludes -Ilibft/includes -g #-fsanitize=address 
-LDFLAGS         =	-fsanitize=address
+CFLAGS          =	-Wall -Werror -Wextra -Iincludes -Ilibft/includes -g
+
 RM              =	rm -rf
 
 SRC_DIR         =	src/
@@ -92,21 +92,6 @@ OBJ_SRC         =	$(OBJ_MAIN) $(OBJ_EXEC) $(OBJ_PARSER)
 
 vpath %.c $(SRC_DIR) $(PARSER_DIR) $(EXEC_DIR)
 
-# Determine OS and architecture
-OS := $(shell uname)
-
-# Check the includes and libs on macOS
-ifeq ($(OS), Darwin)
-INCLUDES += -I/usr/local/opt/readline/include
-LIBS += -L/usr/local/opt/readline/lib
-endif
-
-# Check the includes and libs on Linux
-ifeq ($(OS), Linux)
-INCLUDES += -I/usr/include/readline
-LIBS += -L/usr/lib
-endif
-
 $(OBJ_PARSER_DIR)%.o: $(PARSER_DIR)%.c
 	@mkdir -p $(OBJ_PARSER_DIR)
 	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
@@ -123,7 +108,7 @@ all: $(NAME)
 
 $(NAME): $(OBJ_SRC)
 	@$(MAKE) -s all bonus printf gnl -C $(LIBFT_DIR)
-	$(CC) $(OBJ_SRC) -L $(LIBFT_DIR) $(LIBS) $(LDFLAGS) -o $@
+	$(CC) $(OBJ_SRC) -L $(LIBFT_DIR) $(LIBS) -o $@
 
 clean:
 	@$(RM) $(OBJ_DIR)
@@ -137,59 +122,4 @@ fclean: clean
 
 re: fclean all
 
-# --------------------------------------------------
-#             Test compilation process             |
-# --------------------------------------------------
-
-# ***** Test token *****
-FILES_SRC_TOKEN	=	test_token.c
-SRC_MAIN_TOKEN	=	$(addprefix $(PARSER_DIR),$(FILES_SRC_TOKEN))
-SRC_TOKEN		=	$(SRC_MAIN_TOKEN) $(SRC_EXEC) $(SRC_PARSER)
-OBJ_MAIN_TOKEN	=	$(SRC_MAIN_TOKEN:$(PARSER_DIR)%.c=$(OBJ_PARSER_DIR)%.o)
-OBJ_SRC_TOKEN	=	$(OBJ_MAIN_TOKEN) $(OBJ_EXEC) $(OBJ_PARSER)
-
-$(OBJ_MAIN_TOKEN)%.o: $(PARSER_DIR)%.c | directories
-	@$(CC) $(CFLAGS) -c $< -o $@
-
-token: $(OBJ_SRC_TOKEN)
-	@$(MAKE) -s all bonus printf gnl -C $(LIBFT_DIR)
-	$(CC) $(OBJ_SRC_TOKEN) -L $(LIBFT_DIR) $(LIBS) $(LDFLAGS) -o $@
-
-# ***** Test ast *****
-FILES_SRC_AST	=	test_ast.c
-SRC_MAIN_AST	=	$(addprefix $(PARSER_DIR),$(FILES_SRC_AST))
-SRC_AST			=	$(SRC_MAIN_AST) $(SRC_EXEC) $(SRC_PARSER)
-OBJ_MAIN_AST	=	$(SRC_MAIN_AST:$(PARSER_DIR)%.c=$(OBJ_PARSER_DIR)%.o)
-OBJ_SRC_AST		=	$(OBJ_MAIN_AST) $(OBJ_EXEC) $(OBJ_PARSER)
-
-$(OBJ_MAIN_AST)%.o: $(PARSER_DIR)%.c | directories
-	@$(CC) $(CFLAGS) -c $< -o $@
-
-ast: $(OBJ_SRC_AST)
-	@$(MAKE) -s all bonus printf gnl -C $(LIBFT_DIR)
-	$(CC) $(OBJ_SRC_AST) -L $(LIBFT_DIR) $(LIBS) $(LDFLAGS) -o $@
-
-# ***** Test command *****
-FILES_SRC_CMD	=	test_command.c
-SRC_MAIN_CMD	=	$(addprefix $(PARSER_DIR),$(FILES_SRC_CMD))
-SRC_CMD			=	$(SRC_MAIN_CMD) $(SRC_EXEC) $(SRC_PARSER)
-OBJ_MAIN_CMD	=	$(SRC_MAIN_CMD:$(PARSER_DIR)%.c=$(OBJ_PARSER_DIR)%.o)
-OBJ_SRC_CMD		=	$(OBJ_MAIN_CMD) $(OBJ_EXEC) $(OBJ_PARSER)
-
-$(OBJ_MAIN_CMD)%.o: $(PARSER_DIR)%.c | directories
-	@$(CC) $(CFLAGS) -c $< -o $@
-
-cmd: $(OBJ_SRC_CMD)
-	@$(MAKE) -s all bonus printf gnl -C $(LIBFT_DIR)
-	$(CC) $(OBJ_SRC_CMD) -L $(LIBFT_DIR) $(LIBS) $(LDFLAGS) -o $@
-
-directories:
-	mkdir -p $(AST_OBJ_DIR) $(TOKEN_OBJ_DIR) $(CMD_OBJ_DIR)
-
-tests: token ast cmd
-
-# norminette src/parser/*
-# norminette includes/*
-# valgrind --suppressions=readline.supp --leak-check=full --show-leak-kinds=all -s ./minishell
-
-.PHONY: all clean fclean re test_token test_ast directories
+.PHONY: all clean fclean re

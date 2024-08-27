@@ -6,7 +6,7 @@
 /*   By: sheferna <sheferna@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 19:22:18 by sheferna          #+#    #+#             */
-/*   Updated: 2024/08/23 19:22:20 by sheferna         ###   ########.fr       */
+/*   Updated: 2024/08/27 16:57:17 by sheferna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ void	exec_fork(t_shell *data, t_cmd *cmd, int *fdpipe)
 		ft_perror_exit("error: dup2", data);
 	close(cmd->fdin);
 	run_single_cmd(data, cmd);
+	free_all(data);
 	exit(0);
 }
 
