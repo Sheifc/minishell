@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   set_tmp_fds.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sheferna <sheferna@student.42malaga.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/08/23 19:24:17 by sheferna          #+#    #+#             */
+/*   Updated: 2024/08/23 19:24:18 by sheferna         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 void	set_tmp_fds(t_shell *data)
@@ -26,42 +38,6 @@ void	dup_fdin_tmp(t_shell *data, t_cmd *cmd)
 		perror("minishell: error: dup");
 		return ;
 	}
-}
-
-void	set_fdin(t_shell *data, t_cmd *cmd)
-{
-	if (cmd->fdin == -1)
-		cmd->fdin = dup(data->tmpin);
-	if (cmd->fdin == -1)
-	{
-		perror("minishell: error: dup");
-		return ;
-	}
-	if (dup2(cmd->fdin, 1) == -1)
-	{
-		perror("minishell: error: dup2");
-		close(cmd->fdin);
-		return ;
-	}
-	close(cmd->fdin);
-}
-
-void	set_fdout(t_shell *data, t_cmd *cmd)
-{
-	if (cmd->fdout == -1)
-		cmd->fdout = dup(data->tmpout);
-	if (cmd->fdout == -1)
-	{
-		perror("minishell: error: dup");
-		return ;
-	}
-	if (dup2(cmd->fdout, 1) == -1)
-	{
-		perror("minishell: error: dup2");
-		close(cmd->fdout);
-		return ;
-	}
-	close(cmd->fdout);
 }
 
 void	restart_fds(t_shell *data)

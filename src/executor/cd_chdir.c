@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cd_chdir.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sheferna <sheferna@student.42malaga.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/08/23 19:12:42 by sheferna          #+#    #+#             */
+/*   Updated: 2024/08/23 19:12:51 by sheferna         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 t_env	*env_lst_search(t_env *env, const char *key)
@@ -26,9 +38,9 @@ char	*get_cd_value(t_env *env, const char *key)
 	return (NULL);
 }
 
-char *go_to(t_shell *data, char *location, char *error)
+char	*go_to(t_shell *data, char *location, char *error)
 {
-	char *path;
+	char	*path;
 
 	path = get_cd_value(data->env, location);
 	if (!path)

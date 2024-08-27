@@ -34,6 +34,7 @@ FILES_PARSER	=	parser_utils.c										\
 
 FILES_EXEC      = init.c					\
 				  signals.c					\
+				  signals_heredoc.c			\
 				  exec_builtins.c			\
 				  free_env.c				\
 				  free_cmd.c				\
@@ -64,7 +65,8 @@ FILES_EXEC      = init.c					\
 				  exec_and_or_bonus.c		\
 				  exec_parenthesis_bonus.c	\
 				  exec_redir.c				\
-                  printing.c
+                  printing.c				\
+				  exec_error.c
 
 
 SRC_MAIN        = $(addprefix $(SRC_DIR),$(FILES_SRC))

@@ -1,20 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_toupper.c                                       :+:      :+:    :+:   */
+/*   signals_heredoc.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sheferna <sheferna@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/09/11 15:43:36 by sheferna          #+#    #+#             */
-/*   Updated: 2024/08/23 19:16:52 by sheferna         ###   ########.fr       */
+/*   Created: 2024/08/23 19:24:30 by sheferna          #+#    #+#             */
+/*   Updated: 2024/08/23 20:04:38 by sheferna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "minishell.h"
 
-int	ft_toupper(int c)
+void	heredoc_handler(int signum)
 {
-	if (c >= 'a' && c <= 'z')
-		c -= 32;
-	return (c);
+	(void)signum;
+	printf("\n");
+	exit(130);
 }

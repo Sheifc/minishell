@@ -1,20 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_toupper.c                                       :+:      :+:    :+:   */
+/*   exec_error.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sheferna <sheferna@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/09/11 15:43:36 by sheferna          #+#    #+#             */
-/*   Updated: 2024/08/23 19:16:52 by sheferna         ###   ########.fr       */
+/*   Created: 2024/08/23 19:21:43 by sheferna          #+#    #+#             */
+/*   Updated: 2024/08/23 19:21:45 by sheferna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "minishell.h"
 
-int	ft_toupper(int c)
+void	ft_error_cmd(t_cmd *cmd)
 {
-	if (c >= 'a' && c <= 'z')
-		c -= 32;
-	return (c);
+	ft_putstr_fd("minishell: ", 2);
+	ft_putstr_fd(cmd->arg[0], 2);
+	ft_putendl_fd(": command not found", 2);
+}
+
+void	ft_perror_exit(char *str, t_shell *data)
+{
+	ft_putstr_fd("minishell: ", 2);
+	perror(str);
+	free_all(data);
+	exit(1);
 }

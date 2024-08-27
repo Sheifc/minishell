@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec_pipeline.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sheferna <sheferna@student.42malaga.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/08/23 19:22:18 by sheferna          #+#    #+#             */
+/*   Updated: 2024/08/23 19:22:20 by sheferna         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 void	run_single_cmd(t_shell *data, t_cmd *cmd)
@@ -14,35 +26,26 @@ void	run_single_cmd(t_shell *data, t_cmd *cmd)
 		if (cmd->fdout != -1 && cmd->fdout != 0)
 		{
 			if (dup2(cmd->fdout, 1) == -1)
-			{ 
-				perror("minishell: error: dup2");
-				exit(1);
-			}
+				ft_perror_exit("error: dup2", data);
 			close(cmd->fdout);
 		}
 		if (execve(data->path, cmd->arg, data->envp) < 0)
-		{
-			perror("minishell: error: execve");
-			exit(1);
-		}
+			ft_perror_exit("error: execve", data);
 	}
 }
 
-void	dup_fdpipe(int *fdpipe)
+void	dup_fdpipe(int *fdpipe, t_shell *data)
 {
 	close(fdpipe[0]);
 	if (dup2(fdpipe[1], 1) == -1)
-	{
-		perror("minishell: error: dup2");
-		exit(1);
-	}
+		ft_perror_exit("error: dup2", data);
 	close(fdpipe[1]);
 }
 
 void	exec_fork(t_shell *data, t_cmd *cmd, int *fdpipe)
 {
 	if (cmd->next)
-		dup_fdpipe(fdpipe);
+		dup_fdpipe(fdpipe, data);
 	else
 	{
 		close(fdpipe[0]);
@@ -50,18 +53,12 @@ void	exec_fork(t_shell *data, t_cmd *cmd, int *fdpipe)
 		if (cmd->fdout != -1)
 		{
 			if (dup2(cmd->fdout, 1) == -1)
-			{
-				perror("minishell: error: dup2");
-				exit(1);
-			}
+				ft_perror_exit("error: dup2", data);
 			close(cmd->fdout);
 		}
 	}
- 	if (dup2(cmd->fdin, 0) == -1)
-	{
-		perror("minishell: error: dup2");
-		exit(1);
-	}
+	if (dup2(cmd->fdin, 0) == -1)
+		ft_perror_exit("error: dup2", data);
 	close(cmd->fdin);
 	run_single_cmd(data, cmd);
 	exit(0);
@@ -69,7 +66,7 @@ void	exec_fork(t_shell *data, t_cmd *cmd, int *fdpipe)
 
 void	exec_pipe(t_shell *data, t_cmd *cmd)
 {
-	pid_t		pid;
+	pid_t	pid;
 	int		fdpipe[2];
 
 	if (!cmd)

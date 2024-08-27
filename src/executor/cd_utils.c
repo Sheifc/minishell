@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cd_utils.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sheferna <sheferna@student.42malaga.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/08/23 19:20:25 by sheferna          #+#    #+#             */
+/*   Updated: 2024/08/23 19:20:27 by sheferna         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 int	multiple_args(t_shell *data, t_cmd *cmd)
@@ -13,14 +25,14 @@ int	multiple_args(t_shell *data, t_cmd *cmd)
 
 void	free_pwd(char *old_pwd, char *new_pwd)
 {
-	if(old_pwd)
+	if (old_pwd)
 		free(old_pwd);
-	if(new_pwd)
+	if (new_pwd)
 		free(new_pwd);
 }
 
 void	update_status(t_shell *data)
-{	
+{
 	if (data->status == 1)
 		data->status = 1;
 	else

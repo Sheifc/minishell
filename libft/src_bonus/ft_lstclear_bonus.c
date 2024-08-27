@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_lstclear_bonus.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sheferna <sheferna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sheferna <sheferna@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/30 20:30:58 by sheferna          #+#    #+#             */
-/*   Updated: 2023/10/13 19:14:00 by sheferna         ###   ########.fr       */
+/*   Updated: 2024/08/23 19:17:08 by sheferna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

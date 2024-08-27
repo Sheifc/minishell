@@ -1,14 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   signals.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sheferna <sheferna@student.42malaga.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/08/23 19:24:38 by sheferna          #+#    #+#             */
+/*   Updated: 2024/08/23 19:24:39 by sheferna         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 #include <readline/readline.h>
 
-int g_sig = 0;
-
-void	heredoc_handler(int signum)
-{
-	(void)signum;
-	printf("\n");
-	exit(130);
-}
+int		g_sig = 0;
 
 void	sigint_handler(int signal)
 {
@@ -49,7 +54,8 @@ void	signal_quit(int signal)
 void	sigchld_handler(int signum)
 {
 	(void)signum;
-	while (waitpid(-1, NULL, WNOHANG) > 0);
+	while (waitpid(-1, NULL, WNOHANG) > 0)
+		;
 }
 
 void	init_signals(void)

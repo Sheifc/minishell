@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   set_fds.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sheferna <sheferna@student.42malaga.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/08/23 19:24:10 by sheferna          #+#    #+#             */
+/*   Updated: 2024/08/23 19:24:11 by sheferna         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 void	fdin(t_cmd *cmd)
@@ -7,7 +19,7 @@ void	fdin(t_cmd *cmd)
 		if (dup2(cmd->fdin, 0) == -1)
 		{
 			perror("minishell: error: dup2");
-			exit(EXIT_FAILURE);
+			return ;
 		}
 		close(cmd->fdin);
 	}
@@ -20,10 +32,14 @@ void	fdout(t_cmd *cmd)
 		if (dup2(cmd->fdout, 1) == -1)
 		{
 			perror("minishell: error: dup2");
-			exit(EXIT_FAILURE);
+			return ;
 		}
 		close(cmd->fdout);
 	}
 }
 
-
+void	set_up_fds(t_cmd *cmd)
+{
+	fdin(cmd);
+	fdout(cmd);
+}

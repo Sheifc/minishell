@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   path.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sheferna <sheferna@student.42malaga.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/08/23 19:23:49 by sheferna          #+#    #+#             */
+/*   Updated: 2024/08/23 19:23:51 by sheferna         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 static void	access_cmd(t_shell *data, t_cmd *cmd)
@@ -9,7 +21,8 @@ static void	access_cmd(t_shell *data, t_cmd *cmd)
 	}
 }
 
-static int	find_exec_path(char **content_splited, t_shell *data, t_cmd *cmd, int i)
+static int	find_exec_path(char **content_splited, t_shell *data, t_cmd *cmd,
+	int i)
 {
 	char	*path_temp;
 	char	*path;

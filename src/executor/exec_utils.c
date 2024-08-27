@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec_utils.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sheferna <sheferna@student.42malaga.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/08/23 19:22:34 by sheferna          #+#    #+#             */
+/*   Updated: 2024/08/23 19:22:36 by sheferna         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 void	count_commands(t_shell *data)
@@ -18,7 +30,7 @@ void	save_pipe(int *fdpipe)
 	if (pipe(fdpipe) < 0)
 	{
 		perror("minishell: error: pipe");
-		exit(EXIT_FAILURE);
+		return ;
 	}
 }
 
@@ -35,7 +47,9 @@ pid_t	save_fork(t_shell *data)
 
 pid_t	saved_fork(void)
 {
-	pid_t pid = fork();
+	pid_t	pid;
+
+	pid = fork();
 	if (pid == -1)
 	{
 		perror("minishell: error: fork failed");
