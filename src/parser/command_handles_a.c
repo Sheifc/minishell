@@ -80,7 +80,9 @@ t_cmd	*handle_node_heredoc(t_cmd_arg *arg, t_shell *data)
 {
 	pid_t	pid;
 	int		fd;
+	t_cmd	*c;
 
+	c = process_node_commands(arg, data, -1, R_INFILE);
 	pid = fork();
 	if (pid == -1)
 		return (ft_error(E_AUTO, "heredoc fork failed", &data->status));
@@ -100,5 +102,5 @@ t_cmd	*handle_node_heredoc(t_cmd_arg *arg, t_shell *data)
 	push_operator(arg->ope_stack, NODE_HEREDOC);
 	signal(SIGINT, sigint_handler);
 	unlink(".heredoc_temp");
-	return (process_node_commands(arg, data, fd, R_INFILE));
+	return (c->fdin = fd, c);
 }
