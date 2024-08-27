@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sheferna <sheferna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sheferna <sheferna@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/01 15:38:03 by sheferna          #+#    #+#             */
-/*   Updated: 2024/04/06 13:27:40 by sheferna         ###   ########.fr       */
+/*   Updated: 2024/08/23 19:17:38 by sheferna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

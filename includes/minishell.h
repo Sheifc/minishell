@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sheferna <sheferna@student.42malaga.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/08/23 19:19:00 by sheferna          #+#    #+#             */
+/*   Updated: 2024/08/23 19:19:04 by sheferna         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
@@ -102,8 +114,6 @@ int			checker(t_shell *data, t_cmd *cmd);
 
 void		set_tmp_fds(t_shell *data);
 void		dup_fdin_tmp(t_shell *data, t_cmd *cmd);
-void		set_fdin(t_shell *data, t_cmd *cmd);
-void		set_fdout(t_shell *data, t_cmd *cmd);
 void		restart_fds(t_shell *data);
 void		executor(t_shell *data);
 
@@ -117,12 +127,8 @@ void		set_up_fds(t_cmd *cmd);
 void		exec_one_cmd(t_shell *data, t_cmd *cmd);
 
 void		run_cmd(t_shell *data, t_cmd *cmd);
-void		set_fdin(t_shell *data, t_cmd *cmd);
-
-void		redir_fdin(t_cmd *cmd);
-void		redir_fdout(t_cmd *cmd);
-void		redir_from_infile_if_needed(t_cmd *cmd);
-void		redir_to_outfile_if_needed(t_cmd *cmd);
+void		redir_fdin(t_shell *data, t_cmd *cmd);
+void		redir_fdout(t_shell *data, t_cmd *cmd);
 void		exec_redir(t_shell *data, t_cmd *cmd);
 
 //*--------------------EXECUTOR BONUS--------------------------------
@@ -132,6 +138,7 @@ void		exec_bonus(t_shell *data, t_cmd *cmd, int *execution);
 void		update_total_status(t_shell *data);
 void		parenthesis_open(t_shell *data, t_cmd **cmd, int *execution);
 void		parenthesis_close(t_shell *data, t_cmd **cmd, int *execution);
+void		none_parenthesis(t_shell *data, t_cmd **cmd, int *execution);
 void		exec_parenthesis(t_shell *data, t_cmd *cmd, int *execution);
 
 //*--------------------EXECUTOR UTILS--------------------------------
@@ -151,7 +158,6 @@ void		print_key(t_env *head);
 char		*print_value(t_env *env, char *key);
 void		print_list(t_env *head);
 void		print_argu(char **args);
-void		print_cmds(t_cmd *cmd);
 
 //*--------------------FREE------------------------------------------
 
@@ -165,5 +171,10 @@ void		free_cmd(t_cmd **cmd);
 void		free_cmd_list(t_cmd **cmd_list);
 
 void		free_all(t_shell *data);
+
+//*--------------------ERROR-----------------------------------------
+
+void		ft_perror_exit(char *str, t_shell *data);
+void		ft_error_cmd(t_cmd *cmd);
 
 #endif

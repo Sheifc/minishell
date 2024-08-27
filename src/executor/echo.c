@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   echo.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sheferna <sheferna@student.42malaga.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/08/23 19:21:02 by sheferna          #+#    #+#             */
+/*   Updated: 2024/08/23 19:21:04 by sheferna         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 static void	print_cmd(t_cmd *cmd, int i, int newline)
@@ -16,7 +28,7 @@ static void	print_cmd(t_cmd *cmd, int i, int newline)
 void	ft_echo(t_shell *data, t_cmd *cmd)
 {
 	int	i;
-	int j;
+	int	j;
 	int	newline;
 
 	i = 1;
@@ -27,7 +39,7 @@ void	ft_echo(t_shell *data, t_cmd *cmd)
 		while (cmd->arg[i][j] == 'n')
 			j++;
 		if (cmd->arg[i][j] != '\0')
-			break;
+			break ;
 		newline = 0;
 		i++;
 	}

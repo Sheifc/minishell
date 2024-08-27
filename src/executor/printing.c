@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   printing.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sheferna <sheferna@student.42malaga.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/08/23 19:23:56 by sheferna          #+#    #+#             */
+/*   Updated: 2024/08/23 19:23:58 by sheferna         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 void	print_list(t_env *head)
@@ -33,7 +45,7 @@ char	*print_value(t_env *env, char *key)
 {
 	while (env)
 	{
-		if (ft_strncmp(env->key, key, ft_strlen(env->key)+1) == 0)
+		if (ft_strncmp(env->key, key, ft_strlen(env->key) + 1) == 0)
 			return (env->value);
 		env = env->next;
 	}
@@ -49,36 +61,5 @@ void	print_argu(char **args)
 	{
 		dprintf(2, "Arg[%d]: %s\n", i, args[i]);
 		i++;
-	}
-}
-
-void	print_cmd(t_cmd *cmd)
-{
-	int	i;
-
-	printf(" Command: %s\n", cmd->name);
-	i = -1;
-	while (++i < cmd->n_args)
-		printf("    Arg[%d]: %s\n", i, cmd->arg[i]);
-	printf("fd_in: %d fd_out: %d\n", cmd->fdin,
-		cmd->fdout);
-	printf("  next_operator: %s [%d]\n", node_type_to_symbol(cmd->operator),
-		cmd->operator);
-}
-
-void	print_cmds(t_cmd *cmd)
-{
-	t_cmd	*current;
-
-	current = NULL;
-	if (cmd)
-	{
-		printf("\n**** List of Commands: ****\n");
-		current = cmd;
-		while (current)
-		{
-			print_cmd(current);
-			current = current->next;
-		}
 	}
 }

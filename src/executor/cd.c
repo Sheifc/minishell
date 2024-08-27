@@ -1,6 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cd.c                                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sheferna <sheferna@student.42malaga.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/08/23 19:20:32 by sheferna          #+#    #+#             */
+/*   Updated: 2024/08/23 19:20:33 by sheferna         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-static void	handle_new_pwd_and_update(t_shell *data, char *new_pwd, char *old_pwd, char *pwd)
+static void	handle_new_pwd_and_update(t_shell *data, char *new_pwd,
+	char *old_pwd, char *pwd)
 {
 	new_pwd = get_current_directory(data);
 	if (!new_pwd)
@@ -32,10 +45,10 @@ void	ft_cd(t_shell *data, t_cmd *cmd)
 	if (multiple_args(data, cmd))
 		return ;
 	old_pwd = get_current_directory(data);
- 	if (!old_pwd)
+	if (!old_pwd)
 		return ;
 	pwd = get_pwd(data, cmd, pwd);
- 	if (!pwd)
+	if (!pwd)
 	{
 		free(old_pwd);
 		return ;

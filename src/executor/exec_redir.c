@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec_redir.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sheferna <sheferna@student.42malaga.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/08/23 19:22:25 by sheferna          #+#    #+#             */
+/*   Updated: 2024/08/23 19:22:26 by sheferna         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 void	run_cmd(t_shell *data, t_cmd *cmd)
@@ -12,34 +24,25 @@ void	run_cmd(t_shell *data, t_cmd *cmd)
 			exit(127);
 		}
 		if (execve(data->path, cmd->arg, data->envp) < 0)
-		{
-			perror("minishell: error: execve");
-			exit(1);
-		}
+			ft_perror_exit("error: execve", data);
 	}
 }
 
-void	redir_fdin(t_cmd *cmd)
+void	redir_fdin(t_shell *data, t_cmd *cmd)
 {
 	if (cmd->fdin != -1 && cmd->fdin != 0)
 	{
 		if (dup2(cmd->fdin, 0) == -1)
-		{
-			perror("minishell: error: dup2");
-			exit(1);
-		}
+			ft_perror_exit("error: dup2", data);
 	}
 }
 
-void	redir_fdout(t_cmd *cmd)
+void	redir_fdout(t_shell *data, t_cmd *cmd)
 {
 	if (cmd->fdout != -1 && cmd->fdout != 1)
 	{
 		if (dup2(cmd->fdout, 1) == -1)
-		{
-			perror("minishell: error: dup2");
-			exit(1);
-		}
+			ft_perror_exit("error: dup2", data);
 	}
 }
 
@@ -47,8 +50,8 @@ void	exec_redir(t_shell *data, t_cmd *cmd)
 {
 	if (save_fork(data) == 0)
 	{
-		redir_fdin(cmd);
-		redir_fdout(cmd);
+		redir_fdin(data, cmd);
+		redir_fdout(data, cmd);
 		run_cmd(data, cmd);
 		exit(0);
 	}

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   export_utils.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sheferna <sheferna@student.42malaga.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/08/23 19:22:55 by sheferna          #+#    #+#             */
+/*   Updated: 2024/08/23 19:22:56 by sheferna         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 void	print_export(t_shell *data)
@@ -29,7 +41,8 @@ int	is_valid(t_shell *data)
 		j = 0;
 		while (str[i][j] && str[i][j] != '=')
 		{
-			if ((ft_isdigit(str[i][0]) || !ft_isalnum(str[i][j])) && str[i][j] != '_')
+			if ((ft_isdigit(str[i][0]) || !ft_isalnum(str[i][j]))
+				&& str[i][j] != '_')
 			{
 				printf("export: %s: not a valid identifier\n", str[i]);
 				data->status = 1;

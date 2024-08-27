@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sheferna <sheferna@student.42malaga.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/08/23 19:25:05 by sheferna          #+#    #+#             */
+/*   Updated: 2024/08/23 19:25:07 by sheferna         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 extern int g_sig;
@@ -23,7 +35,7 @@ static void	minishell(t_shell *data)
 	}
 }
 
-void load_data(t_shell *data)
+void	load_data(t_shell *data)
 {
 	bool	ast_status;
 
@@ -55,7 +67,6 @@ int	main(int argc, char **argv, char **envp)
 			data.prompt = NULL;
 			g_sig = 0;
 			init_signals();
-			// printf("[status: %d]\n", data.status);
 		}
 	}
 	free_all(&data);

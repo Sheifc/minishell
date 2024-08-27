@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   key_value.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sheferna <sheferna@student.42malaga.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/08/23 19:23:33 by sheferna          #+#    #+#             */
+/*   Updated: 2024/08/23 19:23:35 by sheferna         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 void	get_key_value(char *str, char **key, char **value)
@@ -16,7 +28,7 @@ void	get_key_value(char *str, char **key, char **value)
 
 char	*get_value(t_env *env, const char *key)
 {
-	t_env *current;
+	t_env	*current;
 
 	if (env == NULL || key == NULL)
 		return (NULL);

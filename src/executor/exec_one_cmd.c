@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec_one_cmd.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sheferna <sheferna@student.42malaga.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/08/23 19:21:58 by sheferna          #+#    #+#             */
+/*   Updated: 2024/08/23 19:22:00 by sheferna         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 void	get_status(t_shell *data)
@@ -12,19 +24,6 @@ void	wait_process(t_shell *data)
 	get_status(data);
 }
 
-void	ft_error_cmd(t_cmd *cmd)
-{
-	ft_putstr_fd("minishell: ", 2);
-	ft_putstr_fd(cmd->arg[0], 2);
-	ft_putendl_fd(": command not found", 2);
-}
-
-void	set_up_fds(t_cmd *cmd)
-{
-	fdin(cmd);
-	fdout(cmd);
-}
-
 void	exec_one_cmd(t_shell *data, t_cmd *cmd)
 {
 	set_up_fds(cmd);
@@ -32,7 +31,10 @@ void	exec_one_cmd(t_shell *data, t_cmd *cmd)
 	{
 		data->pid = fork();
 		if (data->pid < 0)
+		{
 			perror("minishell: error: fork");
+			return ;
+		}
 		else if (data->pid == 0)
 		{
 			get_path(data, cmd);
@@ -43,10 +45,7 @@ void	exec_one_cmd(t_shell *data, t_cmd *cmd)
 				exit(127);
 			}
 			if (execve(data->path, cmd->arg, data->envp) < 0)
-			{
-				perror("minishell: error: execve failed");
-				exit(1);
-			}
+				ft_perror_exit("error: execve", data);
 		}
 		else
 			wait_process(data);

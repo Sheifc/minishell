@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strndup.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: svilla-d <svilla-d@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: sheferna <sheferna@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/19 13:30:37 by svilla-d          #+#    #+#             */
-/*   Updated: 2024/07/19 13:30:51 by svilla-d         ###   ########.fr       */
+/*   Created: 2024/07/19 13:30:37 by sheferna          #+#    #+#             */
+/*   Updated: 2024/08/23 19:11:41 by sheferna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
