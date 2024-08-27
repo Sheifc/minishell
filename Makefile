@@ -1,21 +1,33 @@
-LIBFT_DIR       = libft/
-LIBS            = -lft -lreadline
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: sheferna <sheferna@student.42malaga.com    +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2024/08/27 05:20:05 by sheferna          #+#    #+#              #
+#    Updated: 2024/08/27 05:24:49 by sheferna         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
 
-NAME            = minishell
+LIBFT_DIR       =	libft/
+LIBS            =	-lft -lreadline
 
-CC              = gcc
-CFLAGS          = -Wall -Werror -Wextra -Iincludes -Ilibft/includes -g #-fsanitize=address 
-LDFLAGS         = -fsanitize=address
-RM              = rm -rf
+NAME            =	minishell
 
-SRC_DIR         = src/
-EXEC_DIR        = $(SRC_DIR)executor/
-PARSER_DIR      = $(SRC_DIR)parser/
-OBJ_DIR         = obj/
-OBJ_EXEC_DIR    = $(OBJ_DIR)executor/
-OBJ_PARSER_DIR  = $(OBJ_DIR)parser/
+CC              =	gcc
+CFLAGS          =	-Wall -Werror -Wextra -Iincludes -Ilibft/includes -g #-fsanitize=address 
+LDFLAGS         =	-fsanitize=address
+RM              =	rm -rf
 
-FILES_SRC       = main.c
+SRC_DIR         =	src/
+EXEC_DIR        =	$(SRC_DIR)executor/
+PARSER_DIR      =	$(SRC_DIR)parser/
+OBJ_DIR         =	obj/
+OBJ_EXEC_DIR    =	$(OBJ_DIR)executor/
+OBJ_PARSER_DIR  =	$(OBJ_DIR)parser/
+
+FILES_SRC       =	main.c
 
 FILES_PARSER	=	parser_utils.c										\
 					command.c command_utils.c command_handles_a.c		\
@@ -32,52 +44,51 @@ FILES_PARSER	=	parser_utils.c										\
 					wildcard_bonus.c wildcard_utils_bonus.c				\
 					wildcard_preprocess_bonus.c
 
-FILES_EXEC      = init.c					\
-				  signals.c					\
-				  signals_heredoc.c			\
-				  exec_builtins.c			\
-				  free_env.c				\
-				  free_cmd.c				\
-                  free_all.c				\
-                  list_utils.c				\
-                  key_value.c				\
-                  echo.c					\
-                  pwd.c						\
-                  cd.c						\
-				  cd_utils.c				\
-				  cd_chdir.c				\
-				  cd_update_vars.c			\
-                  env.c						\
-				  env_error_handle.c		\
-                  exit.c					\
-                  export.c					\
-				  export_utils.c			\
-                  unset.c					\
-				  checker_pre_exec.c		\
-				  path.c					\
-				  set_fds.c					\
-				  set_tmp_fds.c				\
-                  executor.c				\
-				  exec_utils.c				\
-                  exec_one_cmd.c			\
-				  exec_multi_cmds.c			\
-				  exec_pipeline.c			\
-				  exec_and_or_bonus.c		\
-				  exec_parenthesis_bonus.c	\
-				  exec_redir.c				\
-                  printing.c				\
-				  exec_error.c
+FILES_EXEC      =	init.c						\
+					signals.c					\
+					signals_heredoc.c			\
+					exec_builtins.c				\
+					free_env.c					\
+					free_cmd.c					\
+                	free_all.c					\
+                	list_utils.c				\
+                	key_value.c					\
+                	echo.c						\
+                	pwd.c						\
+                	cd.c						\
+					cd_utils.c					\
+					cd_chdir.c					\
+					cd_update_vars.c			\
+                	env.c						\
+					env_error_handle.c			\
+                	exit.c						\
+                	export.c					\
+					export_utils.c				\
+                	unset.c						\
+					checker_pre_exec.c			\
+					path.c						\
+					set_fds.c					\
+					set_tmp_fds.c				\
+                	executor.c					\
+					exec_utils.c				\
+                	exec_one_cmd.c				\
+					exec_multi_cmds.c			\
+					exec_pipeline.c				\
+					exec_and_or_bonus.c			\
+					exec_parenthesis_bonus.c	\
+					exec_redir.c				\
+                	printing.c					\
+					exec_error.c
 
+SRC_MAIN        =	$(addprefix $(SRC_DIR),$(FILES_SRC))
+SRC_PARSER      =	$(addprefix $(PARSER_DIR),$(FILES_PARSER))
+SRC_EXEC        =	$(addprefix $(EXEC_DIR),$(FILES_EXEC))
+SRC             =	$(SRC_MAIN) $(SRC_EXEC) $(SRC_PARSER)
 
-SRC_MAIN        = $(addprefix $(SRC_DIR),$(FILES_SRC))
-SRC_PARSER      = $(addprefix $(PARSER_DIR),$(FILES_PARSER))
-SRC_EXEC        = $(addprefix $(EXEC_DIR),$(FILES_EXEC))
-SRC             = $(SRC_MAIN) $(SRC_EXEC) $(SRC_PARSER)
-
-OBJ_MAIN        = $(SRC_MAIN:$(SRC_DIR)%.c=$(OBJ_DIR)%.o)
-OBJ_PARSER      = $(SRC_PARSER:$(PARSER_DIR)%.c=$(OBJ_PARSER_DIR)%.o)
-OBJ_EXEC        = $(SRC_EXEC:$(EXEC_DIR)%.c=$(OBJ_EXEC_DIR)%.o)
-OBJ_SRC         = $(OBJ_MAIN) $(OBJ_EXEC) $(OBJ_PARSER)
+OBJ_MAIN        =	$(SRC_MAIN:$(SRC_DIR)%.c=$(OBJ_DIR)%.o)
+OBJ_PARSER      =	$(SRC_PARSER:$(PARSER_DIR)%.c=$(OBJ_PARSER_DIR)%.o)
+OBJ_EXEC        =	$(SRC_EXEC:$(EXEC_DIR)%.c=$(OBJ_EXEC_DIR)%.o)
+OBJ_SRC         =	$(OBJ_MAIN) $(OBJ_EXEC) $(OBJ_PARSER)
 
 vpath %.c $(SRC_DIR) $(PARSER_DIR) $(EXEC_DIR)
 
