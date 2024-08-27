@@ -17,7 +17,7 @@ t_cmd	*create_command(t_cmd_arg *arg, t_shell *data)
 	cmd->n_args = 0;
 	cmd->fdin = arg->fds.in;
 	cmd->fdout = arg->fds.out;
-	cmd->parenthesis = data->paranthesis;
+	cmd->parenthesis = data->parenthesis;
 	cmd->parenthesis_status = P_NONE;
 	handle_parenthesis_status(cmd, arg);
 	cmd->next = NULL;

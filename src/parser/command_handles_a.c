@@ -23,7 +23,7 @@ t_cmd	*handle_node_command(t_cmd_arg *arg, t_shell *data)
 	t_cmd		*cmd;
 
 	cmd = NULL;
-	data->paranthesis = count_operator(*arg->ope_stack, NODE_PARENTHESIS);
+	data->parenthesis = count_operator(*arg->ope_stack, NODE_PARENTHESIS);
 	cmd = create_command_from_ast(arg, data);
 	if (arg->open_parenthesis == true)
 		arg->open_parenthesis = false;

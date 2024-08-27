@@ -6,7 +6,7 @@
 /*   By: sheferna <sheferna@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 19:23:26 by sheferna          #+#    #+#             */
-/*   Updated: 2024/08/27 05:06:27 by sheferna         ###   ########.fr       */
+/*   Updated: 2024/08/27 05:08:01 by sheferna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	init_shell(t_shell *data, char **envp)
 	data->status = 0;
 	data->total_status = 0;
 	data->num_tokens = 0;
-	data->paranthesis = 0;
+	data->parenthesis = 0;
 	data->tmpin = -1;
 	data->tmpout = -1;
 	data->pid = 0;

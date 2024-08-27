@@ -6,7 +6,7 @@
 /*   By: sheferna <sheferna@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 19:19:19 by sheferna          #+#    #+#             */
-/*   Updated: 2024/08/27 05:00:33 by sheferna         ###   ########.fr       */
+/*   Updated: 2024/08/27 05:07:58 by sheferna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,7 +127,7 @@ typedef struct s_shell
 	int					status;
 	int					total_status;
 	int					num_tokens;
-	int					paranthesis;
+	int					parenthesis;
 	int					tmpin;
 	int					tmpout;
 	pid_t				pid;
