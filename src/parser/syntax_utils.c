@@ -65,7 +65,7 @@ bool	is_binary_operator_valid(t_ast_node *node, int *status)
 		return (false);
 	if (node->left == NULL || node->right == NULL)
 	{
-		ft_error_syntax(E_SYNTAX, node->value, "syntax error near unexpected"
+		ft_error_syntax(E_SYNTAX, node->value, "syntax error near unexpected "
 			"token", status);
 		return (false);
 	}
@@ -81,14 +81,14 @@ bool	is_redirection_valid(t_ast_node *node, int *status)
 		return (false);
 	if (node->right == NULL)
 	{
-		ft_error_syntax(E_SYNTAX, "newline", "syntax error near unexpected"
+		ft_error_syntax(E_SYNTAX, "newline", "syntax error near unexpected "
 			"token", status);
 		return (false);
 	}
 	child = node->right;
 	if (!child || (child->type != NODE_COMMAND))
 	{
-		ft_error_syntax(E_SYNTAX, "newline", "syntax error near unexpected"
+		ft_error_syntax(E_SYNTAX, "newline", "syntax error near unexpected "
 			"token", status);
 		return (false);
 	}

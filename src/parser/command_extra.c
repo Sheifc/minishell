@@ -12,9 +12,7 @@ t_token	**tokenize_input(t_shell *data)
 				&data->status);
 			return (data->tokens);
 		}
-		// printf("\n**** Tokens: ****\n");
 		data->tokens = tokenize(data);
-		// print_tokens(data->tokens, data->num_tokens);
 		if (verify_tokens(data) != 0)
 			free_tokens(&data->tokens, &data->num_tokens);
 	}
@@ -26,9 +24,7 @@ t_ast_node	*create_ast(t_shell *data)
 	data->ast = NULL;
 	if (data->tokens)
 	{
-		// printf("\n**** AST: ****\n");
 		data->ast = build_ast(data->tokens, data->num_tokens, 0);
-		// print_ast(data->ast);
 	}
 	return (data->ast);
 }
@@ -40,9 +36,7 @@ bool	validate_and_free_tokens(t_shell *data)
 	is_valid = false;
 	if (data->tokens)
 	{
-		// printf("\n**** Validando: ****\n");
 		is_valid = validate_ast(data->tokens, data->ast, &data->status);
-		// printf("\nIs Valid: %d\n", is_valid);
 	}
 	free_tokens(&data->tokens, &data->num_tokens);
 	return (is_valid);
@@ -68,7 +62,6 @@ t_cmd	*generate_commands(t_shell *data, bool is_valid, t_fds fds)
 		postprocess_cmds(data);
 		if (data->cmd == NULL || data->cmd->name == NULL)
 			data->cmd = NULL;
-		// print_commands(data->cmd);
 	}
 	free_ast(&data->ast);
 	if (pipe_stack != NULL)

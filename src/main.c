@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sheferna <sheferna@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: svilla-d <svilla-d@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 19:25:05 by sheferna          #+#    #+#             */
-/*   Updated: 2024/08/23 19:25:07 by sheferna         ###   ########.fr       */
+/*   Updated: 2024/08/27 09:02:24 by svilla-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-extern int g_sig;
+extern int	g_sig;
 
 int	handle_empty_or_whitespace_commands(char **prompt)
 {
