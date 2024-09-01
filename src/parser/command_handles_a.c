@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command_handles_a.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sheferna <sheferna@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: svilla-d <svilla-d@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 18:46:07 by sheferna          #+#    #+#             */
-/*   Updated: 2024/08/27 18:46:08 by sheferna         ###   ########.fr       */
+/*   Updated: 2024/09/01 10:29:02 by svilla-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,7 @@ t_cmd	*handle_node_heredoc(t_cmd_arg *arg, t_shell *data)
 		if (arg->node->right && arg->node->right->left)
 			ft_read_stdin(fd, arg->node->right->left->value, data);
 		close(fd);
+		free_commands(&c);
 		free_all(data);
 		exit(EXIT_SUCCESS);
 	}
@@ -113,6 +114,5 @@ t_cmd	*handle_node_heredoc(t_cmd_arg *arg, t_shell *data)
 	fd = open(".heredoc_temp", O_RDONLY);
 	push_operator(arg->ope_stack, NODE_HEREDOC);
 	signal(SIGINT, sigint_handler);
-	unlink(".heredoc_temp");
-	return (c->fdin = fd, c);
+	return (unlink(".heredoc_temp"), c->fdin = fd, c);
 }

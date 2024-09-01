@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: sheferna <sheferna@student.42malaga.com    +#+  +:+       +#+         #
+#    By: svilla-d <svilla-d@student.42malaga.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/27 05:20:05 by sheferna          #+#    #+#              #
-#    Updated: 2024/08/27 16:48:52 by sheferna         ###   ########.fr        #
+#    Updated: 2024/09/01 10:00:36 by svilla-d         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -122,4 +122,59 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all clean fclean re
+# --------------------------------------------------
+#             Test compilation process             |
+# --------------------------------------------------
+
+# ***** Test token *****
+FILES_SRC_TOKEN	=	test_token.c
+SRC_MAIN_TOKEN	=	$(addprefix $(PARSER_DIR),$(FILES_SRC_TOKEN))
+SRC_TOKEN		=	$(SRC_MAIN_TOKEN) $(SRC_EXEC) $(SRC_PARSER)
+OBJ_MAIN_TOKEN	=	$(SRC_MAIN_TOKEN:$(PARSER_DIR)%.c=$(OBJ_PARSER_DIR)%.o)
+OBJ_SRC_TOKEN	=	$(OBJ_MAIN_TOKEN) $(OBJ_EXEC) $(OBJ_PARSER)
+
+$(OBJ_MAIN_TOKEN)%.o: $(PARSER_DIR)%.c | directories
+	@$(CC) $(CFLAGS) -c $< -o $@
+
+token: $(OBJ_SRC_TOKEN)
+	@$(MAKE) -s all bonus printf gnl -C $(LIBFT_DIR)
+	$(CC) $(OBJ_SRC_TOKEN) -L $(LIBFT_DIR) $(LIBS) $(LDFLAGS) -o $@
+
+# ***** Test ast *****
+FILES_SRC_AST	=	test_ast.c
+SRC_MAIN_AST	=	$(addprefix $(PARSER_DIR),$(FILES_SRC_AST))
+SRC_AST			=	$(SRC_MAIN_AST) $(SRC_EXEC) $(SRC_PARSER)
+OBJ_MAIN_AST	=	$(SRC_MAIN_AST:$(PARSER_DIR)%.c=$(OBJ_PARSER_DIR)%.o)
+OBJ_SRC_AST		=	$(OBJ_MAIN_AST) $(OBJ_EXEC) $(OBJ_PARSER)
+
+$(OBJ_MAIN_AST)%.o: $(PARSER_DIR)%.c | directories
+	@$(CC) $(CFLAGS) -c $< -o $@
+
+ast: $(OBJ_SRC_AST)
+	@$(MAKE) -s all bonus printf gnl -C $(LIBFT_DIR)
+	$(CC) $(OBJ_SRC_AST) -L $(LIBFT_DIR) $(LIBS) $(LDFLAGS) -o $@
+
+# ***** Test command *****
+FILES_SRC_CMD	=	test_command.c
+SRC_MAIN_CMD	=	$(addprefix $(PARSER_DIR),$(FILES_SRC_CMD))
+SRC_CMD			=	$(SRC_MAIN_CMD) $(SRC_EXEC) $(SRC_PARSER)
+OBJ_MAIN_CMD	=	$(SRC_MAIN_CMD:$(PARSER_DIR)%.c=$(OBJ_PARSER_DIR)%.o)
+OBJ_SRC_CMD		=	$(OBJ_MAIN_CMD) $(OBJ_EXEC) $(OBJ_PARSER)
+
+$(OBJ_MAIN_CMD)%.o: $(PARSER_DIR)%.c | directories
+	@$(CC) $(CFLAGS) -c $< -o $@
+
+cmd: $(OBJ_SRC_CMD)
+	@$(MAKE) -s all bonus printf gnl -C $(LIBFT_DIR)
+	$(CC) $(OBJ_SRC_CMD) -L $(LIBFT_DIR) $(LIBS) $(LDFLAGS) -o $@
+
+directories:
+	mkdir -p $(AST_OBJ_DIR) $(TOKEN_OBJ_DIR) $(CMD_OBJ_DIR)
+
+tests: token ast cmd
+
+# norminette src/parser/*
+# norminette includes/*
+# valgrind --suppressions=readline.supp --leak-check=full --show-leak-kinds=all -s ./minishell
+
+.PHONY: all clean fclean re token ast cmd directories

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command_handles_utils.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sheferna <sheferna@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: svilla-d <svilla-d@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 18:46:18 by sheferna          #+#    #+#             */
-/*   Updated: 2024/08/27 18:46:19 by sheferna         ###   ########.fr       */
+/*   Updated: 2024/09/01 10:08:28 by svilla-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ char	*read_until_eof(char *line, char *eof, char *result)
 	{
 		write(1, "> ", 2);
 		line = get_next_line(STDIN_FILENO);
-		if (line && ft_strcmp(line, eof) == OK)
+		if (line && ft_strncmp(line, eof, ft_strlen(line) - 1) == OK)
 			break ;
 		if (line == NULL)
 		{

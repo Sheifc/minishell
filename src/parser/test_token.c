@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   test_token.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: svilla-d <svilla-d@student.42malaga.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/09/01 10:31:45 by svilla-d          #+#    #+#             */
+/*   Updated: 2024/09/01 10:31:46 by svilla-d         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "token.h"
 
 typedef struct s_test_token
@@ -83,8 +95,7 @@ int	main(void)
 	{"ls -la", {{T_COMMAND, "ls", 1}, {T_ARG, "-la", 1}}, 2},
 	{"ls | (pwd && cd '/home|' )", {{T_COMMAND, "ls", 1}, {T_PIPE, "|", 1},
 	{T_PAREN_OPEN, "(", 1}, {T_COMMAND, "pwd", 1}, {T_AND, "&&", 1},
-	{T_COMMAND, "cd", 1}, {T_QUOTE, "\'", 1}, {T_TEXT, "/home|", 1},
-	{T_QUOTE, "\'", 1}, {T_PAREN_CLOSE, ")", 1}}, 10},
+	{T_COMMAND, "cd", 1}, {T_ARG, "'/home|'", 1}, {T_PAREN_CLOSE, ")", 1}}, 8},
 	{"ls -l -a file*.txt", {{T_COMMAND, "ls", 1}, {T_ARG, "-l", 1},
 	{T_ARG, "-a", 1}, {T_WILDCARD, "file*.txt", 1}}, 4}
 	};
